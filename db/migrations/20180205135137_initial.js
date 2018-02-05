@@ -10,6 +10,7 @@ exports.up = function(knex, Promise) {
       table.increments('id').primary();
       table.string('term');
       table.string('definition');
+      table.string('category_name');
       table.integer('category_id').unsigned();
       table.foreign('category_id').references('categories.id');
     })
