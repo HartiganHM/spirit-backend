@@ -14,4 +14,17 @@ module.exports = {
     useNullAsDefault: true
   },
 
+   test: {
+    client: 'pg',
+    connection: process.env.DATABASE_URL || 'postgres://localhost/spirit_test',
+    migrations: {
+      directory: __dirname + '/db/migrations'
+    },
+    seeds: {
+      directory: __dirname + '/db/seeds/test'
+    },
+    useNullAsDefault: true
+  },
+
+
 };
