@@ -1,15 +1,18 @@
-
+const categories = require('../../data/categories');
+const terms = require('../../data/terms');
 
 const createCategory = (knex, category) => {
-  return knex('categories').insert(continent, 'id')
+  return knex('categories').insert(category, 'id')
     .then(categoryId => {
-      let filteredTerms = termsData.filter(term => term.category_name === category.name);
+      let termsPromises = [];
 
-      return Promise.all([
-        filteredTerms.map(term =>{
-          createTerm(knex, { ...term, category_id: categoryId[0] })
-        })
-      ])
+      let filteredTerms = terms.filter(term => term.category_name === category.name);
+
+      filteredTerms.forEach(term => {
+        termsPromises.push(createTerm(knex, {...term, category_id: categoryId[0]}))
+      });
+
+      return Promise.all(termsPromises);
     })
 }
 
@@ -22,9 +25,13 @@ exports.seed = function(knex, Promise) {
     .then(() => knex('categories').del())
 
     .then(() => {
-      return Promise.all([
-        categoriesData.map(category => createCategory(knex, category))
-      ]);
+      let categoriesPromises = [];
+
+      categories.forEach(category => {
+        categoriesPromises.push(createCategory(knex, category));
+      });
+
+      return Promise.all(categoriesPromises);
     })
 
     .catch(error => console.log(`Error seeding data: ${error}`));

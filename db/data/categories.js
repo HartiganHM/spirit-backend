@@ -21,3 +21,5 @@ const categories = [
     name: 'Executive Functioning'
   }
 ]
+
+module.exports = categories;
