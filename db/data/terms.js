@@ -3,7 +3,7 @@ const terms = [
     term: 'JRC/AR',
     definition: `This is the abbreviation for Just Right Challenge and Adaptive Response. Since we are utilizing and ASI© model as one foundational frame of reference, the treatment plan needs to include mindful decisions about how the therapists might guide the JRC and what AR's are noted.  This is where you should note what treatment was offered and what the response was.  In the treatment planning section, do this related to the STEPSI© components.`,
     category_name: 'Spirit',
-    imageURL:
+    imageURL: '',
   },
   {
     term: 'S-A-M',
@@ -15,218 +15,464 @@ const terms = [
     term: 'S in S-A-M: Sensory',
     definition: `High: Sensory Discrimination, Low: Sensory Modulation`,
     category_name: 'Spirit',
-    imageURL:
+    imageURL: ''
   },
   {
     term: 'A in S-A-M: Affective',
     definition: `High: Motivational Biasing System, Low: Affective Valence`,
     category_name: 'Spirit',
-    imageURL:
+    imageURL: ''
   },
   {
     term: 'M in S-A-M: Motor',
     definition: `High: Motor Planning Executive system, Low: Automatic postural and motor functions`,
-    category_name: 'Spirit'
-    imageURL:
+    category_name: 'Spirit',
+    imageURL: ''
   },
   {
     term: 'Vestibular',
     definition: 'Receptors located bilaterally in inner ears; receives information about gravity and movement  in all planes and detects change, variation, speed, location of the movement; partners with proprioception and vision to give sense of balance and postural adaptation; participates with cranial nerves to control ocular motor function and integrate head/neck movements with body and space; gives rise to bilateral control, spatial awareness, body awareness, movement and balance, contributes to sense of self and sense of here/now and organizes for anticipation and future planning; senses vibration and wellness of self and other',
     category_name: 'Sensory Systems',
-    imageURL:
+    imageURL: ''
   },
   {
-    term: ''
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Push/Pull/Reach',
+    definition: 'Basic action patterns that are biomechanically possible',
+    category_name: 'Posture',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Bilateral Symmetrical/Bilateral Asymmetrical/Unilateral',
+    definition: `The ability to use both sides of your body in a coordinated way either symmetrically, asymmetrically or unilaterally. Limbs can coordinate to work together to do the same task or they can work simultaneously at different tasks to complete the action.`,
+    category_name: 'Posture',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Grasp/Release',
+    definition: `Fine manual, oral, ocular control allow for flexion-grasp/extension-release patterns.`,
+    category_name: 'Posture',
+    imageURL: '',
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Strength/ Endurance/Flexibility/BMI',
+    definition: `Muscular strength is the amount of force that your muscles are able to produce in a single effort /ability to sustain body effort for duration. Muscular endurance is the ability of your muscles to perform repeated contractions or hold a single contraction over a period of time without fatigue / ability of your body's muscles, ligaments, tendons and joints to move through their full range of motion without tightness or discomfort /BMI, the acronym for body mass index and is an indicator of body composition.`,
+    category_name: 'Posture',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Ideation',
+    definition: `Coming up with ideas `,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Initiation',
+    definition: `Starting idea once formulated`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Imitation',
+    definition: `Matching actions to a modeled action`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Affordance-based ',
+    definition: `Properties that evince particular action (obvious, imitative or expands?)`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Sequencing',
+    definition: `Organizing a sequence to meet the idea/goal and carrying it to completion.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Body Scheme, Selection and Expansion',
+    definition: `Based in awareness of body – internal map – neural memories and mapped to affordances and basic action patterns to generate chunks of action possibilities.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Execution',
+    definition: `Includes the physical enactment of the act, includes space and time processing. The actual performance of the motor act, coordinating 2 or more actions simultaneously, ability to make precise motor responses and changes.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Monitoring',
+    definition: `Awareness of goal/idea (ie was it completed and completed as planned?).`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Modification',
+    definition: `Were errors corrected (ie was repeated performance smoothed/improved?).`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Timing/Force',
+    definition: `Motor execution happens in a sequence of timing and the intensity of the muscle action is graded in response to body and environmental affordances.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Spatial Motor',
+    definition: `Motor actions occur with body acting in the space around/environment and coordinated therein.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Control (Postural, FF, FB)',
+    definition: `Postural control requires stability and postural control, anticipatory (feedforward) control and adjustment based on action forces or comparison to goal with correction or refinement or error correction (feedback).`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Oral',
+    definition: `Mouth, includes tongue, cheeks, palate, teeth, jaw, in relation to hyoid based head neck complex and SSB/talk function.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Ocular',
+    definition: `There are four basic types of eye movements, saccades, smooth pursuit, vergence(con and di), and vestibulo-ocular movements.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Postural',
+    definition: `Body control through planes of movement with stability/mobility patterns.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Limb',
+    definition: `Extremity - leg or arm and foot or hand anatomically part of whole.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Gross',
+    definition: `General body based actions.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Fine',
+    definition: `Refined distal body actions of the hands, feet, eyes or oral/facial structures`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Tool/Object',
+    definition: `Motor skills often interact with a tool or object and this requires additional coordination and skill.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Projected Action Sequences',
+    definition: `Anticipation of future events in the environment and the ability to adjust actions to meet those conditions. Ability to differentiate self and object action and make adjustments accordingly.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Ayres’ Factors',
+    definition: `Sensory Discrimination leads to a number of difficulties that through research have been identified as the factors of dysfunction.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Praxis',
+    definition: `The ability to conceive of, organize, and carry out a sequence of unfamiliar actions. (Ayres 1973)`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Somatodyspraxia',
+    definition: `Somatosensory-based coordination difficulties. Note which areas of the process of praxis are also involved below.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Visual Dyspraxia',
+    definition: `2D  and/or 3D  visual-constructional dyspraxia.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Generalized Dyspraxia',
+    definition: `Overall somato/vestibular sensory-based and generalized process of praxis is fully disrupted in all areas as noted below.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'BMC/Balance/Sequencing/ML',
+    definition: `Bilateral Motor Coordination issues, with Balance and Sequencing difficulties (vestibular base). The ability to use both sides of your body in a coordinated way – they can work together to do the same task or they can work simultaneously at different tasks to complete the action.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Praxis on Verbal Command',
+    definition: `Ability to motor plan actions based on verbal request/description; often spatial in nature and related to understanding of prepositions.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
   },
   {
-    term:
-    definition: 
-    category_name:
-    imageURL:
+    term: 'Regulation',
+    definition: `Ability to be calm and alert and maintain this while in response to stimulation/interaction around you.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
   },
-  
+  {
+    term: 'Engagement',
+    definition: `This is the capacity to show interest in and connect with and delight in others and includes shared gaze, shared affect, and shared imitation.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Reciprocity/Reciprocal Social Interaction',
+    definition: `The capacity for shared back and forth connected interaction with initiating and responding in a back and forth shared manner.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Problem Solving',
+    definition: `This is the capacity to use gestures and words(so communication based, to solve problems together and involves inter-subjective understanding.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Representational Symbolic Thinking',
+    definition: `The ability to use symbols, pretend and imagination or creativity related to ideas, interactions and actions.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Triangular Thinking',
+    definition: `The child is able to explore multiple reasons for a feeling, comparing feelings, and understanding triadic interactions among feeling states.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Comparative Thinking and Gray Area Thinking',
+    definition: `Shades and gradations among different feeling states, the ability to describe degrees of feelings about anger, love, excitement, disappointment, and how the self is impacted by self-perception comparison to others.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Reflective Thinking',
+    definition: `Reflecting on feelings in a relationship to an internalized sense of self.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Self/Other Awareness',
+    definition: `An emerging awareness and knowledge of self as individual yet in relation to others, includes eventually how these two intersect including strengths, weaknesses, thoughts, beliefs, motivation, intentions, and emotions.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Joint Attention',
+    definition: `Joint attention or shared attention is the shared focus of two individuals on an object. It is achieved when one individual alerts another to an object by means of eye-gazing, pointing or other verbal or non-verbal indications.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Social Referencing',
+    definition: `Non-verbal interactive process where the cues are taken and exchanged with an-other in the environment, about which emotions and actions are appropriate in a certain context or situation.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Imitation',
+    definition: `Behavior whereby an individual observes and replicates another's behavior; mimicry is matching because of contagion whereas emulation is imitation because of action of for purpose of intention, not just matching action, which is what imitation produces.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Inferential Thinking/Intention',
+    definition: `Capacity to use observation and background knowledge with context of relationship to reach a logical conclusion about what was intended/desired in the other's mind or action.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Contingent Interaction/Reciprocal Actions',
+    definition: `Caregiver response contiguity is characterized by the caregiver’s promptness and frequency or rate of response to the infant’s signals/  the back-and-forth flow of social interaction. The term reciprocity refers to how the behavior of one person influences and is influenced by the behavior of another person and vice versa.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Theory of Mind',
+    definition: `Theory of Mind (often abbreviated ToM) is the ability to attribute mental states—beliefs, intents, desires, pretending, knowledge, etc.—to oneself and others and to understand that others have beliefs, desires, intentions, and perspectives that are different from one's own.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Central Coherence',
+    definition: `Central coherence is the ability to focus on both details as well as wholes and in particular to extend this to the understanding of the social world.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Mentalising',
+    definition: `The process by which we make sense of each other and ourselves, implicitly and explicitly, in terms of subjective states and mental processes. It is a profoundly social construct in the sense that we are attentive to the mental states of those we are with, physically or psychologically.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Empathy and Social Perspective',
+    definition: `Perspective-taking is the process by which an individual views a situation from another's point-of-view.  Perspective-taking is  the cognitive, intellectual reaction to another's situation or experience and empathy is the visceral, emotional reaction.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Social Motivators (AAAA)',
+    definition: `Our personal engagement is mediated by our social experience and we connect to motivation via intentional direction of action to shift, change, enhance or dampen attention, arousal, affect, or action.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Mental Health Support indicated?',
+    definition: `Y/N: If primarily emotion regulation, then often psychological support is needed.  Emotion regulation consists of “…the extrinsic and intrinsic processes responsible for monitoring, evaluating, and modifying emotional reactions, especially in their intensive and temporal features, to accomplish one's goals.”`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Thoughts and/or emotions require intervention or medication?',
+    definition: `Y/N`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Attachment related care needed?',
+    definition: `Y/N`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Trauma Informed care needed?',
+    definition: `Y/N`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Eye Scan/Saccadic Movements',
+    definition: `There are four basic types of eye movements, saccadic eye movements and smooth pursuits are organized in the frontal cortex as a guided attentional mechanism.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Inhibition',
+    definition: `The frontal cortex is able to mobilize top down stop signals across all the various neural functions, this is called inhibition or inhibitory control.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Working Memory',
+    definition: `Holding facts in mind while manipulating information; accessing facts stored in long-term memory.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Verbal Working Memory',
+    definition: `Holding verbal information in mind to make use of it for a here and now function.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Spatial Working Memory',
+    definition: `Holding spatial information in mind to make use of it for a here and now function.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'General Working Memory',
+    definition: `Holding information in mind to make use of it for a here and now function.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Initiation',
+    definition: `Start function - often requires increase in action or arousal or activation.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Internalize Language',
+    definition: `Luria (1973) and Vygotsky (1986) both proposed the importance of language as a mediating tool used to solve problems and as a control feature for self-regulation of behavior. Luria suggested a model wherein, initially, others in a child’s environment exert behavioral control and regulation over the child’s behaviors.  Over time, with the development of language-symbols, and through interaction with the environment itself, the child begins to apply language to regulate the self, and speech internalizes for the purposes of planning and self-regulation.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Shifting',
+    definition: `Requires stop/inhibit of one attentional object and start of the next attentional object.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Global/Local Shifting',
+    definition: `The gestalt/detail relationship in perception that leads to conceptualization and knowledge, the brain shifts between the feature/detail and the whole back and forth in forming a complex knowing of the 'what' and 'where' of information.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Flexibility Shifting',
+    definition: `The ability to shift within and between information temporally, spatially, and conceptually.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Planning',
+    definition: `The neurological processes involved in the formulation, evaluation and selection of a sequence of thoughts and actions to achieve a desired goal.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Sequencing',
+    definition: `The steps to solve a problem and set up an action in the moment or for a goal.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Future-Oriented/Goal Directed',
+    definition: `Our behavior is typically organized for something that will happen, in the next or extended moment, and this aspect of executive function allows for the organization of  behaviour towards a goal.  Mindfulness, and being in the moment is the penultimate ability to suspend future for the now/present moment.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Problem Solving',
+    definition: `Problem solving refers to a state of desire for reaching a definite 'goal' from a present condition that either is not directly moving toward the goal, is far from it, or needs more complex logic for finding a missing description of conditions or steps toward the goal.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Motivational Bias',
+    definition: `Internal drive to achieve either a goal, a valence based shift (to achieve comfort, safety or connection), oran experience that matches sense of self or condition.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Effortful Control',
+    definition: `The ability to regulate and sustain, shift, enhance or change how much effort one invests into a goal.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Other',
+    definition: `The list provided in the SpIRiT is not-comprehensive, so, if a child has an identified executive function component not listed here, this space allows for it to be added individually.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Spatial/Temporal Organization',
+    definition: `Neural processing that supports either spatial knowing, temporal knowing, or how they work in tandem to help organize the self in relation to environment.\n
+    Spatiotemporal adaptation is a process by which the child discovers and absorbs information from the environment and it has a developmental sequence and matures with the alteration or modification of performance. The spatiotemporal adaptation is, therefore, a process of continual interactions among growth, maturation, development and environmental transactions (Gilfoyle, Grady, Moore, 1990).`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
 ]
 
