@@ -476,3 +476,4 @@ const terms = [
   }
 ]
 
+module.exports = terms;
