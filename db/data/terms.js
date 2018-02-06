@@ -473,6 +473,6 @@ const terms = [
     Spatiotemporal adaptation is a process by which the child discovers and absorbs information from the environment and it has a developmental sequence and matures with the alteration or modification of performance. The spatiotemporal adaptation is, therefore, a process of continual interactions among growth, maturation, development and environmental transactions (Gilfoyle, Grady, Moore, 1990).`,
     category_name: 'Executive Functioning',
     imageURL: ''
-  },
+  }
 ]
 
