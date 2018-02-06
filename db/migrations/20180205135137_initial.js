@@ -9,7 +9,8 @@ exports.up = function(knex, Promise) {
     knex.schema.createTable('terms', function(table) {
       table.increments('id').primary();
       table.string('term');
-      table.string('definition');
+      table.text('definition', 'longtext');
+      table.string('imageURL');
       table.string('category_name');
       table.integer('category_id').unsigned();
       table.foreign('category_id').references('categories.id');
