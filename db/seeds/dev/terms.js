@@ -1,9 +1,10 @@
-
+const categories = require('../../data/categories');
+const terms = require('../../data/terms');
 
 const createCategory = (knex, category) => {
   return knex('categories').insert(continent, 'id')
     .then(categoryId => {
-      let filteredTerms = termsData.filter(term => term.category_name === category.name);
+      let filteredTerms = terms.filter(term => term.category_name === category.name);
 
       return Promise.all([
         filteredTerms.map(term =>{
@@ -23,7 +24,7 @@ exports.seed = function(knex, Promise) {
 
     .then(() => {
       return Promise.all([
-        categoriesData.map(category => createCategory(knex, category))
+        categories.map(category => createCategory(knex, category))
       ]);
     })
 
