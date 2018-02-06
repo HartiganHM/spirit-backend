@@ -4,13 +4,15 @@ const terms = require('../../data/terms');
 const createCategory = (knex, category) => {
   return knex('categories').insert(category, 'id')
     .then(categoryId => {
+      let termsPromises = [];
+
       let filteredTerms = terms.filter(term => term.category_name === category.name);
 
-      return Promise.all([
-        filteredTerms.map(term =>{
-          createTerm(knex, { ...term, category_id: categoryId[0] })
-        })
-      ])
+      filteredTerms.forEach(term => {
+        termsPromises.push(createTerm(knex, {...term, category_id: categoryId[0]}))
+      });
+
+      return Promise.all(termsPromises);
     })
 }
 
