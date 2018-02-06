@@ -6,6 +6,9 @@ const categories = [
     name: 'Sensory Systems'
   },
   {
+    name: 'Modulation'
+  },
+  {
     name: 'Posture'
   },
   {
