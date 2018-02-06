@@ -9,7 +9,7 @@ const terms = [
     term: 'S-A-M',
     definition: `This is an abbreviation for Sensory-Affective-Motor, and was originated by Greenspan. For the SpIRiT©, Stackhouse and colleagues have elaborated the Sensory-Affective-Motor function into the low and high routes of processing that occur in each function.  This is the pivotal function that helps to 'connect the dots and trace the threads' of connection between the functions in the SpIRiT© model.  The idea here is for the clinician to select which aspect seems to be the "driver" of the concerns in that area (S-A-M) - it is a clinical decision/tacit response about what seems to be the most primary. This should be consistent, then, with what your clinical decisions are in each area.  It could be one, two, or all three (S-A-M), and it could vary from one area to another.`,
     category_name: 'Spirit',
-    imageURL: true
+    imageURL: 'true'
   },
   {
     term: 'S in S-A-M: Sensory',
