@@ -339,7 +339,7 @@ const terms = [
     term: 'Mental Health Support indicated?',
     definition: `Y/N: If primarily emotion regulation, then often psychological support is needed.  Emotion regulation consists of “…the extrinsic and intrinsic processes responsible for monitoring, evaluating, and modifying emotional reactions, especially in their intensive and temporal features, to accomplish one's goals.”`,
     category_name: 'Social/Emotional Development',
-=======
+    imageURL: ''
   },
   {
     term: 'Proprioception',
