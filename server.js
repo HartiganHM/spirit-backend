@@ -16,117 +16,143 @@ app.listen(app.get('port'), () => {                                             
 });
 
 //////  GET ALL TERMS  //////
-
 app.get('/api/v1/terms', (request, response) => {
   database('terms').select()
   .then((terms) => {
-    response.status(200).json(terms);
+    return response.status(200).json(terms);
   })
   .catch((error) => {
-    response.status(500).json({ error });
+    return response.status(500).json({ error });
   });
 });
 
 //////  GET ALL CATEGORIES  //////
-
 app.get('/api/v1/categories', (request, response) => {
   database('categories').select()
   .then((categories) => {
-    response.status(200).json(categories);
+    return response.status(200).json(categories);
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 //////  GET TERMS BY CATEGORY ID  //////
-
 app.get('/api/v1/categories/:category_id/terms', (request, response) => {
   const { category_id } = request.params;
 
+  //probably need an error check here for category not found
+
   database('terms').where('category_id', category_id).select()
   .then((terms) => {
-    response.status(200).json(terms);
+    return response.status(200).json(terms);
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 //////  GET TERMS BY TERMS ID //////
-
 app.get('/api/v1/terms/:terms_id', (request, response) => {
   const { terms_id } = request.params;
 
+  //probably need an error check here for term not found
+
   database('terms').where('id', terms_id).select()
   .then((term) => {
-    response.status(200).json(term)
+    return response.status(200).json(term)
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 //////  CREATE NEW TERM  //////
-
-app.post('/api/v1/terms', (request, response) => {
+// NOTE:  Requires category id in params and then term and definition in body.  Call will add the category name to the term.
+app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
   const newTerm = request.body;
+  const { category_id } = request.params;
 
-  database('terms').returning('id').insert(newTerm)
+  for (let requiredParameter of ['term', 'definition']) {
+    if (!newTerm[requiredParameter]) {
+      return response.status(422).json({ error: `Missing required parameter - ${requiredParameter}`})
+    }
+  }
+  const categoryName = await database('categories').where('id', category_id).select()
+  if (!categoryName.length) {
+    return response.status(422).json({ error: `Category not found` })
+  }
+
+  const addTerm = await Object.assign({}, newTerm, { category_id: category_id, category_name: categoryName[0].name });
+
+  database('terms').returning('id').insert(addTerm)
   .then((id) => {
-    response.status(201).json(id)
+    return response.status(201).json(id)
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 //////  CREATE NEW CATEGORY  //////
-
 app.post('/api/v1/categories', (request, response) => {
   const newCategory = request.body;
 
+  for (let requiredParameter of ['name']) {
+    if (!newCategory[requiredParameter]) {
+      return response.status(422).json({ error: `Missing required parameter - ${requiredParameter}`})
+    }
+  }
   database('categories').returning('id').insert(newCategory)
   .then((id) => {
-    response.status(201).json(id)
+    return response.status(201).json(id)
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 
 //////  UPDATE TERM  //////
-
-app.put('/api/v1/terms/:terms_id', (request, response) => {
+app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
   const updatedTerm = request.body;
+  const termToUpdate = await database('terms').where('id', terms_id).select()
 
-  database('terms').where('id', terms_id).update(updatedTerm)
+  if (!termToUpdate.length) {
+    return response.status(422).json({ error: `Term id not found.` })
+  }
+
+  await database('terms').where('id', terms_id).update(updatedTerm)
   .then(() => {
-    response.status(200).send({
+    return response.status(200).send({
       success: `Term ${terms_id} updated.`
     })
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
 //////  UPDATE CATEGORY  //////
 
-app.put('/api/v1/categories/:category_id', (request, response) => {
+app.put('/api/v1/categories/:category_id', async (request, response) => {
   const { category_id } = request.params;
   const updatedCategory = request.body;
 
-  database('categories').where('id', category_id).update(updatedCategory)
+  const categoryToUpdate = await database('categories').where('id', category_id).select()
+  if (!categoryToUpdate.length) {
+    return response.status(422).json({ error: `Category not found.` })
+  }
+
+  await database('categories').where('id', category_id).update(updatedCategory)
   .then(() => {
-    response.status(200).send({
+    return response.status(200).send({
       success: `Category ${category_id} updated.`
     })
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
@@ -135,14 +161,19 @@ app.put('/api/v1/categories/:category_id', (request, response) => {
 app.delete('/api/v1/terms/:terms_id', (request, response) => {
   const { terms_id } = request.params;
 
+  const killedTerm = database('terms').where('id', terms_id).select()
+  if (!killedTerm.length) {
+    return response.status(422).json({ error: `Term ${terms_id} not found` })
+  }
+
   database('terms').where('id', terms_id).delete()
   .then(() => {
-    response.status(200).send({
+    return response.status(200).send({
       success: `Term ${terms_id} deleted.`
     })
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
@@ -150,15 +181,20 @@ app.delete('/api/v1/terms/:terms_id', (request, response) => {
 
 app.delete('/api/v1/category/:category_id', (request, response) => {
   const { category_id } = request.params;
+  const killedCategory = database('categories').where('id', category_id).select()
+
+  if (!killedCategory.length) {
+    return response.status(422).json({ error: `Category ${category_id} not found.` })
+  }
 
   database('categories').where('id', category_id).delete()
   .then(() => {
-    response.status(200).send({
+    return response.status(200).send({
       success: `Category ${category_id} deleted.`
     })
   })
   .catch((error) => {
-    response.status(500).json({ error })
+    return response.status(500).json({ error })
   });
 });
 
