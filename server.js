@@ -1,19 +1,18 @@
 /*eslint-disable camelcase*/
 /*eslint-disable no-console*/
 
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-app.set('port', process.env.PORT || 3000);
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
+// Middleware used to redirect http to https
 const requireHTTPS = (request, response, next) => {
   if (request.headers['x-forwarded-proto'] !== 'https') {
     return response.redirect('https://' + request.get('host') + request.url);
@@ -21,11 +20,67 @@ const requireHTTPS = (request, response, next) => {
   next();
 };
 
-// app.use(requireHTTPS);   // Comment this line in for production
+// Middleware use to check for authentic token on api request
+const checkAuth = (request, response, next) => {
+  const { token } = request.headers;
+
+  if (!token) {
+    return response
+      .status(403)
+      .json('You must be authorized to hit this endpoint');
+  }
+
+  try {
+    jwt.verify(token, app.get('spiritKey'));
+
+    next();
+  } catch (error) {
+    return response.status(403).json('Invalid token');
+  }
+};
+
+// Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
+const accessControlAllowOrigin = (request, response, next) => {
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+};
+
+app.set('port', process.env.PORT || 3000);
+app.set('spiritKey', process.env.SPIRIT_KEY);
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+if (environment !== 'development' && environment !== 'test') {
+  app.use(requireHTTPS);
+} else if (environment !== 'test') {
+  app.use(accessControlAllowOrigin);
+}
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
 });
+
+////// AUTHENTICATE USER //////
+/// Note: Authenticate endpoint must be at top as user must be authenticated
+///       prior to accessing any api endpoints
+
+app.post('/authenticate', (request, response) => {
+  const { email, appName } = request.body;
+  const cert = app.get('spiritKey');
+  const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
+
+  return response.status(201).json(token);
+});
+
+if (environment !== 'test') {
+  app.use(checkAuth);
+}
 
 //////  GET ALL TERMS  //////
 app.get('/api/v1/terms/all', (request, response) => {
