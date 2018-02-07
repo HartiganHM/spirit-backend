@@ -1,7 +1,9 @@
+/*eslint-disable max-len*/
+
 process.env.NODE_ENV = 'test';
 
 const chai = require('chai');
-const should = chai.should();
+const should = chai.should(); // eslint-disable-line no-unused-vars
 const chaiHttp = require('chai-http');
 const server = require('../server');
 const knex = require('../db/knex');
@@ -148,7 +150,6 @@ describe('API Routes', () => {
           response.body[0].should.have.property('imageURL');
           response.body[0].term.should.equal('Olfaction');
           response.body[0].definition.should.equal(
-            /*eslint-disable-next-line max-len*/
             'Receptors located in nose and are chemoreceptors for smell.  Primarily for detection hedonic for modulation and for emotional memory support for detail/discrimination.'
           );
           response.body[0].category_name.should.equal('Sensory Systems');
@@ -206,7 +207,6 @@ describe('API Routes', () => {
               response.body[0].id.should.equal(id);
               response.body[0].term.should.equal('Olfaction');
               response.body[0].definition.should.equal(
-                /*eslint-disable-next-line max-len*/
                 'Receptors located in nose and are chemoreceptors for smell.  Primarily for detection hedonic for modulation and for emotional memory support for detail/discrimination.'
               );
               response.body[0].category_name.should.equal('Sensory Systems');
