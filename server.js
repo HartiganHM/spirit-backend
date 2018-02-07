@@ -31,7 +31,7 @@ const checkAuth = (request, response, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, app.get('spiritKey'));
+    jwt.verify(token, app.get('spiritKey'));
 
     next();
   } catch (error) {
@@ -59,12 +59,28 @@ app.use(bodyParser.urlencoded({ extended: true }));
 if (environment !== 'development' && environment !== 'test') {
   app.use(requireHTTPS);
 } else if (environment !== 'test') {
-  app.use(checkAuth, accessControlAllowOrigin);
+  app.use(accessControlAllowOrigin);
 }
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
 });
+
+////// AUTHENTICATE USER //////
+/// Note: Authenticate endpoint must be at top as user must be authenticated
+///       prior to accessing any api endpoints
+
+app.post('/authenticate', (request, response) => {
+  const { email, appName } = request.body;
+  const cert = app.get('spiritKey');
+  const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
+
+  return response.status(201).json(token);
+});
+
+if (environment !== 'test') {
+  app.use(checkAuth);
+}
 
 //////  GET ALL TERMS  //////
 app.get('/api/v1/terms/all', (request, response) => {
@@ -149,15 +165,6 @@ app.get('/api/v1/terms', async (request, response) => {
   } catch (error) {
     return response.status(500).json({ error });
   }
-});
-
-////// AUTHENTICATE USER //////
-app.post('/authenticate', (request, response) => {
-  const { email, appName } = request.body;
-  const cert = app.get('spiritKey');
-  const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
-
-  return response.status(201).json(token);
 });
 
 //////  CREATE NEW TERM  //////
