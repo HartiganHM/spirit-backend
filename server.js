@@ -42,7 +42,7 @@ const checkAuth = (request, response, next) => {
   }
 }
 
-// app.use(requireHTTPS);   // Comment this line in for production
+app.use(requireHTTPS, checkAuth);   // Comment this line in for production
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
