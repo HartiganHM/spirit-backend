@@ -26,6 +26,22 @@ const requireHTTPS = (request, response, next) => {
   next();
 };
 
+const checkAuth = (request, response, next) => {
+  const { token } = request.headers;
+
+  if (!token) {
+    return response.status(403).json('You must be authorized to hit this endpoint');
+  }
+
+  try{
+    const decoded = jwt.verify(token, app.get('spiritKey'));
+
+    next();
+  } catch (error) {
+    return response.status(403).json('Invalid token');
+  }
+}
+
 // app.use(requireHTTPS);   // Comment this line in for production
 
 app.listen(app.get('port'), () => {
