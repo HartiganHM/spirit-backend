@@ -59,7 +59,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 if (environment !== 'development' && environment !== 'test') {
   app.use(requireHTTPS);
 } else if (environment !== 'test') {
-  app.use(checkAuth, accessControlAllowOrigin);
+  app.use(accessControlAllowOrigin);
 }
 
 app.listen(app.get('port'), () => {
@@ -67,7 +67,7 @@ app.listen(app.get('port'), () => {
 });
 
 //////  GET ALL TERMS  //////
-app.get('/api/v1/terms/all', (request, response) => {
+app.get('/api/v1/terms/all', checkAuth, (request, response) => {
   database('terms')
     .select()
     .then(terms => {
@@ -79,7 +79,7 @@ app.get('/api/v1/terms/all', (request, response) => {
 });
 
 //////  GET ALL CATEGORIES  //////
-app.get('/api/v1/categories/all', (request, response) => {
+app.get('/api/v1/categories/all', checkAuth, (request, response) => {
   database('categories')
     .select()
     .then(categories => {
@@ -91,7 +91,7 @@ app.get('/api/v1/categories/all', (request, response) => {
 });
 
 //////  GET TERMS BY CATEGORY ID  //////
-app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
+app.get('/api/v1/categories/:category_id/terms', checkAuth, async (request, response) => {
   const { category_id } = request.params;
 
   try {
@@ -112,7 +112,7 @@ app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
 });
 
 //////  GET TERMS BY TERMS ID //////
-app.get('/api/v1/terms/:terms_id', async (request, response) => {
+app.get('/api/v1/terms/:terms_id', checkAuth, async (request, response) => {
   const { terms_id } = request.params;
 
   try {
@@ -133,7 +133,7 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
 });
 
 //////  GET TERMS BY TERMS NAME //////
-app.get('/api/v1/terms', async (request, response) => {
+app.get('/api/v1/terms', checkAuth, async (request, response) => {
   const query = request.query.term;
 
   try {
@@ -163,7 +163,7 @@ app.post('/authenticate', (request, response) => {
 //////  CREATE NEW TERM  //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
-app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
+app.post('/api/v1/categories/:category_id/terms', checkAuth, async (request, response) => {
   const newTerm = request.body;
   const { category_id } = request.params;
 
@@ -198,7 +198,7 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
 });
 
 //////  CREATE NEW CATEGORY  //////
-app.post('/api/v1/categories', (request, response) => {
+app.post('/api/v1/categories', checkAuth, (request, response) => {
   const newCategory = request.body;
 
   for (let requiredParameter of ['name']) {
@@ -220,7 +220,7 @@ app.post('/api/v1/categories', (request, response) => {
 });
 
 //////  UPDATE TERM  //////
-app.put('/api/v1/terms/:terms_id', async (request, response) => {
+app.put('/api/v1/terms/:terms_id', checkAuth, async (request, response) => {
   const { terms_id } = request.params;
   const updatedTerm = request.body;
   const termToUpdate = await database('terms')
@@ -245,7 +245,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
 });
 
 //////  UPDATE CATEGORY  //////
-app.put('/api/v1/categories/:category_id', async (request, response) => {
+app.put('/api/v1/categories/:category_id', checkAuth, async (request, response) => {
   const { category_id } = request.params;
   const updatedCategory = request.body;
 
@@ -272,7 +272,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
 });
 
 //////  DELETE TERM  //////
-app.delete('/api/v1/terms/:terms_id', async (request, response) => {
+app.delete('/api/v1/terms/:terms_id', checkAuth, async (request, response) => {
   const { terms_id } = request.params;
 
   try {
@@ -293,7 +293,7 @@ app.delete('/api/v1/terms/:terms_id', async (request, response) => {
 });
 
 //////  DELETE CATEGORY  //////
-app.delete('/api/v1/categories/:category_id', (request, response) => {
+app.delete('/api/v1/categories/:category_id', checkAuth, (request, response) => {
   const { category_id } = request.params;
 
   try {
