@@ -1,15 +1,20 @@
 /*eslint-disable camelcase*/
 /*eslint-disable no-console*/
 
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const jwt = require('jsonwebtoken');
+
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
 app.set('port', process.env.PORT || 3000);
+app.set('spiritKey', process.env.SPIRIT_KEY);
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -111,6 +116,15 @@ app.get('/api/v1/terms', async (request, response) => {
     return response.status(500).json({ error });
   }
 });
+
+////// AUTHENTICATE USER //////
+app.post('/authenticate', (request, response) => {
+  const { email, appName } = request.body;
+  const cert = app.get('spiritKey');
+  const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
+
+  return response.status(201).json(token);
+})
 
 //////  CREATE NEW TERM  //////
 // NOTE:  Requires category id in params and then term and definition in body.
