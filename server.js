@@ -12,13 +12,15 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-const requireHTTPS = (request, response, next) => { // Middleware used to redirect http to https
+// Middleware used to redirect http to https
+const requireHTTPS = (request, response, next) => {
   if (request.headers['x-forwarded-proto'] !== 'https') {
     return response.redirect('https://' + request.get('host') + request.url);
   }
   next();
 };
 
+// Middleware use to check for authentic token on api request
 const checkAuth = (request, response, next) => {
   const { token } = request.headers;
 
@@ -37,7 +39,8 @@ const checkAuth = (request, response, next) => {
   }
 };
 
-const accessControlAllowOrigin = (request, response, next) => { // Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
+// Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
+const accessControlAllowOrigin = (request, response, next) => {
   response.header('Access-Control-Allow-Origin', '*');
   response.header(
     'Access-Control-Allow-Headers',
