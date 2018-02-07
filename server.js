@@ -37,7 +37,7 @@ app.get('/api/v1/terms/all', (request, response) => {
 });
 
 //////  GET ALL CATEGORIES  //////
-app.get('/api/v1/categories', (request, response) => {
+app.get('/api/v1/categories/all', (request, response) => {
   database('categories').select()
   .then((categories) => {
     return response.status(200).json(categories);
@@ -187,43 +187,39 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
 });
 
 //////  DELETE TERM  //////
-app.delete('/api/v1/terms/:terms_id', (request, response) => {
+app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
 
-  const killedTerm = database('terms').where('id', terms_id).select()
-  if (!killedTerm.length) {
-    return response.status(422).json({ error: `Term ${terms_id} not found` })
-  }
-
-  database('terms').where('id', terms_id).delete()
-  .then(() => {
-    return response.status(204).send({
-      success: `Term ${terms_id} deleted.`
-    })
-  })
-  .catch((error) => {
+  try {
+    const killedTerm = await database('terms').returning('id').where('id', terms_id).delete()
+    if (!killedTerm.length) {
+      return response.status(422).json({ error: `Term ${terms_id} not found` })
+    } else {
+      return response.status(204).json({
+        success: `Term ${terms_id} deleted.`
+      })
+    }
+  } catch (error) {
     return response.status(500).json({ error })
-  });
+  }
 });
 
 //////  DELETE CATEGORY  //////
-app.delete('/api/v1/category/:category_id', (request, response) => {
+app.delete('/api/v1/categories/:category_id', (request, response) => {
   const { category_id } = request.params;
-  const killedCategory = database('categories').where('id', category_id).select()
 
-  if (!killedCategory.length) {
-    return response.status(422).json({ error: `Category ${category_id} not found.` })
-  }
-
-  database('categories').where('id', category_id).delete()
-  .then(() => {
-    return response.status(204).send({
-      success: `Category ${category_id} deleted.`
-    })
-  })
-  .catch((error) => {
+  try {
+    const killedCategory = database('categories').returning('id').where('id', category_id).delete()
+    if (!Object.keys(killedCategory).length) {
+      return response.status(422).json({ error: `Category ${category_id} not found.` })
+    } else {
+      return response.status(204).json({
+        success: `Category ${category_id} deleted.`
+      })
+    }
+  } catch (error) {
     return response.status(500).json({ error })
-  });
+  }
 });
 
 module.exports = app;
