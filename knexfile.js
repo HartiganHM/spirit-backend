@@ -1,7 +1,4 @@
-// Update with your config settings.
-
 module.exports = {
-
   development: {
     client: 'pg',
     connection: 'postgres://localhost/spirit',
@@ -14,7 +11,7 @@ module.exports = {
     useNullAsDefault: true
   },
 
-   test: {
+  test: {
     client: 'pg',
     connection: process.env.DATABASE_URL || 'postgres://localhost/spirit_test',
     migrations: {
@@ -37,6 +34,5 @@ module.exports = {
     },
     useNullAsDefault: true
   }
-
-
+  
 };

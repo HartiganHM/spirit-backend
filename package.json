@@ -4,6 +4,7 @@
   "description": "",
   "main": "knexfile.js",
   "dependencies": {
+    "babel-eslint": "^8.2.1",
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
     "knex": "^0.14.2",
@@ -12,11 +13,13 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "chai-http": "git+https://github.com/chaijs/chai-http.git#3ea4524",
+    "eslint": "^4.17.0",
     "mocha": "^5.0.0"
   },
   "scripts": {
     "test": "mocha --exit",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "eslint": "./node_modules/eslint/bin/eslint.js ./*.js ./db/*.js ./db/*/*.js ./db/*/*/*.js ./test/*.js"
   },
   "repository": {
     "type": "git",
