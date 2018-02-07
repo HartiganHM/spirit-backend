@@ -12,14 +12,7 @@ const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
 
-app.set('port', process.env.PORT || 3000);
-app.set('spiritKey', process.env.SPIRIT_KEY);
-
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-const requireHTTPS = (request, response, next) => {
+const requireHTTPS = (request, response, next) => { // Middleware used to redirect http to https
   if (request.headers['x-forwarded-proto'] !== 'https') {
     return response.redirect('https://' + request.get('host') + request.url);
   }
@@ -30,19 +23,41 @@ const checkAuth = (request, response, next) => {
   const { token } = request.headers;
 
   if (!token) {
-    return response.status(403).json('You must be authorized to hit this endpoint');
+    return response
+      .status(403)
+      .json('You must be authorized to hit this endpoint');
   }
 
-  try{
+  try {
     const decoded = jwt.verify(token, app.get('spiritKey'));
 
     next();
   } catch (error) {
     return response.status(403).json('Invalid token');
   }
-}
+};
 
-app.use(requireHTTPS, checkAuth);   // Comment this line in for production
+const accessControlAllowOrigin = (request, response, next) => { // Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
+  response.header('Access-Control-Allow-Origin', '*');
+  response.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+};
+
+app.set('port', process.env.PORT || 3000);
+app.set('spiritKey', process.env.SPIRIT_KEY);
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+if (environment !== 'development' && environment !== 'test') {
+  app.use(requireHTTPS);
+} else if (environment !== 'test') {
+  app.use(checkAuth, accessControlAllowOrigin);
+}
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
@@ -140,7 +155,7 @@ app.post('/authenticate', (request, response) => {
   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
 
   return response.status(201).json(token);
-})
+});
 
 //////  CREATE NEW TERM  //////
 // NOTE:  Requires category id in params and then term and definition in body.
