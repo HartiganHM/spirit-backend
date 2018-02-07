@@ -20,6 +20,8 @@ const requireHTTPS = (request, response, next) => {
   next();
 };
 
+
+
 // Middleware use to check for authentic token on api request
 const checkAuth = (request, response, next) => {
   const { token } = request.headers;
@@ -31,11 +33,20 @@ const checkAuth = (request, response, next) => {
   }
 
   try {
-    jwt.verify(token, app.get('spiritKey'));
-
+    const decoded = jwt.verify(token, app.get('spiritKey'));
+    response.locals.email = decoded.email;
     next();
   } catch (error) {
     return response.status(403).json('Invalid token');
+  }
+};
+
+// Middleware for checking admin email
+const checkAdmin = (request, response, next) => {
+  if (response.locals.email.includes('@turing.io')) {
+    next();
+  } else {
+    return response.status(403).json({ error: 'You are not authorized at this endpoint'});
   }
 };
 
@@ -72,6 +83,7 @@ app.listen(app.get('port'), () => {
 
 app.post('/authenticate', (request, response) => {
   const { email, appName } = request.body;
+  console.log(email, appName);
   const cert = app.get('spiritKey');
   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
 
@@ -167,7 +179,11 @@ app.get('/api/v1/terms', async (request, response) => {
   }
 });
 
-//////  CREATE NEW TERM  //////
+if (environment !== 'test') {
+  app.use(checkAdmin);
+}
+
+//////  CREATE NEW TERM (admin only) //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
 app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
@@ -204,7 +220,7 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     });
 });
 
-//////  CREATE NEW CATEGORY  //////
+//////  CREATE NEW CATEGORY (admin only) //////
 app.post('/api/v1/categories', (request, response) => {
   const newCategory = request.body;
 
@@ -226,7 +242,7 @@ app.post('/api/v1/categories', (request, response) => {
     });
 });
 
-//////  UPDATE TERM  //////
+//////  UPDATE TERM (admin only) //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
   const updatedTerm = request.body;
@@ -251,7 +267,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     });
 });
 
-//////  UPDATE CATEGORY  //////
+//////  UPDATE CATEGORY (admin only) //////
 app.put('/api/v1/categories/:category_id', async (request, response) => {
   const { category_id } = request.params;
   const updatedCategory = request.body;
@@ -278,7 +294,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     });
 });
 
-//////  DELETE TERM  //////
+//////  DELETE TERM (admin only) //////
 app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
 
@@ -299,7 +315,7 @@ app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   }
 });
 
-//////  DELETE CATEGORY  //////
+//////  DELETE CATEGORY (admin only) //////
 app.delete('/api/v1/categories/:category_id', (request, response) => {
   const { category_id } = request.params;
 
