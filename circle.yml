@@ -15,7 +15,6 @@ database:
 test:
   override:
     - npm test
-    - npm run eslint
 
 deployment:
   staging:
