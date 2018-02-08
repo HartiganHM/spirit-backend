@@ -11,6 +11,19 @@ const knex = require('../db/knex');
 chai.use(chaiHttp);
 
 describe('Client Routes', () => {
+  it('Should return the homepage', () => {
+    return chai
+      .request(server)
+      .get('/')
+      .then(response => {
+        response.should.have.status(200);
+        response.should.be.html;
+      })
+      .catch(error => {
+        throw error;
+      });
+  });
+
   it('Should return a 404 error for a route that does not exist', () => {
     return chai
       .request(server)
@@ -120,9 +133,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Category 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -170,9 +181,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Term pants not found."}'
-          );
+          response.error.text.should.equal('{"error":"Term pants not found."}');
         })
         .catch(error => {
           throw error;
@@ -231,9 +240,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Term 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -455,9 +462,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Term 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -512,9 +517,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Category 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -558,9 +561,7 @@ describe('API Routes', () => {
         .catch(response => {
           response.should.have.status(422);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Term 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
         });
     });
   });
@@ -601,9 +602,7 @@ describe('API Routes', () => {
         .catch(error => {
           error.should.have.status(422);
           error.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Category 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Category 0 not found."}');
         });
     });
   });
