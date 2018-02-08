@@ -602,7 +602,7 @@ describe('API Routes', () => {
         .catch(error => {
           error.should.have.status(422);
           error.should.be.json;
-          response.error.text.should.equal('{"error":"Category 0 not found."}');
+          error.error.text.should.equal('{"error":"Category 0 not found."}');
         });
     });
   });
