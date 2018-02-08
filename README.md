@@ -159,6 +159,24 @@ Status: 200 OK
 
 ### Endpoint
 ```shell
+POST /authenticate
+```
+
+#### Request
+Requires email and appName in body.
+```json
+{ "email": "user@email.com", "appName": "myApp" }
+```
+
+#### Response
+Returns unique JSON Web Token (JWT).
+
+```json
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.TJVA95OrM7E2cBab30RMHrHDcEfxjoYZgeFONFh7HgQ"
+```
+
+### Endpoint
+```shell
 POST /api/v1/categories/:category_id/terms
 ```
 
