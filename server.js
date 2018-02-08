@@ -83,7 +83,6 @@ app.listen(app.get('port'), () => {
 
 app.post('/authenticate', (request, response) => {
   const { email, appName } = request.body;
-  console.log(email, appName);
   const cert = app.get('spiritKey');
   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
 
