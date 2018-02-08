@@ -82,6 +82,14 @@ app.listen(app.get('port'), () => {
 ///       prior to accessing any api endpoints
 
 app.post('/authenticate', (request, response) => {
+  for (let requiredParameter of ['email', 'appName']) {
+    if (!request.body[requiredParameter]) {
+      return response
+        .status(422)
+        .json({ error: `Missing required parameter - ${requiredParameter}` });
+    }
+  }
+
   const { email, appName } = request.body;
   const cert = app.get('spiritKey');
   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
