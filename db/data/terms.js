@@ -82,14 +82,26 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Affordance-based ',
+    term: 'Affordance-based',
     definition: `Properties that evince particular action (obvious, imitative or expands?)`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
+  },
+  {
+    term: 'Generativity',
+    definition: `This is the ability to take the ideas/affordances and create opportunity, options, meanings and possibilities from them to act on for greater meaning and purpose.`,
     category_name: 'Sensory Discrimination',
     imageURL: ''
   },
   {
     term: 'Sequencing',
     definition: `Organizing a sequence to meet the idea/goal and carrying it to completion.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
+  },
+  {
+    term: 'Gestalt',
+    definition: `Sequences are only meaningful for the 'whole' that they create or contribute to, this is the larger goal or purpose, the whole.`,
     category_name: 'Sensory Discrimination',
     imageURL: ''
   },
@@ -107,7 +119,7 @@ const terms = [
   },
   {
     term: 'Monitoring',
-    definition: `Awareness of goal/idea (ie was it completed and completed as planned?).`,
+    definition: `Actions are monitored for how well what occurred matches what was required or intended and then the information becomes part of the feedback system, so surveilling what is occurring for match/feedback is an essential part of the execution of motor acts.`,
     category_name: 'Sensory Discrimination',
     imageURL: ''
   },
@@ -118,13 +130,19 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Timing/Force',
-    definition: `Motor execution happens in a sequence of timing and the intensity of the muscle action is graded in response to body and environmental affordances.`,
+    term: 'Timing/Temporal',
+    definition: `Motor execution happens in a sequence of timing, or temporal planning.`,
     category_name: 'Sensory Discrimination',
     imageURL: ''
   },
   {
-    term: 'Spatial Motor',
+    term: 'Force',
+    definition: `Motor execution happens with organized, graded muscle action is that matches the intensity needed to match the qualities of the properties/affordances being acted upon; graded in response to body and environmental affordances.`,
+    category_name: 'Sensory Discrimination',
+    imageURL: ''
+  },
+  {
+    term: 'Spatial',
     definition: `Motor actions occur with body acting in the space around/environment and coordinated therein.`,
     category_name: 'Sensory Discrimination',
     imageURL: ''
@@ -334,8 +352,14 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Social Motivators (AAAA)',
+    term: 'Social Motivation - Self-Organizing',
     definition: `Our personal engagement is mediated by our social experience and we connect to motivation via intentional direction of action to shift, change, enhance or dampen attention, arousal, affect, or action.`,
+    category_name: 'Social/Emotional Development',
+    imageURL: ''
+  },
+  {
+    term: 'Pro-Social Motivation - Moral',
+    definition: `When the 'other', or those around us, including the rules and mores and cultural norms are available to the system, there is an ability to use this to guide behavior. This is true even when emotions, or other drives might evince reactive behavior. However, we have the capacity to exert control over an more primitive responses and use a 'moral compass' to guide.`,
     category_name: 'Social/Emotional Development',
     imageURL: ''
   },
@@ -394,7 +418,8 @@ const terms = [
   },
   {
     term: 'Arousal',
-    definition: `Relative activation of the brain. Arousal is a state of relative activity or activation of energy in preparation for or during actual responsivity and behavior, occurs in both mind and body.  Arousal is relative to demand and responsivity to  sensory-affect-motor based input and is contextual/conditional. Arousal changes in preparation for the response in context (readiness). When it is well modulated, arousal is appropriate, proportional activation or adaptation to the input or context. Arousal difficulties are when the adaptation and or activation are not in-kind to the input or condition.  Arousal works in an inverted-U arousal-performance relationship, that reveals that performance is optimal in middle/optimal states of arousal and levels off as arousal is non-optimal (too high or low).  General CNS arousal ranges from a state of general nervous system quietness and inhibition to a state of activation or overactivation.  As it moves through these states, the arousal can be described in behavioral terms along a spectrum  as follows:  1. Asleep 2. Drowsy 3. Hypoalert  4. Calmly focused and Alert 5. Hyperalert  6. Flooded  7. Shutdown/protective inhibition. The final state cycles back to lower states, and in the lowest states, the nervous system might signal activation to support physiology.  The brain states of arousal can also be related to brainwave states:`,
+    definition: `Relative activation of the brain. Arousal is a state of relative activity or activation of energy in preparation for or during actual responsivity and behavior, occurs in both mind and body.  Arousal is relative to demand and responsivity to  sensory-affect-motor based input and is contextual/conditional. Arousal changes in preparation for the response in context (readiness). 
+                When it is well modulated, arousal is appropriate, proportional activation or adaptation to the input or context. Arousal difficulties are when the adaptation and or activation are not in-kind to the input or condition.  Arousal works in an inverted-U arousal-performance relationship, that reveals that performance is optimal in middle/optimal states of arousal and levels off as arousal is non-optimal (too high or low).  General CNS arousal ranges from a state of general nervous system quietness and inhibition to a state of activation or overactivation.  As it moves through these states, the arousal can be described in behavioral terms along a spectrum  as follows:  1. Asleep 2. Drowsy 3. Hypoalert  4. Calmly focused and Alert 5. Hyperalert  6. Flooded  7. Shutdown/protective inhibition. The final state cycles back to lower states, and in the lowest states, the nervous system might signal activation to support physiology.  The brain states of arousal can also be related to brainwave states:`,
     category_name: 'Modulation',
     imageURL: true
   },
@@ -552,7 +577,7 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Core Development',
+    term: 'Outer Core',
     definition:
       'Outer Core is assessed by looking at alignment of head over shoulders, shoulders over hips, and hips over pelvis.',
     category_name: 'Posture',
@@ -684,6 +709,13 @@ const terms = [
     imageURL: ''
   },
   {
+    term: 'Alignment/Orient to Stimulus or Goal',
+    definition:
+      'The vestibular system, through the MLF, helps to organize the head/neck complex to that the eyes/ears and focal attention can be shifted to turn toward and take in information that is deemed safe, important, relevant so that more information and/or engagement with the information is possible.',
+    category_name: 'Posture',
+    imageURL: ''
+  },
+  {
     term: 'Reflex Integration/Sensory Motor Patterns',
     definition:
       'Primitive or primary movement patterns allow for infant motor development and are integrated as neuromotor foundations and sensory experience allow for more advanced automatic and volitional motor control.',
@@ -694,6 +726,12 @@ const terms = [
     term: 'Anticipatory Control',
     definition:
       'A set of strategies of postural adjustment that an individual uses to prepare for specific voluntary movements.',
+    category_name: 'Posture',
+    imageURL: ''
+  },
+  {
+    term: 'Interactive Oscillator and Imitative Action',
+    definition: 'Through the mu-wave motoric system, otherwise known as the mirror neuron system, there are basic postural motor functions that allow us to catch the action, rhythm, timing and intention of another actions and to entrain/match/produce similar function. It allows for smooth, automatic shared action and enhances the anticipatory guidance of the postural motor system. This system is coded within the affective circuitry as well.',
     category_name: 'Posture',
     imageURL: ''
   },
@@ -716,7 +754,13 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Eye Scan/Saccadic Movements',
+    term: 'Executive Functioning',
+    definition: 'Executive functions are broad neurological processes that organize top down control from sensory and motor perceptual signals and allow for organized, self-regulated function.  As defined by Baron (2004): “Executive functioning skills “allow an individual to perceive stimuli from his or her environment, respond adaptively, flexibly change direction, anticipate future goals, consider consequences, and respond in an integrated or commonsense way” (p. 135).',
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Orient EYES-EARS-SELF to Goal',
     definition: `There are four basic types of eye movements, saccadic eye movements and smooth pursuits are organized in the frontal cortex as a guided attentional mechanism.`,
     category_name: 'Executive Functioning',
     imageURL: ''
@@ -794,7 +838,7 @@ const terms = [
     imageURL: ''
   },
   {
-    term: 'Future-Oriented/Goal Directed',
+    term: 'Future/Goal Directed',
     definition: `Our behavior is typically organized for something that will happen, in the next or extended moment, and this aspect of executive function allows for the organization of  behaviour towards a goal.  Mindfulness, and being in the moment is the penultimate ability to suspend future for the now/present moment.`,
     category_name: 'Executive Functioning',
     imageURL: ''
@@ -813,7 +857,7 @@ const terms = [
   },
   {
     term: 'Effortful Control',
-    definition: `The ability to regulate and sustain, shift, enhance or change how much effort one invests into a goal.`,
+    definition: `A person can invoke more power, precision, strength, speed with effortful intention.`,
     category_name: 'Executive Functioning',
     imageURL: ''
   },
@@ -827,6 +871,24 @@ const terms = [
     term: 'Spatial/Temporal Organization',
     definition: `Neural processing that supports either spatial knowing, temporal knowing, or how they work in tandem to help organize the self in relation to environment.\n
     Spatiotemporal adaptation is a process by which the child discovers and absorbs information from the environment and it has a developmental sequence and matures with the alteration or modification of performance. The spatiotemporal adaptation is, therefore, a process of continual interactions among growth, maturation, development and environmental transactions (Gilfoyle, Grady, Moore, 1990).`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Self-Control',
+    definition: `The ability to inhibit or manage problems when they arise - this is a reactive system and not as pro-active or responsive a set of functions.  Shanker (2016) points out the importance of the varieties of higher level controls are within a self-regulating system.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Self-Regulation Control',
+    definition: `The ability to proactively seek to identify and regulate, sustain, shift, enhance or change one's mood, state, experience or behavior.`,
+    category_name: 'Executive Functioning',
+    imageURL: ''
+  },
+  {
+    term: 'Self-Compassion',
+    definition: `The ability to engage in self-care with warmth and understanding toward our own selves when we suffer, fail, mismatch expectations, or feel inadequate, rather than being harsh, critical or ignoring our own pain or needs. (Neff, 2017).`,
     category_name: 'Executive Functioning',
     imageURL: ''
   }
