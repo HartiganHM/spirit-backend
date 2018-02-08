@@ -250,6 +250,25 @@ describe('API Routes', () => {
           throw error;
         });
     });
+
+    it('Should send a 422 if missing a parameter', () => {
+      return chai
+        .request(server)
+        .post('/authenticate')
+        .send({
+          appName: 'spirit'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - email"}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
   });
 
   describe('POST new term', () => {
