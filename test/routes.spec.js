@@ -11,7 +11,20 @@ const knex = require('../db/knex');
 chai.use(chaiHttp);
 
 describe('Client Routes', () => {
-  it('should return a 404 error for a route that does not exist', () => {
+  it('Should return the homepage', () => {
+    return chai
+      .request(server)
+      .get('/')
+      .then(response => {
+        response.should.have.status(200);
+        response.should.be.html;
+      })
+      .catch(error => {
+        throw error;
+      });
+  });
+
+  it('Should return a 404 error for a route that does not exist', () => {
     return chai
       .request(server)
       .get('/sad')
@@ -29,7 +42,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should get all terms', () => {
+    it('Should get all terms', () => {
       return chai
         .request(server)
         .get('/api/v1/terms/all')
@@ -58,7 +71,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should get all categories', () => {
+    it('Should get all categories', () => {
       return chai
         .request(server)
         .get('/api/v1/categories/all')
@@ -83,7 +96,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should get terms by category id', () => {
+    it('Should get terms by category id', () => {
       let id;
 
       return chai
@@ -113,13 +126,14 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 404 error if category is not found', () => {
+    it('Should return a 404 error if category is not found', () => {
       return chai
         .request(server)
         .get('/api/v1/categories/0/terms')
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -134,7 +148,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should get terms by terms name', () => {
+    it('Should get terms by terms name', () => {
       return chai
         .request(server)
         .get('/api/v1/terms?term=Olfaction')
@@ -160,13 +174,14 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 404 error when term is not found', () => {
+    it('Should return a 404 error when term is not found', () => {
       return chai
         .request(server)
         .get('/api/v1/terms?term=pants')
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Term pants not found."}');
         })
         .catch(error => {
           throw error;
@@ -181,7 +196,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should get terms by terms id', () => {
+    it('Should get terms by terms id', () => {
       let id;
 
       return chai
@@ -218,13 +233,53 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 404 error when term id is not found', () => {
+    it('Should return a 404 error when term id is not found', () => {
       return chai
         .request(server)
         .get('/api/v1/terms/0')
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('POST authenticate', () => {
+    it('should create a new JWT', () => {
+      return chai
+        .request(server)
+        .post('/authenticate')
+        .send({
+          email: 'user@email.com',
+          appName: 'spirit'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('string');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 422 if missing a parameter', () => {
+      return chai
+        .request(server)
+        .post('/authenticate')
+        .send({
+          appName: 'spirit'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - email"}'
+          );
         })
         .catch(error => {
           throw error;
@@ -239,7 +294,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should create a new term', () => {
+    it('Should create a new term', () => {
       let id;
 
       return chai
@@ -270,7 +325,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 404 error if category is not found when creating a term', () => {
+    it('Should return a 404 error if category is not found when creating a term', () => {
       return chai
         .request(server)
         .post('/api/v1/categories/0/terms')
@@ -287,7 +342,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error if parameters are missing', () => {
+    it('Should return a 422 error if parameters are missing', () => {
       let id;
 
       return chai
@@ -306,6 +361,9 @@ describe('API Routes', () => {
             .then(response => {
               response.should.have.status(422);
               response.should.be.json;
+              response.error.text.should.equal(
+                '{"error":"Missing required parameter - definition"}'
+              );
             })
             .catch(error => {
               throw error;
@@ -324,7 +382,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should create a new category', () => {
+    it('Should create a new category', () => {
       return chai
         .request(server)
         .post('/api/v1/categories')
@@ -340,13 +398,16 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error if parameters are missing', () => {
+    it('Should return a 422 error if parameters are missing', () => {
       return chai
         .request(server)
         .post('/api/v1/categories')
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - name"}'
+          );
         })
         .catch(error => {
           throw error;
@@ -361,7 +422,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should update a term', () => {
+    it('Should update a term', () => {
       let id;
 
       return chai
@@ -391,7 +452,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error when terms id is not found', () => {
+    it('Should return a 422 error when terms id is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/terms/0')
@@ -401,6 +462,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -415,7 +477,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should update a category', () => {
+    it('Should update a category', () => {
       let id;
 
       return chai
@@ -445,7 +507,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error when category is not found', () => {
+    it('Should return a 422 error when category is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/categories/0')
@@ -455,6 +517,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -469,7 +532,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should delete a term', () => {
+    it('Should delete a term', () => {
       let id;
 
       return chai
@@ -491,13 +554,14 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error when term is not found', () => {
+    it('Should return a 422 error when term is not found', () => {
       return chai
         .request(server)
         .delete('/api/v1/terms/0')
         .catch(response => {
           response.should.have.status(422);
           response.should.be.json;
+          response.error.text.should.equal('{"error":"Term 0 not found."}');
         });
     });
   });
@@ -509,7 +573,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('should delete a category', () => {
+    it('Should delete a category', () => {
       let id;
 
       return chai
@@ -531,13 +595,14 @@ describe('API Routes', () => {
         });
     });
 
-    it('should return a 422 error when category is not found', () => {
+    it('Should return a 422 error when category is not found', () => {
       return chai
         .request(server)
         .delete('/api/v1/categories/0')
         .catch(error => {
           error.should.have.status(422);
           error.should.be.json;
+          error.error.text.should.equal('{"error":"Category 0 not found."}');
         });
     });
   });
