@@ -232,6 +232,26 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST authenticate', () => {
+    it('should create a new JWT', () => {
+      return chai
+        .request(server)
+        .post('/authenticate')
+        .send({
+          email: 'user@email.com',
+          appName: 'spirit'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.be.a('string');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('POST new term', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
