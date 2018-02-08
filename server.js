@@ -20,8 +20,6 @@ const requireHTTPS = (request, response, next) => {
   next();
 };
 
-
-
 // Middleware use to check for authentic token on api request
 const checkAuth = (request, response, next) => {
   const { token } = request.headers;
@@ -46,7 +44,9 @@ const checkAdmin = (request, response, next) => {
   if (response.locals.email.includes('@turing.io')) {
     next();
   } else {
-    return response.status(403).json({ error: 'You are not authorized at this endpoint'});
+    return response
+      .status(403)
+      .json({ error: 'You are not authorized at this endpoint' });
   }
 };
 
