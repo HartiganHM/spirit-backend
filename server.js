@@ -6,11 +6,29 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const jwt = require('jsonwebtoken');
-
+const { KEYUTIL, KJUR, b64utoutf8 } = require('jsrsasign');
+const cors = require('express-cors');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
+const key = require('./pubKey');
+
+const corsOptions = {
+  allowedOrigins: ['localhost:3001', 'localhost:3000', 'rmorgan323.github.io'],
+  preflightContinue: true,
+  headers: ['Content-Type', 'x-token']
+};
+
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-token');
+  next();
+};
+
+app.use(allowCrossDomain)
+app.use(cors(corsOptions));
+
 
 // Middleware used to redirect http to https
 const requireHTTPS = (request, response, next) => {
@@ -51,14 +69,14 @@ const checkAdmin = (request, response, next) => {
 };
 
 // Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
-const accessControlAllowOrigin = (request, response, next) => {
-  response.header('Access-Control-Allow-Origin', '*');
-  response.header(
-    'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept'
-  );
-  next();
-};
+// const accessControlAllowOrigin = (request, response, next) => {
+//   response.header('Access-Control-Allow-Origin', '*');
+//   response.header(
+//     'Access-Control-Allow-Headers',
+//     'Origin, X-Requested-With, Content-Type, Accept'
+//   );
+//   next();
+// };
 
 app.set('port', process.env.PORT || 3000);
 app.set('spiritKey', process.env.SPIRIT_KEY);
@@ -67,39 +85,112 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if (environment !== 'development' && environment !== 'test') {
-  app.use(requireHTTPS);
-} else if (environment !== 'test') {
-  app.use(accessControlAllowOrigin);
-}
+// if (environment !== 'development' && environment !== 'test') {
+//   app.use(requireHTTPS);
+// } else if (environment !== 'test') {
+//   app.use(accessControlAllowOrigin);
+// }
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
 });
 
+////// VALIDATE //////
+
+const validate = (request, response) => {
+  try {
+    var jwToken = request.headers['x-token'] !== 'null' ? request.headers['x-token'] : '';
+    var pubkey = KEYUTIL.getKey(key);
+    var isValid = KJUR.jws.JWS.verifyJWT(jwToken, pubkey, {alg: ['RS256']});
+    if (isValid) {
+      var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(jwToken.split(".")[1]));
+      return payloadObj;
+    }
+  } catch (e) {
+    response.status(401).json({error: 'Invalid token.  Please login again.'});
+  }
+};
+
+////// GET/CREATE USER //////
+
+const getCurrentUser =  async ( request, response ) => {
+  const userObject = await validate(request, response);
+  if (!userObject) {
+    return;
+  }
+
+  const newUser = {
+    email: userObject.un,
+    name: userObject.n,
+    authrocket_id: userObject.uid
+  };
+
+  let foundUser = null;
+  await database('users').where('authrocket_id', userObject.uid).select()
+    .then( async (user) =>{
+      if (!user.length) {
+        foundUser = await createUser( response, newUser );
+      } else {
+        foundUser = user[0];
+      }
+    })
+    .catch(error => {
+      response.status(404).json({error});
+    });
+  return foundUser;
+};
+
+const createUser = async ( response, user ) => {
+  let foundUser;
+  await database('users').insert(user)
+    .then(() => {
+      foundUser = user;
+    })
+    .catch( error => {
+      response.status(500).json({error});
+    });
+  return foundUser;
+};
+
+app.get('/api/v1/users', async (request, response) => { 
+  const currentUser = await getCurrentUser(request, response);
+  if (!currentUser) {
+    return;
+  }
+  database('users').where('authrocket_id', currentUser.authrocket_id).select()
+    .then((user) => {
+      response.status(200).json(user);
+    });
+});
+
+
+
+
+
+
 ////// AUTHENTICATE USER //////
 /// Note: Authenticate endpoint must be at top as user must be authenticated
 ///       prior to accessing any api endpoints
 
-app.post('/authenticate', (request, response) => {
-  for (let requiredParameter of ['email', 'appName']) {
-    if (!request.body[requiredParameter]) {
-      return response
-        .status(422)
-        .json({ error: `Missing required parameter - ${requiredParameter}` });
-    }
-  }
+// app.post('/authenticate', (request, response) => {
+//   for (let requiredParameter of ['email', 'appName']) {
+//     if (!request.body[requiredParameter]) {
+//       return response
+//         .status(422)
+//         .json({ error: `Missing required parameter - ${requiredParameter}` });
+//     }
+//   }
 
-  const { email, appName } = request.body;
-  const cert = app.get('spiritKey');
-  const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
+//   const { email, appName } = request.body;
+//   const cert = app.get('spiritKey');
+//   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
 
-  return response.status(201).json(token);
-});
+//   return response.status(201).json(token);
+// });
 
-if (environment !== 'test') {
-  app.use(checkAuth);
-}
+// if (environment !== 'test') {
+//   app.use(checkAuth);
+// }
 
 //////  GET ALL TERMS  //////
 app.get('/api/v1/terms/all', (request, response) => {
@@ -186,9 +277,9 @@ app.get('/api/v1/terms', async (request, response) => {
   }
 });
 
-if (environment !== 'test') {
-  app.use(checkAdmin);
-}
+// if (environment !== 'test') {
+//   app.use(checkAdmin);
+// }
 
 //////  CREATE NEW TERM (admin only) //////
 // NOTE:  Requires category id in params and then term and definition in body.
