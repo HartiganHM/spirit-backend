@@ -177,7 +177,7 @@ app.get('/api/v1/terms', async (request, response) => {
       .select();
 
     if (!term.length) {
-      return response.status(404).json({ error: `Term ${term} not found.` });
+      return response.status(404).json({ error: `Term ${query} not found.` });
     } else {
       return response.status(200).json(term);
     }
