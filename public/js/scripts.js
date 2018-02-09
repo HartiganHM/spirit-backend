@@ -12,12 +12,7 @@ const authenticateUser = async () => {
     })
   })
 
-  console.log({ getUser })
-
   const jwt = await getUser.json();
-
-  console.log({ jwt })
-
   saveJWTtoLS(jwt)
   return jwt;
 }
