@@ -258,8 +258,6 @@ describe('API Routes', () => {
           appName: 'spirit'
         })
         .then(response => {
-          console.log(response);
-
           response.should.have.status(201);
           response.should.be.json;
           response.body.should.be.a('string');
