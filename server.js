@@ -363,13 +363,13 @@ app.post('/api/v1/categories', (request, response) => {
 //////  CREATE NEW PATIENT //////
 // NOTE:  Requires user id in params and then abstracted_name in body.
 //        Call will add the clinic_name to the term.
-app.post('/api/v1/users/:user_id/patients', (request, response) => {
+app.post('/api/v1/users/:user_id/patients', async (request, response) => {
   const newPatient = request.body;
   const { user_id } = request.params;
 
   for (let requiredParameter of ['abstracted_name']) {
     if (!newPatient[requiredParameter]) {
-      return response.status(422).json({ error: `Missing required parameter - ${requiredPatameter}` });
+      return response.status(422).json({ error: `Missing required parameter - ${requiredParameter}` });
     }
   }
 
@@ -380,7 +380,7 @@ app.post('/api/v1/users/:user_id/patients', (request, response) => {
   }
 
   const addPatient = await Object.assign({}, newPatient, {
-    clinic_name: clinicName[0].name,
+    clinic_name: clinicName[0].clinic,
     ot_id: user_id
   });
 
