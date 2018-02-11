@@ -152,6 +152,7 @@ const createUser = async ( response, user ) => {
   return foundUser;
 };
 
+//////  GET ALL USERS  //////
 app.get('/api/v1/users', async (request, response) => { 
   const currentUser = await getCurrentUser(request, response);
   if (!currentUser) {
@@ -163,10 +164,17 @@ app.get('/api/v1/users', async (request, response) => {
     });
 });
 
-
-
-
-
+//////  GET ALL PATIENTS //////
+app.get('/api/v1/patients', async (request, response) => {
+  database('patients')
+  .select()
+  .then(patients => {
+    return response.status(200).json(patients);
+  })
+  .catch(error => {
+    return response.status(500).json({ error });
+  });
+});
 
 ////// AUTHENTICATE USER //////
 /// Note: Authenticate endpoint must be at top as user must be authenticated
