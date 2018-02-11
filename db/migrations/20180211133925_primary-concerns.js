@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       table.foreign('patient_id').references('patients.id');
       table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
