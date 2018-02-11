@@ -360,6 +360,38 @@ app.post('/api/v1/categories', (request, response) => {
     });
 });
 
+//////  CREATE NEW PATIENT //////
+// NOTE:  Requires user id in params and then abstracted_name in body.
+//        Call will add the clinic_name to the term.
+app.post('/api/v1/users/:user_id/patients', (request, response) => {
+  const newPatient = request.body;
+  const { user_id } = request.params;
+
+  for (let requiredParameter of ['abstracted_name']) {
+    if (!newPatient[requiredParameter]) {
+      return response.status(422).json({ error: `Missing required parameter - ${requiredPatameter}` });
+    }
+  }
+
+  const clinicName = await database('users').where('id', user_id).select();
+
+  if (!clinicName.length) {
+    return response.status(404).json({ error: `User not found` });
+  }
+
+  const addPatient = await Object.assign({}, newPatient, {
+    clinic_name: clinicName[0].name,
+    ot_id: user_id
+  });
+
+  database('patients').returning('id').insert(addPatient).then(id => {
+    return response.status(201).json(id);
+  })
+  .catch(error => {
+    return response.status(500).json({ error });
+  });
+});
+
 //////  CREATE NEW TERM (admin only) //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
