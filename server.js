@@ -269,7 +269,7 @@ app.get('/api/v1/patients/:patient_id', async (request, response) => {
     } else {
       return response.status(200).json(patient);
     }
-  } catch {
+  } catch (error) {
     return response.status(500).json({ error });
   }
 });
@@ -294,6 +294,24 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
     return response.status(500).json({ error });
   }
 });
+
+//////  GET PATIENTs BY USER ID  //////
+app.get('/api/v1/users/:user_id/patients', async (request, response) => {
+  const { user_id } = request.params;
+
+  try {
+    const patients = await database('patients').where('ot_id', user_id).select();
+
+    if (!patients.length) {
+      return response.status(404).json({ error: `User ${user_id} not found.`});
+    } else {
+      return response.status(200).json(patients);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
