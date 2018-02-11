@@ -22,13 +22,15 @@ const corsOptions = {
 var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-token');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Content-Type, Authorization, Content-Length, X-Requested-With, x-token'
+  );
   next();
 };
 
-app.use(allowCrossDomain)
+app.use(allowCrossDomain);
 app.use(cors(corsOptions));
-
 
 // Middleware used to redirect http to https
 const requireHTTPS = (request, response, next) => {
@@ -99,21 +101,24 @@ app.listen(app.get('port'), () => {
 
 const validate = (request, response) => {
   try {
-    var jwToken = request.headers['x-token'] !== 'null' ? request.headers['x-token'] : '';
+    var jwToken =
+      request.headers['x-token'] !== 'null' ? request.headers['x-token'] : '';
     var pubkey = KEYUTIL.getKey(key);
-    var isValid = KJUR.jws.JWS.verifyJWT(jwToken, pubkey, {alg: ['RS256']});
+    var isValid = KJUR.jws.JWS.verifyJWT(jwToken, pubkey, { alg: ['RS256'] });
     if (isValid) {
-      var payloadObj = KJUR.jws.JWS.readSafeJSONString(b64utoutf8(jwToken.split(".")[1]));
+      var payloadObj = KJUR.jws.JWS.readSafeJSONString(
+        b64utoutf8(jwToken.split('.')[1])
+      );
       return payloadObj;
     }
   } catch (e) {
-    response.status(401).json({error: 'Invalid token.  Please login again.'});
+    response.status(401).json({ error: 'Invalid token.  Please login again.' });
   }
 };
 
 ////// GET/CREATE USER //////
 
-const getCurrentUser =  async ( request, response ) => {
+const getCurrentUser = async (request, response) => {
   const userObject = await validate(request, response);
   if (!userObject) {
     return;
@@ -126,40 +131,45 @@ const getCurrentUser =  async ( request, response ) => {
   };
 
   let foundUser = null;
-  await database('users').where('authrocket_id', userObject.uid).select()
-    .then( async (user) =>{
+  await database('users')
+    .where('authrocket_id', userObject.uid)
+    .select()
+    .then(async user => {
       if (!user.length) {
-        foundUser = await createUser( response, newUser );
+        foundUser = await createUser(response, newUser);
       } else {
         foundUser = user[0];
       }
     })
     .catch(error => {
-      response.status(404).json({error});
+      response.status(404).json({ error });
     });
   return foundUser;
 };
 
-const createUser = async ( response, user ) => {
+const createUser = async (response, user) => {
   let foundUser;
-  await database('users').insert(user)
+  await database('users')
+    .insert(user)
     .then(() => {
       foundUser = user;
     })
-    .catch( error => {
-      response.status(500).json({error});
+    .catch(error => {
+      response.status(500).json({ error });
     });
   return foundUser;
 };
 
 //////  GET ALL USERS  //////
-app.get('/api/v1/users', async (request, response) => { 
+app.get('/api/v1/users', async (request, response) => {
   const currentUser = await getCurrentUser(request, response);
   if (!currentUser) {
     return;
   }
-  database('users').where('authrocket_id', currentUser.authrocket_id).select()
-    .then((user) => {
+  database('users')
+    .where('authrocket_id', currentUser.authrocket_id)
+    .select()
+    .then(user => {
       response.status(200).json(user);
     });
 });
@@ -167,13 +177,13 @@ app.get('/api/v1/users', async (request, response) => {
 //////  GET ALL PATIENTS //////
 app.get('/api/v1/patients', (request, response) => {
   database('patients')
-  .select()
-  .then(patients => {
-    return response.status(200).json(patients);
-  })
-  .catch(error => {
-    return response.status(500).json({ error });
-  });
+    .select()
+    .then(patients => {
+      return response.status(200).json(patients);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
 });
 
 ////// AUTHENTICATE USER //////
@@ -244,6 +254,25 @@ app.get('/api/v1/terms', async (request, response) => {
 });
 
 //////  GET PATIENT BY PATIENT ID //////
+app.get('/api/v1/patients/:patient_id', async (request, response) => {
+  const { patient_id } = request.params;
+
+  try {
+    const patient = await database('patients')
+      .where('id', patient_id)
+      .select();
+
+    if (!patient.length) {
+      return response
+        .status(404)
+        .json({ error: `Patient ${patient_id} not found.` });
+    } else {
+      return response.status(200).json(patient);
+    }
+  } catch {
+    return response.status(500).json({ error });
+  }
+});
 
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
