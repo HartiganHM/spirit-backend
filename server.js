@@ -295,7 +295,7 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
   }
 });
 
-//////  GET PATIENTs BY USER ID  //////
+//////  GET PATIENTS BY USER ID  //////
 app.get('/api/v1/users/:user_id/patients', async (request, response) => {
   const { user_id } = request.params;
 
@@ -338,6 +338,28 @@ app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
 //   app.use(checkAdmin);
 // }
 
+//////  CREATE NEW CATEGORY (admin only) //////
+app.post('/api/v1/categories', (request, response) => {
+  const newCategory = request.body;
+
+  for (let requiredParameter of ['name']) {
+    if (!newCategory[requiredParameter]) {
+      return response
+        .status(422)
+        .json({ error: `Missing required parameter - ${requiredParameter}` });
+    }
+  }
+  database('categories')
+    .returning('id')
+    .insert(newCategory)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW TERM (admin only) //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
@@ -375,27 +397,6 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     });
 });
 
-//////  CREATE NEW CATEGORY (admin only) //////
-app.post('/api/v1/categories', (request, response) => {
-  const newCategory = request.body;
-
-  for (let requiredParameter of ['name']) {
-    if (!newCategory[requiredParameter]) {
-      return response
-        .status(422)
-        .json({ error: `Missing required parameter - ${requiredParameter}` });
-    }
-  }
-  database('categories')
-    .returning('id')
-    .insert(newCategory)
-    .then(id => {
-      return response.status(201).json(id);
-    })
-    .catch(error => {
-      return response.status(500).json({ error });
-    });
-});
 
 //////  UPDATE TERM (admin only) //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
