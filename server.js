@@ -165,7 +165,7 @@ app.get('/api/v1/users', async (request, response) => {
 });
 
 //////  GET ALL PATIENTS //////
-app.get('/api/v1/patients', async (request, response) => {
+app.get('/api/v1/patients', (request, response) => {
   database('patients')
   .select()
   .then(patients => {
@@ -224,28 +224,28 @@ app.get('/api/v1/categories/all', (request, response) => {
     });
 });
 
-//////  GET TERMS BY CATEGORY ID  //////
-app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
-  const { category_id } = request.params;
+//////  GET TERMS BY TERMS NAME //////
+app.get('/api/v1/terms', async (request, response) => {
+  const query = request.query.term;
 
   try {
-    const terms = await database('terms')
-      .where('category_id', category_id)
+    const term = await database('terms')
+      .where('term', query)
       .select();
 
-    if (!terms.length) {
-      return response
-        .status(404)
-        .json({ error: `Category ${category_id} not found.` });
+    if (!term.length) {
+      return response.status(404).json({ error: `Term ${query} not found.` });
     } else {
-      return response.status(200).json(terms);
+      return response.status(200).json(term);
     }
   } catch (error) {
     return response.status(500).json({ error });
   }
 });
 
-//////  GET TERMS BY TERMS ID //////
+//////  GET PATIENT BY PATIENT ID //////
+
+//////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
 
@@ -266,19 +266,21 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
   }
 });
 
-//////  GET TERMS BY TERMS NAME //////
-app.get('/api/v1/terms', async (request, response) => {
-  const query = request.query.term;
+//////  GET TERMS BY CATEGORY ID  //////
+app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
+  const { category_id } = request.params;
 
   try {
-    const term = await database('terms')
-      .where('term', query)
+    const terms = await database('terms')
+      .where('category_id', category_id)
       .select();
 
-    if (!term.length) {
-      return response.status(404).json({ error: `Term ${query} not found.` });
+    if (!terms.length) {
+      return response
+        .status(404)
+        .json({ error: `Category ${category_id} not found.` });
     } else {
-      return response.status(200).json(term);
+      return response.status(200).json(terms);
     }
   } catch (error) {
     return response.status(500).json({ error });
