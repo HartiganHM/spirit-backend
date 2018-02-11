@@ -6,6 +6,7 @@ exports.up = function(knex, Promise) {
       table.string('clinic_name');
       table.integer('ot_id').unsigned();
       table.foreign('ot_id').references('users.id');
+      table.timestamps(true, true);
     })
   ]);
 };
