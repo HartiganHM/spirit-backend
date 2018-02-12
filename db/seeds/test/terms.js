@@ -8,12 +8,8 @@ const clinics = [
   {
     name: 'Developmental_FX',
     abbreviation: 'DFX'
-  },
-  {
-    name: 'Clinic_World',
-    abbreviation: 'CLW'
   }
-]
+];
 
 const users = [
   {
@@ -22,26 +18,19 @@ const users = [
     email: 'hartigan.hm@gmail.com',
     clinic: 'Developmental_FX',
     clinic_abbreviation: 'DFX'
-  },
-  {
-    authrocket_id: 'usr_0vYfOixWwPnBDh1w812345',
-    name: 'Tracy Stackhouse',
-    email: 'tracy@developmentalfx.org',
-    clinic: 'Developmental_FX',
-    clinic_abbreviation: 'DFX'
   }
-]
+];
 
 const patients = [
   {
     abstracted_name: 'DFXHH3',
-    clinic_name: 'Developmental_FX',
+    clinic_name: 'Developmental_FX'
   },
   {
     abstracted_name: 'DFXJF1',
-    clinic_name: 'Developmental_FX',
+    clinic_name: 'Developmental_FX'
   }
-]
+];
 
 const createCategory = (knex, category) => {
   return knex('categories')
@@ -67,50 +56,61 @@ const createTerm = (knex, term) => {
   return knex('terms').insert(term);
 };
 
-const createClinic = (knex, clinic) =>{
+const createClinic = (knex, clinic) => {
   return knex('clinics')
-  .insert(clinic, 'id')
-  .then(clinicId => {
-    let userPromises = [];
+    .insert(clinic, 'id')
+    .then(clinicId => {
+      let userPromises = [];
 
-    let filteredUsers = users.filter(
-      user => user.clinic === clinic.name
-    );
+      let filteredUsers = users.filter(user => user.clinic === clinic.name);
 
-    filteredUsers.forEach(user => {
-      userPromises.push(createUser(knex, user));
+      filteredUsers.forEach(user => {
+        userPromises.push(
+          createUser(knex, { ...user, clinic_id: clinicId[0] })
+        );
+      });
+
+      return Promise.all(userPromises);
+    })
+    .catch(error => {
+      throw error;
     });
+};
 
-    return Promise.all(userPromises);
-  })
-}
-
-const createUser = (knex, clinic) => {
+const createUser = (knex, user) => {
   return knex('users')
     .insert(user, 'id')
     .then(userId => {
       let patientsPromises = [];
 
       let filteredPatients = patients.filter(
-        patient => patient.clinic_name === user.clinic_name
+        patient => patient.clinic_name === user.clinic
       );
 
       filteredPatients.forEach(patient => {
-        patientsPromises.push(createPatient(knex, patient));
+        patientsPromises.push(
+          createPatient(knex, { ...patient, ot_id: userId[0] })
+        );
       });
 
       return Promise.all(patientsPromises);
     })
-}
+    .catch(error => {
+      throw error;
+    });
+};
 
 const createPatient = (knex, patient) => {
   return knex('patients').insert(patient);
-}
+};
 
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('patients').del())
+    .then(() => knex('users').del())
+    .then(() => knex('clinics').del())
     .then(() => {
       let categoriesPromises = [];
 
@@ -121,13 +121,10 @@ exports.seed = function(knex, Promise) {
       return Promise.all(categoriesPromises);
     })
     .then(() => {
-      knex('patients').del()
-    })
-    .then(() => {
       let clinicsPromises = [];
 
       clinics.forEach(clinic => {
-        clinicsPromises.push(createUser(knex, clinic));
+        clinicsPromises.push(createClinic(knex, clinic));
       });
 
       return Promise.all(clinicsPromises);
