@@ -4,6 +4,17 @@
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
 
+const patients = [
+  {
+    abstracted_name: 'DFXHH3',
+    clinic_name: 'Developmental_FX',
+  },
+  {
+    abstracted_name: 'DFXJF1',
+    clinic_name: 'Developmental_FX',
+  }
+]
+
 const createCategory = (knex, category) => {
   return knex('categories')
     .insert(category, 'id')
@@ -28,11 +39,14 @@ const createTerm = (knex, term) => {
   return knex('terms').insert(term);
 };
 
+const createPatient = (knex, patient) => {
+  return knex('patients').insert(patient);
+}
+
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
-
     .then(() => {
       let categoriesPromises = [];
 
@@ -41,6 +55,18 @@ exports.seed = function(knex, Promise) {
       });
 
       return Promise.all(categoriesPromises);
+    })
+    .then(() => {
+      knex('patients').del()
+    })
+    .then(() => {
+      let patientsPromises = [];
+
+      patients.forEach(patient => {
+        patientsPromises.push(createPatient(knex, patient));
+      });
+
+      return Promise.all(patientsPromises);
     })
     .catch(error => console.log(`Error seeding data: ${error}`));
 };
