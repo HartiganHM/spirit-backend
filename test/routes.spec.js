@@ -89,6 +89,31 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET all clinics', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get all clinics', () =>{
+      return chai
+        .request(server)
+        .get('/api/v1/clinics')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('abbreviation');
+        })
+        .catch(error => {
+          throw error;
+        })
+    })
+  })
+
   describe('GET all patients', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
