@@ -167,6 +167,47 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET patients by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get patients by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('abstracted_name');
+          response.body[0].should.have.property('clinic_name');
+          response.body[0].should.have.property('ot_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 if user id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Patient 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
