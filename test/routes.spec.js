@@ -626,6 +626,26 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new patient', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should create a new patient', () => {
+
+    });
+
+    it('Should return a 422 error if parameters are missing', () => {
+
+    });
+
+    it('Should return a 404 error is user does not exist', () => {
+
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
