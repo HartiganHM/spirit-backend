@@ -366,7 +366,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     .select();
 
   if (!clinicName.length) {
-    return response.status(404).json({ error: `User not found` });
+    return response.status(404).json({ error: `User ${user_id} not found.` });
   }
 
   const addPatient = await Object.assign({}, newPatient, {
