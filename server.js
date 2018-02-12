@@ -197,6 +197,27 @@ app.get('/api/v1/terms', async (request, response) => {
   }
 });
 
+//////  GET CLINIC BY CLINIC ID //////
+app.get('/api/v1/clinics/:clinic_id', async (request, response) => {
+  const { clinic_id } = request.params;
+
+  try {
+    const clinic = await database('clinics')
+      .where('id', clinic_id)
+      .select();
+
+    if (!clinic.length) {
+      return response
+        .status(404)
+        .json({ error: `Clinic ${clinic_id} not found.` });
+    } else {
+      return response.status(200).json(clinic);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET PATIENT BY PATIENT ID //////
 app.get('/api/v1/patients/:patient_id', async (request, response) => {
   const { patient_id } = request.params;
@@ -279,11 +300,7 @@ app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   }
 });
 
-// if (environment !== 'test') {
-//   app.use(checkAdmin);
-// }
-
-//////  CREATE NEW CATEGORY (admin only) //////
+//////  CREATE NEW CATEGORY //////
 app.post('/api/v1/categories', (request, response) => {
   const newCategory = request.body;
 
@@ -344,7 +361,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     });
 });
 
-//////  CREATE NEW TERM (admin only) //////
+//////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
 app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
@@ -381,7 +398,7 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     });
 });
 
-//////  UPDATE TERM (admin only) //////
+//////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
   const updatedTerm = request.body;
@@ -406,7 +423,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     });
 });
 
-//////  UPDATE CATEGORY (admin only) //////
+//////  UPDATE CATEGORY //////
 app.put('/api/v1/categories/:category_id', async (request, response) => {
   const { category_id } = request.params;
   const updatedCategory = request.body;
@@ -433,7 +450,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     });
 });
 
-//////  DELETE TERM (admin only) //////
+//////  DELETE TERM //////
 app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
 
@@ -454,7 +471,7 @@ app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   }
 });
 
-//////  DELETE CATEGORY (admin only) //////
+//////  DELETE CATEGORY //////
 app.delete('/api/v1/categories/:category_id', (request, response) => {
   const { category_id } = request.params;
 
