@@ -29,56 +29,13 @@ var allowCrossDomain = function(req, res, next) {
   next();
 };
 
-app.use(allowCrossDomain);
-app.use(cors(corsOptions));
-
-// Middleware used to redirect http to https
+////// HTTPS REDIRECT //////
 const requireHTTPS = (request, response, next) => {
   if (request.headers['x-forwarded-proto'] !== 'https') {
     return response.redirect('https://' + request.get('host') + request.url);
   }
   next();
 };
-
-// Middleware use to check for authentic token on api request
-const checkAuth = (request, response, next) => {
-  const { token } = request.headers;
-
-  if (!token) {
-    return response
-      .status(403)
-      .json('You must be authorized to hit this endpoint');
-  }
-
-  try {
-    const decoded = jwt.verify(token, app.get('spiritKey'));
-    response.locals.email = decoded.email;
-    next();
-  } catch (error) {
-    return response.status(403).json('Invalid token');
-  }
-};
-
-// Middleware for checking admin email
-const checkAdmin = (request, response, next) => {
-  if (response.locals.email.includes('@turing.io')) {
-    next();
-  } else {
-    return response
-      .status(403)
-      .json({ error: 'You are not authorized at this endpoint' });
-  }
-};
-
-// Middleware used to set Access-Control-Allow-Origin header in response to avoid CORS errors
-// const accessControlAllowOrigin = (request, response, next) => {
-//   response.header('Access-Control-Allow-Origin', '*');
-//   response.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept'
-//   );
-//   next();
-// };
 
 app.set('port', process.env.PORT || 3000);
 app.set('spiritKey', process.env.SPIRIT_KEY);
@@ -87,18 +44,18 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// if (environment !== 'development' && environment !== 'test') {
-//   app.use(requireHTTPS);
-// } else if (environment !== 'test') {
-//   app.use(accessControlAllowOrigin);
-// }
+if (environment !== 'development' && environment !== 'test') {
+  app.use(requireHTTPS);
+} else if (environment !== 'test') {
+  app.use(allowCrossDomain);
+  app.use(cors(corsOptions));
+}
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
 });
 
 ////// VALIDATE //////
-
 const validate = (request, response) => {
   try {
     var jwToken =
@@ -111,13 +68,12 @@ const validate = (request, response) => {
       );
       return payloadObj;
     }
-  } catch (e) {
+  } catch (error) {
     response.status(401).json({ error: 'Invalid token.  Please login again.' });
   }
 };
 
 ////// GET/CREATE USER //////
-
 const getCurrentUser = async (request, response) => {
   const userObject = await validate(request, response);
   if (!userObject) {
@@ -185,30 +141,6 @@ app.get('/api/v1/patients', (request, response) => {
       return response.status(500).json({ error });
     });
 });
-
-////// AUTHENTICATE USER //////
-/// Note: Authenticate endpoint must be at top as user must be authenticated
-///       prior to accessing any api endpoints
-
-// app.post('/authenticate', (request, response) => {
-//   for (let requiredParameter of ['email', 'appName']) {
-//     if (!request.body[requiredParameter]) {
-//       return response
-//         .status(422)
-//         .json({ error: `Missing required parameter - ${requiredParameter}` });
-//     }
-//   }
-
-//   const { email, appName } = request.body;
-//   const cert = app.get('spiritKey');
-//   const token = jwt.sign({ email, appName }, cert, { expiresIn: '6h' });
-
-//   return response.status(201).json(token);
-// });
-
-// if (environment !== 'test') {
-//   app.use(checkAuth);
-// }
 
 //////  GET ALL TERMS  //////
 app.get('/api/v1/terms/all', (request, response) => {
@@ -300,10 +232,12 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
   const { user_id } = request.params;
 
   try {
-    const patients = await database('patients').where('ot_id', user_id).select();
+    const patients = await database('patients')
+      .where('ot_id', user_id)
+      .select();
 
     if (!patients.length) {
-      return response.status(404).json({ error: `User ${user_id} not found.`});
+      return response.status(404).json({ error: `User ${user_id} not found.` });
     } else {
       return response.status(200).json(patients);
     }
@@ -311,7 +245,6 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
     return response.status(500).json({ error });
   }
 });
-
 
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
@@ -369,11 +302,15 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
 
   for (let requiredParameter of ['abstracted_name']) {
     if (!newPatient[requiredParameter]) {
-      return response.status(422).json({ error: `Missing required parameter - ${requiredParameter}` });
+      return response
+        .status(422)
+        .json({ error: `Missing required parameter - ${requiredParameter}` });
     }
   }
 
-  const clinicName = await database('users').where('id', user_id).select();
+  const clinicName = await database('users')
+    .where('id', user_id)
+    .select();
 
   if (!clinicName.length) {
     return response.status(404).json({ error: `User not found` });
@@ -384,12 +321,15 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     ot_id: user_id
   });
 
-  database('patients').returning('id').insert(addPatient).then(id => {
-    return response.status(201).json(id);
-  })
-  .catch(error => {
-    return response.status(500).json({ error });
-  });
+  database('patients')
+    .returning('id')
+    .insert(addPatient)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
 });
 
 //////  CREATE NEW TERM (admin only) //////
@@ -428,7 +368,6 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
       return response.status(500).json({ error });
     });
 });
-
 
 //////  UPDATE TERM (admin only) //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {

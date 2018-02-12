@@ -111,9 +111,9 @@ describe('API Routes', () => {
         })
         .catch(error => {
           throw error;
-        })
-    })
-  })
+        });
+    });
+  });
 
   describe('GET terms by category id', () => {
     beforeEach(done => {
