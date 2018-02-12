@@ -130,6 +130,18 @@ app.get('/api/v1/users', async (request, response) => {
     });
 });
 
+//////  GET ALL CLINICS //////
+app.get('/api/v1/clinics', (request, response) => {
+  database('clinics')
+    .select()
+    .then(clinics => {
+      return response.status(200).json(clinics);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  GET ALL PATIENTS //////
 app.get('/api/v1/patients', (request, response) => {
   database('patients')
