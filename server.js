@@ -324,7 +324,7 @@ app.post('/api/v1/categories', (request, response) => {
 
 //////  CREATE NEW CLINIC //////
 // NOTE:  Requires name and abbreviation in body.
-app.post('/api/v1/clinics', () => {
+app.post('/api/v1/clinics', (request, response) => {
   const newClinic = request.body;
 
   for (let requiredParameter of ['name', 'abbreviation']) {
