@@ -322,9 +322,33 @@ app.post('/api/v1/categories', (request, response) => {
     });
 });
 
+//////  CREATE NEW CLINIC //////
+// NOTE:  Requires name and abbreviation in body.
+app.post('/api/v1/clinics', () => {
+  const newClinic = request.body;
+
+  for (let requiredParameter of ['name', 'abbreviation']) {
+    if (!newClinic[requiredParameter]) {
+      return response
+        .status(422)
+        .json({ error: `Missing required parameter - ${requiredParameter}` });
+    }
+  }
+
+  database('clinics')
+    .returning('id')
+    .insert(newClinic)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW PATIENT //////
 // NOTE:  Requires user id in params and then abstracted_name in body.
-//        Call will add the clinic_name to the term.
+//        Call will add the clinic_name to the patient.
 app.post('/api/v1/users/:user_id/patients', async (request, response) => {
   const newPatient = request.body;
   const { user_id } = request.params;
