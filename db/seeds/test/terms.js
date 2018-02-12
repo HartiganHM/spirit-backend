@@ -5,13 +5,31 @@ const categories = require('../../data/categories');
 const terms = require('../../data/terms');
 
 const clinics = [
-  {},
-  {}
+  {
+    name: 'Developmental_FX',
+    abbreviation: 'DFX'
+  },
+  {
+    name: 'Clinic_World',
+    abbreviation: 'CLW'
+  }
 ]
 
 const users = [
-  {},
-  {}
+  {
+    authrocket_id: 'usr_0vYfOixWwPnBDh1w8rxjGm',
+    name: 'Hugh Hartigan',
+    email: 'hartigan.hm@gmail.com',
+    clinic: 'Developmental_FX',
+    clinic_abbreviation: 'DFX'
+  },
+  {
+    authrocket_id: 'usr_0vYfOixWwPnBDh1w812345',
+    name: 'Tracy Stackhouse',
+    email: 'tracy@developmentalfx.org',
+    clinic: 'Developmental_FX',
+    clinic_abbreviation: 'DFX'
+  }
 ]
 
 const patients = [
@@ -49,6 +67,28 @@ const createTerm = (knex, term) => {
   return knex('terms').insert(term);
 };
 
+const createClinic = (knex, clinic) =>{
+
+}
+
+const createUser = (knex, clinic) => {
+  return knex('users')
+    .insert(user, 'id')
+    .then(userId => {
+      let patientsPromises = [];
+
+      let filteredPatients = patients.filter(
+        patient => patient.clinic_name === user.clinic_name
+      );
+
+      filteredPatients.forEach(patient => {
+        patientsPromises.push(createPatient(knex, patient));
+      });
+
+      return Promise.all(patientsPromises);
+    })
+}
+
 const createPatient = (knex, patient) => {
   return knex('patients').insert(patient);
 }
@@ -70,13 +110,13 @@ exports.seed = function(knex, Promise) {
       knex('patients').del()
     })
     .then(() => {
-      let patientsPromises = [];
+      let usersPromises = [];
 
-      patients.forEach(patient => {
-        patientsPromises.push(createPatient(knex, patient));
+      users.forEach(user => {
+        usersPromises.push(createPatient(knex, user));
       });
 
-      return Promise.all(patientsPromises);
+      return Promise.all(usersPromises);
     })
     .catch(error => console.log(`Error seeding data: ${error}`));
 };
