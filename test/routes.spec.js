@@ -600,7 +600,6 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
-
         })
         .catch(error => {
           throw error;
@@ -608,7 +607,22 @@ describe('API Routes', () => {
     });
 
     it('Should return a 422 error if parameters are missing', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/clinics')
+        .send({
+          name: 'Clinic_Place'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - abbreviation"}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
