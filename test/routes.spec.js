@@ -215,7 +215,14 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 if clinic is not found', () => {
-
+      return chai;
+      request(server)
+        .get('/api/v1/clinics/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Clinic 0 not found."}');
+        });
     });
   });
 
