@@ -634,8 +634,8 @@ describe('API Routes', () => {
     });
 
     it('Should create a new patient', () => {
-      return chai
-        request(server)
+      return chai;
+      request(server)
         .post('/api/v1/users/1/patients')
         .send({
           abstracted_name: 'DFXTH23'
@@ -650,12 +650,21 @@ describe('API Routes', () => {
     });
 
     it('Should return a 422 error if parameters are missing', () => {
-
+      return chai;
+      request(server)
+        .post('/api/v1/users/1/patients')
+        .then(response => {
+          response.should.have.status(422);
+          response.error.text.should.equal(
+            '"error":"Missing required parameter - abstracted_name"'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
-    it('Should return a 404 error is user does not exist', () => {
-
-    });
+    it('Should return a 404 error is user does not exist', () => {});
   });
 
   describe('PUT terms', () => {
