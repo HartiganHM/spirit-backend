@@ -109,8 +109,17 @@ exports.seed = function(knex, Promise) {
     .del()
     .then(() => knex('categories').del())
     .then(() => knex('patients').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE patients_id_seq RESTART WITH 1');
+    })
     .then(() => knex('users').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE users_id_seq RESTART WITH 1');
+    })
     .then(() => knex('clinics').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE clinics_id_seq RESTART WITH 1');
+    })
     .then(() => {
       let categoriesPromises = [];
 
