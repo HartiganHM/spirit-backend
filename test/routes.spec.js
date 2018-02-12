@@ -96,7 +96,7 @@ describe('API Routes', () => {
       });
     });
 
-    it('Should get all clinics', () =>{
+    it('Should get all clinics', () => {
       return chai
         .request(server)
         .get('/api/v1/clinics')
@@ -110,9 +110,9 @@ describe('API Routes', () => {
         })
         .catch(error => {
           throw error;
-        })
-    })
-  })
+        });
+    });
+  });
 
   describe('GET all patients', () => {
     beforeEach(done => {
@@ -189,6 +189,22 @@ describe('API Routes', () => {
         .catch(error => {
           throw error;
         });
+    });
+  });
+
+  describe('GET clinics by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get clinics by clinic id', () => {
+      
+    });
+
+    it('Should return a 404 if clinic is not found', () => {
+
     });
   });
 
