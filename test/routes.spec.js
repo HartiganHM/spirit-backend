@@ -582,6 +582,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new clinic', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should create a new clinic', () => {
+
+    });
+
+    it('Should return a 422 error if parameters are missing', () => {
+
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
