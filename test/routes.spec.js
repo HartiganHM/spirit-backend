@@ -634,7 +634,19 @@ describe('API Routes', () => {
     });
 
     it('Should create a new patient', () => {
-
+      return chai
+        request(server)
+        .post('/api/v1/users/1/patients')
+        .send({
+          abstracted_name: 'DFXTH23'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 422 error if parameters are missing', () => {
