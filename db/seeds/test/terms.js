@@ -4,6 +4,16 @@
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
 
+const clinics = [
+  {},
+  {}
+]
+
+const users = [
+  {},
+  {}
+]
+
 const patients = [
   {
     abstracted_name: 'DFXHH3',
