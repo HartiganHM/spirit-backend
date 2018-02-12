@@ -68,7 +68,21 @@ const createTerm = (knex, term) => {
 };
 
 const createClinic = (knex, clinic) =>{
+  return knex('clinics')
+  .insert(clinic, 'id')
+  .then(clinicId => {
+    let userPromises = [];
 
+    let filteredUsers = users.filter(
+      user => user.clinic === clinic.name
+    );
+
+    filteredUsers.forEach(user => {
+      userPromises.push(createUser(knex, user));
+    });
+
+    return Promise.all(userPromises);
+  })
 }
 
 const createUser = (knex, clinic) => {
@@ -110,13 +124,13 @@ exports.seed = function(knex, Promise) {
       knex('patients').del()
     })
     .then(() => {
-      let usersPromises = [];
+      let clinicsPromises = [];
 
-      users.forEach(user => {
-        usersPromises.push(createPatient(knex, user));
+      clinics.forEach(clinic => {
+        clinicsPromises.push(createUser(knex, clinic));
       });
 
-      return Promise.all(usersPromises);
+      return Promise.all(clinicsPromises);
     })
     .catch(error => console.log(`Error seeding data: ${error}`));
 };
