@@ -200,7 +200,18 @@ describe('API Routes', () => {
     });
 
     it('Should get clinics by clinic id', () => {
-      
+      return chai
+        .request(server)
+        .get('/api/v1/clinics/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('name');
+          response.body[0].should.have.property('abbreviation');
+        });
     });
 
     it('Should return a 404 if clinic is not found', () => {
