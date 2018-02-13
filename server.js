@@ -279,6 +279,30 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
   }
 });
 
+///// GET PRIMARY CONCERNS BY PATIENT ID /////
+app.get(
+  '/api/v1/patients/:patientId/primary-concerns',
+  async (request, response) => {
+    const { patientId } = request.params;
+
+    try {
+      const primaryConcerns = await database('primary_concerns')
+        .where('patient_id', patientId)
+        .select();
+
+      if (!primaryConcerns.length) {
+        return response
+          .status(404)
+          .json({ error: `Patient ${patientId} not found.` });
+      } else {
+        return response.status(200).json(primaryConcerns);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   const { category_id } = request.params;
