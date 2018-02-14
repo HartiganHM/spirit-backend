@@ -592,45 +592,6 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST authenticate', () => {
-    xit('should create a new JWT', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          email: 'user@email.com',
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(201);
-          response.should.be.json;
-          response.body.should.be.a('string');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-
-    xit('Should send a 422 if missing a parameter', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(422);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Missing required parameter - email"}'
-          );
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-  });
-
   describe('POST new term', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
