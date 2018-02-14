@@ -422,7 +422,7 @@ app.post(
       if (!newPrimaryConcern[requiredParameter]) {
         return response
           .status(422)
-          .json({ error: `Missing required parameter - ${requiredParameter}` });
+          .json({ error: `Missing required parameter - ${requiredParameter}.` });
       }
     }
 

@@ -763,7 +763,30 @@ describe('API Routes', () => {
     });
 
     it('Should return a 422 error if missing a required parameter', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/patients/1/primary-concerns')
+        .send(
+          {
+            domain_1: true,
+            domain_2: false,
+            domain_3: true,
+            domain_4: true,
+            domain_5: false,
+            domain_6: true,
+            notes: 'Plays well with parents around, but not while away'
+          }
+        )
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - description."}'
+          )
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should throw a 404 error if patient id is not found', () => {
