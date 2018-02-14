@@ -630,7 +630,28 @@ describe('API Routes', () => {
     });
 
     it('Should get treatment plans by session id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/treatment-plans')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should send a 404 if session id is not found', () => {
