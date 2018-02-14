@@ -728,7 +728,26 @@ describe('API Routes', () => {
 
     it('Should get therapy goals by session id', () => {
       return chai
-
+        .request(server)
+        .get('/api/v1/sessions/1/therapy-goals')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('ot_importance');
+          response.body[0].should.have.property('parent_importance');
+          response.body[0].should.have.property('ot_performance');
+          response.body[0].should.have.property('parent_performance');
+          response.body[0].should.have.property('ot_satisfaction');
+          response.body[0].should.have.property('parent_satisfaction');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should send a 404 if session id is not found', () => {
