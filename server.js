@@ -422,7 +422,9 @@ app.post(
       if (!newPrimaryConcern[requiredParameter]) {
         return response
           .status(422)
-          .json({ error: `Missing required parameter - ${requiredParameter}.` });
+          .json({
+            error: `Missing required parameter - ${requiredParameter}.`
+          });
       }
     }
 
@@ -490,29 +492,34 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
 });
 
 //////  UPDATE PRIMARY CONCERN //////
-app.put('/api/v1/primary-concerns/:primaryConcernId', async (request, response) => {
-  const { patientId, primaryConcernId } = request.params;
-  const updatedPrimaryConcern = request.body;
-  const primaryConcernToUpdate = await database('primary_concerns')
-    .where('id', primaryConcernId)
-    .select();
+app.put(
+  '/api/v1/primary-concerns/:primaryConcernId',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+    const updatedPrimaryConcern = request.body;
+    const primaryConcernToUpdate = await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .select();
 
-  if(!primaryConcernToUpdate.length) {
-    return response.status(404).json({ error: `Primary concern ${primaryConcernId} not found.` });
-  }
+    if (!primaryConcernToUpdate.length) {
+      return response
+        .status(404)
+        .json({ error: `Primary concern ${primaryConcernId} not found.` });
+    }
 
-  await database('primary_concerns')
-    .where('id', primaryConcernId)
-    .update(updatedPrimaryConcern)
-    .then(() => {
-      return response.status(201).send({
-        success: `Primary concern ${primaryConcernId} updated.`
+    await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .update(updatedPrimaryConcern)
+      .then(() => {
+        return response.status(201).send({
+          success: `Primary concern ${primaryConcernId} updated.`
+        });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
       });
-    })
-    .catch(error => {
-      return response.status(500).json({ error })
-    })
-})
+  }
+);
 
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
