@@ -317,6 +317,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET sessions by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a session by id', () => {
+
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
