@@ -924,7 +924,17 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 error if primary concern id is not found', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/0/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern by id 0 not found."}'
+          );
+        });
     });
   });
 
