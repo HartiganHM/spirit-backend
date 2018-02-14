@@ -351,6 +351,30 @@ app.get(
   }
 );
 
+///// GET SESSION BY PRIMARY CONCERNS ID /////
+app.get(
+  '/api/v1/primary-concerns/:primaryConcernId/session',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+
+    try {
+      const sessions = await database('sessions')
+        .where('concern_id', primaryConcernId)
+        .select();
+
+      if (!sessions.length) {
+        return response
+          .status(404)
+          .json({ error: `Primary concern ${primaryConcernId} not found.` });
+      } else {
+        return response.status(200).json(sessions);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   const { category_id } = request.params;
