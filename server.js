@@ -498,7 +498,7 @@ app.put('/api/v1/primary-concerns/:primaryConcernId', async (request, response) 
     .select();
 
   if(!primaryConcernToUpdate.length) {
-    return response.status(422).json({ error: `Primary concern ${primaryConcernId} not found.` });
+    return response.status(404).json({ error: `Primary concern ${primaryConcernId} not found.` });
   }
 
   await database('primary_concerns')
@@ -523,7 +523,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     .select();
 
   if (!termToUpdate.length) {
-    return response.status(422).json({ error: `Term ${terms_id} not found.` });
+    return response.status(404).json({ error: `Term ${terms_id} not found.` });
   }
 
   await database('terms')
