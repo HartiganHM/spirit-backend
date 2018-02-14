@@ -790,7 +790,29 @@ describe('API Routes', () => {
     });
 
     it('Should throw a 404 error if patient id is not found', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/patients/0/primary-concerns')
+        .send(
+          {
+            description: 'Does not play well at school',
+            domain_1: true,
+            domain_2: false,
+            domain_3: true,
+            domain_4: true,
+            domain_5: false,
+            domain_6: true,
+            notes: 'Plays well with parents around, but not while away'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Patient by id 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   })
 
