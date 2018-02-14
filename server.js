@@ -393,6 +393,30 @@ app.get(
   }
 );
 
+///// GET PROCESS BY SESSION ID /////
+app.get(
+  '/api/v1/sessions/:sessionId/processes',
+  async (request, response) => {
+    const { sessionId } = request.params;
+
+    try {
+      const processes = await database('processes')
+        .where('session_id', sessionsId)
+        .select();
+
+      if (!processes.length) {
+        return response
+          .status(404)
+          .json({ error: `Session ${sessionId} not found.` });
+      } else {
+        return response.status(200).json(processes);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   const { category_id } = request.params;
