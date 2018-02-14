@@ -737,7 +737,7 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
   if (!processToUpdate.length) {
     return response
       .status(404)
-      .json({ error: `Process ${primaryConcernId} not found.` });
+      .json({ error: `Process ${processId} not found.` });
   }
 
   await database('processes')
