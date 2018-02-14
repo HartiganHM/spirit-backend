@@ -49,7 +49,7 @@ const processes = [
     pos_5_alignment_COG: '10F',
     soc_2_social_motivators: '3I'
   }
-]
+];
 
 const sessions = [{}];
 
@@ -166,7 +166,25 @@ const createPrimaryConcerns = (knex, primaryConcern) => {
 };
 
 const createSessions = (knex, session) => {
-  return knex('sessions').insert(session);
+  return knex('sessions')
+    .insert(session, 'id')
+    .then(sessionId => {
+      let processesPromises = [];
+
+      processes.forEach(processes => {
+        processesPromises.push(
+          createProcesses(knex, {
+            ...processes,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      return Promise.all(processesPromises);
+    })
+    .catch(error => {
+      throw error;
+    });
 };
 
 const createProcesses = (knex, processes) => {
