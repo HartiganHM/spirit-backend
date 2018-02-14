@@ -730,6 +730,26 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST primary concern', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new primary concern to a patient', () => {
+
+    });
+
+    it('Should return a 422 error if missing a required parameter', () => {
+
+    });
+
+    it('Should throw a 404 error if patient id is not found', () => {
+
+    });
+  })
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
