@@ -681,6 +681,14 @@ app.post('/api/v1/sessions/:sessionId/treatment-plans', async (request, response
   const newTreatmentPlan = request.body;
   const { sessionId } = request.params;
 
+  for (let requiredParameter of ['category']) {
+    if (!newPrimaryConcern[requiredParameter]) {
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}.`
+      });
+    }
+  }
+
   const session = await database('sessions')
     .where('id', sessionId)
     .select();
