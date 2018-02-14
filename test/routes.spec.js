@@ -741,18 +741,16 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/patients/1/primary-concerns')
-        .send(
-          {
-            description: 'Does not play well at school',
-            domain_1: true,
-            domain_2: false,
-            domain_3: true,
-            domain_4: true,
-            domain_5: false,
-            domain_6: true,
-            notes: 'Plays well with parents around, but not while away'
-          }
-        )
+        .send({
+          description: 'Does not play well at school',
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -766,23 +764,21 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/patients/1/primary-concerns')
-        .send(
-          {
-            domain_1: true,
-            domain_2: false,
-            domain_3: true,
-            domain_4: true,
-            domain_5: false,
-            domain_6: true,
-            notes: 'Plays well with parents around, but not while away'
-          }
-        )
+        .send({
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
         .then(response => {
           response.should.have.status(422);
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Missing required parameter - description."}'
-          )
+          );
         })
         .catch(error => {
           throw error;
@@ -793,28 +789,42 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/patients/0/primary-concerns')
-        .send(
-          {
-            description: 'Does not play well at school',
-            domain_1: true,
-            domain_2: false,
-            domain_3: true,
-            domain_4: true,
-            domain_5: false,
-            domain_6: true,
-            notes: 'Plays well with parents around, but not while away'
-          }
-        )
+        .send({
+          description: 'Does not play well at school',
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal('{"error":"Patient by id 0 not found."}');
+          response.error.text.should.equal(
+            '{"error":"Patient by id 0 not found."}'
+          );
         })
         .catch(error => {
           throw error;
         });
     });
-  })
+  });
+
+  describe('PUT primary concern', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a primary concern', () => {
+
+    });
+
+    it('Should throw a 404 error if primary concern is not found')
+  });
 
   describe('PUT terms', () => {
     beforeEach(done => {
@@ -861,7 +871,7 @@ describe('API Routes', () => {
           definition: 'Look I have a new definition!'
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Term 0 not found."}');
         })
