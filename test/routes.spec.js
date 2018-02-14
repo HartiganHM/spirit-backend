@@ -1028,6 +1028,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new process to a session', () => {
+
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+
+    });
+  });
+
   describe('PUT user', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
