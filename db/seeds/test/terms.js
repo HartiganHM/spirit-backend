@@ -56,12 +56,13 @@ const treatmentPlans = [
     category: 'Sensory',
     task: 'Puzzle Games',
     environment: 'Solo play in quiet setting',
-    predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+    predictability:
+      'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
     self_regulation: 'Focus and attention',
     interaction: 'Encourage problem solving with guidance',
     JRC_AR_notes: 'Record results from distance, but be engaged if needed'
   }
-]
+];
 
 const sessions = [{}];
 
@@ -202,7 +203,10 @@ const createSessions = (knex, session) => {
         );
       });
 
-      const allSessionsPromises = [processesPromises, treatmentPlansPromises].map(innerPromiseArray => Promise.all(innerPromiseArray))
+      const allSessionsPromises = [
+        processesPromises,
+        treatmentPlansPromises
+      ].map(innerPromiseArray => Promise.all(innerPromiseArray));
 
       return Promise.all(allSessionsPromises);
     })
