@@ -450,6 +450,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET therapy goals by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a therapy goal by id', () => {
+
+    });
+
+    it('Should return a 404 error if therapy goal id is not found', () => {
+
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
