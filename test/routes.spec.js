@@ -409,7 +409,28 @@ describe('API Routes', () => {
     });
 
     it('Should get a treament plan by id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if treatment plan id is not found', () => {
