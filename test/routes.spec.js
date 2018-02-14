@@ -1160,6 +1160,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('PUT process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a process', () => {
+
+    });
+
+    it('Should throw a 404 error if process is not found', () => {
+
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
