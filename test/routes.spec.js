@@ -444,6 +444,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET sessions by primary concern id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get sessions by primary concern id', () => {
+
+    });
+
+    it('Should send a 404 if primary concern id is not found', () => {
+
+    });
+  });
+
   describe('GET terms by terms name', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
