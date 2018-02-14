@@ -41,6 +41,8 @@ const primaryConcerns = [
   }
 ];
 
+const sessions = [{}];
+
 const createCategory = (knex, category) => {
   return knex('categories')
     .insert(category, 'id')
@@ -132,13 +134,39 @@ const createPatient = (knex, patient) => {
 };
 
 const createPrimaryConcerns = (knex, primaryConcern) => {
-  return knex('primary_concerns').insert(primaryConcern);
+  return knex('primary_concerns')
+    .insert(primaryConcern)
+    .then(primaryConcernId => {
+      let sessionsPromises = [];
+
+      sessions.forEach(session => {
+        sessionsPromises.push(
+          createSessions(knex, {
+            ...session,
+            concern_id: primaryConcernId[0]
+          })
+        );
+      });
+
+      return Promise.all(sessionsPromises);
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+const createSessions = (knex, session) => {
+  return knex('sessions').insert(session);
 };
 
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('sessions').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE sessions_id_seq RESTART WITH 1');
+    })
     .then(() => knex('primary_concerns').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE primary_concerns_id_seq RESTART WITH 1');
