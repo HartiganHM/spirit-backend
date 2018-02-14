@@ -1036,7 +1036,25 @@ describe('API Routes', () => {
     });
 
     it('Should add a new process to a session', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/processes')
+        .send(
+          {
+            sen_h_vestibular: '7F',
+            mod_2_autonomic: '3R',
+            exe_4b_self_control: '5A',
+            pos_5_alignment_COG: '10F',
+            soc_2_social_motivators: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if session id is not found', () => {
