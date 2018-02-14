@@ -394,28 +394,25 @@ app.get(
 );
 
 ///// GET PROCESS BY SESSION ID /////
-app.get(
-  '/api/v1/sessions/:sessionId/processes',
-  async (request, response) => {
-    const { sessionId } = request.params;
+app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
+  const { sessionId } = request.params;
 
-    try {
-      const processes = await database('processes')
-        .where('session_id', sessionsId)
-        .select();
+  try {
+    const processes = await database('processes')
+      .where('session_id', sessionsId)
+      .select();
 
-      if (!processes.length) {
-        return response
-          .status(404)
-          .json({ error: `Session ${sessionId} not found.` });
-      } else {
-        return response.status(200).json(processes);
-      }
-    } catch (error) {
-      return response.status(500).json({ error });
+    if (!processes.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(processes);
     }
+  } catch (error) {
+    return response.status(500).json({ error });
   }
-);
+});
 
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
@@ -582,7 +579,9 @@ app.post(
     if (!primaryConcern.length) {
       return response
         .status(404)
-        .json({ error: `Primary concern by id ${primaryConcernId} not found.` });
+        .json({
+          error: `Primary concern by id ${primaryConcernId} not found.`
+        });
     }
 
     const addSession = await Object.assign({}, newSession, {
@@ -604,37 +603,34 @@ app.post(
 //////  CREATE NEW PROCESS //////
 // NOTE:  Requires session id in params.
 //        Call will add the session_id to process.
-app.post(
-  '/api/v1/sessions/:sessionId/processes',
-  async (request, response) => {
-    const newProcess = request.body;
-    const { sessionId } = request.params;
+app.post('/api/v1/sessions/:sessionId/processes', async (request, response) => {
+  const newProcess = request.body;
+  const { sessionId } = request.params;
 
-    const session = await database('sessions')
-      .where('id', sessionId)
-      .select();
+  const session = await database('sessions')
+    .where('id', sessionId)
+    .select();
 
-    if (!session.length) {
-      return response
-        .status(404)
-        .json({ error: `Session by id ${sessionId} not found.` });
-    }
-
-    const addProcess = await Object.assign({}, newProcess, {
-      session_id: sessionId
-    });
-
-    database('processes')
-      .returning('id')
-      .insert(addProcess)
-      .then(id => {
-        return response.status(201).json(id);
-      })
-      .catch(error => {
-        return response.status(500).json({ error });
-      });
+  if (!session.length) {
+    return response
+      .status(404)
+      .json({ error: `Session by id ${sessionId} not found.` });
   }
-);
+
+  const addProcess = await Object.assign({}, newProcess, {
+    session_id: sessionId
+  });
+
+  database('processes')
+    .returning('id')
+    .insert(addProcess)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
 
 //////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
@@ -729,6 +725,33 @@ app.put(
       });
   }
 );
+
+//////  UPDATE PROCESS //////
+app.put('/api/v1/processes/:processId', async (request, response) => {
+  const { processId } = request.params;
+  const updatedProcess = request.body;
+  const processToUpdate = await database('processes')
+    .where('id', processId)
+    .select();
+
+  if (!processToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Process ${primaryConcernId} not found.` });
+  }
+
+  await database('processes')
+    .where('id', processId)
+    .update(updatedProcess)
+    .then(() => {
+      return response.status(201).send({
+        success: `Primary concern ${processId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
 
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
