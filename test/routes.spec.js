@@ -1058,7 +1058,25 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 error if session id is not found', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/processes')
+        .send(
+          {
+            sen_h_vestibular: '7F',
+            mod_2_autonomic: '3R',
+            exe_4b_self_control: '5A',
+            pos_5_alignment_COG: '10F',
+            soc_2_social_motivators: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        });
     });
   });
 
