@@ -306,7 +306,7 @@ app.get('/api/v1/processes/:processId', async (request, response) => {
 });
 
 ///// GET TREATMENT PLAN BY TREATMENT PLAN ID /////
-app.get('/api/v1/treatment_plans/:treatmentPlanId', async (request, response) => {
+app.get('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) => {
   const { treatmentPlanId } = request.params;
 
   try {
