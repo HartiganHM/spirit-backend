@@ -812,6 +812,22 @@ describe('API Routes', () => {
     });
   });
 
+  descirbe('PUT user', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a user', () => {
+
+    });
+
+    it('Should return a 404 error if no user is found', () => {
+
+    });
+  });
+
   describe('PUT primary concern', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
