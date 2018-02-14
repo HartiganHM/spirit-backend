@@ -434,7 +434,17 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 error if treatment plan id is not found', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Treatment plan 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
