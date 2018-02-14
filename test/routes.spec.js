@@ -283,7 +283,7 @@ describe('API Routes', () => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
-          response.body.length.should.equal(2);
+          response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('abstracted_name');
           response.body[0].should.have.property('clinic_name');
@@ -317,11 +317,42 @@ describe('API Routes', () => {
     });
 
     it('Should get primary concerns by patient id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/patients/1/primary-concerns')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('description');
+          response.body[0].should.have.property('domain_1');
+          response.body[0].should.have.property('domain_2');
+          response.body[0].should.have.property('domain_3');
+          response.body[0].should.have.property('domain_4');
+          response.body[0].should.have.property('domain_5');
+          response.body[0].should.have.property('domain_6');
+          response.body[0].should.have.property('notes');
+          response.body[0].should.have.property('patient_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
-    it('Should retunr a 404 if patient id is not found', () => {
-
+    it('Should return a 404 if patient id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/0/primary-concerns')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Patient 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
