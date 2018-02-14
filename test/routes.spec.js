@@ -1187,7 +1187,24 @@ describe('API Routes', () => {
     });
 
     it('Should throw a 404 error if process is not found', () => {
-
+      return chai
+        .request(server)
+        .put('/api/v1/processes/0')
+        .send(
+          {
+            sen_h_vestibular: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Process 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
