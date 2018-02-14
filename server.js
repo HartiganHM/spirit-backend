@@ -674,6 +674,38 @@ app.post('/api/v1/sessions/:sessionId/processes', async (request, response) => {
     });
 });
 
+//////  CREATE NEW TREATMENT PLAN //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to treatment plan.
+app.post('/api/v1/sessions/:sessionId/treatment-plans', async (request, response) => {
+  const newTreatmentPlan = request.body;
+  const { sessionId } = request.params;
+
+  const session = await database('sessions')
+    .where('id', sessionId)
+    .select();
+
+  if (!session.length) {
+    return response
+      .status(404)
+      .json({ error: `Session by id ${sessionId} not found.` });
+  }
+
+  const addTreatmentPlan = await Object.assign({}, newTreatmentPlan, {
+    session_id: sessionId
+  });
+
+  database('treatment_plans')
+    .returning('id')
+    .insert(addTreatmentPlan)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
