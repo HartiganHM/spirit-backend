@@ -834,7 +834,22 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should throw a 404 error if primary concern is not found')
+    it('Should throw a 404 error if primary concern is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/primary-concerns/0')
+        .send({ domain_1: true })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
   });
 
   describe('PUT terms', () => {
@@ -874,7 +889,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error when terms id is not found', () => {
+    it('Should return a 404 error when terms id is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/terms/0')
@@ -929,7 +944,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error when category is not found', () => {
+    it('Should return a 404 error when category is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/categories/0')
@@ -937,7 +952,7 @@ describe('API Routes', () => {
           name: 'Look I have a new name!'
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
