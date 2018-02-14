@@ -1174,6 +1174,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new treatment plan to a session', () => {
+
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+
+    });
+  });
+
   describe('PUT user', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
