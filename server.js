@@ -854,7 +854,7 @@ app.put('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) =>
     .update(updatedTreatmentPlan)
     .then(() => {
       return response.status(201).send({
-        success: `Treatment Plan ${treatmentPlanId} updated.`
+        success: `Treatment plan ${treatmentPlanId} updated.`
       });
     })
     .catch(error => {

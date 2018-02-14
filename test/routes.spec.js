@@ -1390,11 +1390,37 @@ describe('API Routes', () => {
     });
 
     it('Should update a treatment plan', () => {
-
+      return chai
+        .request(server)
+        .put('/api/v1/treatment-plans/1')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Treatment plan 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should throw a 404 error if treatment plan is not found', () => {
-
+      return chai
+        .request(server)
+        .put('/api/v1/treatment/0')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
