@@ -1118,6 +1118,9 @@ describe('API Routes', () => {
           response.error.text.should.equal(
             '{"error":"Primary concern by id 0 not found."}'
           );
+        })
+        .catch(error => {
+          throw error;
         });
     });
   });
@@ -1170,6 +1173,9 @@ describe('API Routes', () => {
           response.error.text.should.equal(
             '{"error":"Session by id 0 not found."}'
           );
+        })
+        .catch(error => {
+          throw error;
         });
     });
   });
