@@ -135,7 +135,7 @@ const createPatient = (knex, patient) => {
 
 const createPrimaryConcerns = (knex, primaryConcern) => {
   return knex('primary_concerns')
-    .insert(primaryConcern)
+    .insert(primaryConcern, 'id')
     .then(primaryConcernId => {
       let sessionsPromises = [];
 
