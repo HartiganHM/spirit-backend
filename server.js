@@ -756,6 +756,46 @@ app.post('/api/v1/sessions/:sessionId/treatment-plans', async (request, response
     });
 });
 
+//////  CREATE NEW THERAPY GOAL //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to therapy goal.
+app.post('/api/v1/sessions/:sessionId/therapy-goals', async (request, response) => {
+  const newTherapyGoal = request.body;
+  const { sessionId } = request.params;
+
+  for (let requiredParameter of ['category', 'ot_importance', 'ot_performance', 'ot_satisfaction']) {
+    if (!newTherapyGoal[requiredParameter]) {
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}.`
+      });
+    }
+  }
+
+  const session = await database('sessions')
+    .where('id', sessionId)
+    .select();
+
+  if (!session.length) {
+    return response
+      .status(404)
+      .json({ error: `Session by id ${sessionId} not found.` });
+  }
+
+  const addTherapyGoal = await Object.assign({}, newTherapyGoal, {
+    session_id: sessionId
+  });
+
+  database('therapy_goals')
+    .returning('id')
+    .insert(addTherapyGoal)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
