@@ -719,6 +719,23 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET therapy goals by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get therapy goals by session id', () => {
+      return chai
+
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+
+    });
+  });
+
   describe('GET terms by terms name', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
