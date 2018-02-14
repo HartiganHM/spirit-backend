@@ -28,16 +28,18 @@ const patients = [
   }
 ];
 
-const primaryConcerns = {
-  description: 'Does not play well at school',
-  domain_1: true,
-  domain_2: false,
-  domain_3: true,
-  domain_4: true,
-  domain_5: false,
-  domain_6: true,
-  notes: 'Plays well with parents around, but not while away'
-}
+const primaryConcerns = [
+  {
+    description: 'Does not play well at school',
+    domain_1: true,
+    domain_2: false,
+    domain_3: true,
+    domain_4: true,
+    domain_5: false,
+    domain_6: true,
+    notes: 'Plays well with parents around, but not while away'
+  }
+];
 
 const createCategory = (knex, category) => {
   return knex('categories')
@@ -108,12 +110,18 @@ const createUser = (knex, user) => {
 };
 
 const createPatient = (knex, patient) => {
-  return knex('patients').insert(patient, 'id')
+  return knex('patients')
+    .insert(patient, 'id')
     .then(patientId => {
       let primaryConcernsPromises = [];
 
       primaryConcerns.forEach(concern => {
-        primaryConcernsPromises.push(knex, { ...concern, patient_id: patientId[0] })
+        primaryConcernsPromises.push(
+          createPrimaryConcerns(knex, {
+            ...concern,
+            patient_id: patientId[0]
+          })
+        );
       });
 
       return Promise.all(primaryConcernsPromises);
@@ -125,7 +133,7 @@ const createPatient = (knex, patient) => {
 
 const createPrimaryConcerns = (knex, patient) => {
   return knex('primary_concerns').insert(primaryConcern);
-}
+};
 
 exports.seed = function(knex, Promise) {
   return knex('terms')
