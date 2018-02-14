@@ -477,6 +477,27 @@ app.get('/api/v1/sessions/:sessionId/treatment-plans', async (request, response)
   }
 });
 
+///// GET THERAPY GOALS BY SESSION ID /////
+app.get('/api/v1/sessions/:sessionId/therapy-goals', async (request, response) => {
+  const { sessionId } = request.params;
+
+  try {
+    const therapyGoals = await database('therapy_goals')
+      .where('session_id', sessionId)
+      .select();
+
+    if (!therapyGoals.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(therapyGoals);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   const { category_id } = request.params;
