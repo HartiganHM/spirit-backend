@@ -622,6 +622,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET treatment plans by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get treatment plans by session id', () => {
+
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+
+    });
+  });
+
   describe('GET terms by terms name', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
