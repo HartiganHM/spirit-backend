@@ -549,7 +549,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     .select();
   if (!categoryToUpdate.length) {
     return response
-      .status(422)
+      .status(404)
       .json({ error: `Category ${category_id} not found.` });
   }
 
