@@ -846,7 +846,7 @@ app.put('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) =>
   if (!treatmentPlanToUpdate.length) {
     return response
       .status(404)
-      .json({ error: `Treatment Plan ${treatmentPlanId} not found.` });
+      .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
   }
 
   await database('treatment_plans')
