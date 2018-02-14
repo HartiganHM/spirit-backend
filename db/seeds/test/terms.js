@@ -57,7 +57,7 @@ const treatmentPlans = [
     task: 'Puzzle Games',
     environment: 'Solo play in quiet setting',
     predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-    'self-regulation': 'Focus and attention',
+    self_regulation: 'Focus and attention',
     interaction: 'Encourage problem solving with guidance',
     JRC_AR_notes: 'Record results from distance, but be engaged if needed'
   }
@@ -182,6 +182,7 @@ const createSessions = (knex, session) => {
     .insert(session, 'id')
     .then(sessionId => {
       let processesPromises = [];
+      let treatmentPlansPromises = [];
 
       processes.forEach(processes => {
         processesPromises.push(
@@ -192,21 +193,18 @@ const createSessions = (knex, session) => {
         );
       });
 
-      return Promise.all(processesPromises);
-    })
-    .then(sessionId => {
-      let treatmentPlansPromises = [];
-
       treatmentPlans.forEach(treatmentPlan => {
         treatmentPlansPromises.push(
-          createProcesses(knex, {
+          createTreatmentPlans(knex, {
             ...treatmentPlan,
             session_id: sessionId[0]
           })
         );
       });
 
-      return Promise.all(treatmentPlansPromises);
+      const allSessionsPromises = [processesPromises, treatmentPlansPromises].map(innerPromiseArray => Promise.all(innerPromiseArray))
+
+      return Promise.all(allSessionsPromises);
     })
     .catch(error => {
       throw error;
