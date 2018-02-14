@@ -131,7 +131,7 @@ const createPatient = (knex, patient) => {
     });
 };
 
-const createPrimaryConcerns = (knex, patient) => {
+const createPrimaryConcerns = (knex, primaryConcern) => {
   return knex('primary_concerns').insert(primaryConcern);
 };
 
