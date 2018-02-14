@@ -279,6 +279,30 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
   }
 });
 
+///// GET PRIMARY CONCERNS BY PATIENT ID /////
+app.get(
+  '/api/v1/patients/:patientId/primary-concerns',
+  async (request, response) => {
+    const { patientId } = request.params;
+
+    try {
+      const primaryConcerns = await database('primary_concerns')
+        .where('patient_id', patientId)
+        .select();
+
+      if (!primaryConcerns.length) {
+        return response
+          .status(404)
+          .json({ error: `Patient ${patientId} not found.` });
+      } else {
+        return response.status(200).json(primaryConcerns);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   const { category_id } = request.params;
@@ -385,6 +409,49 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     });
 });
 
+//////  CREATE NEW PRIMARY CONCERN //////
+// NOTE:  Requires patient id in params and all primary_concern propertis in body.
+//        Call will add the patient_id to primary concern.
+app.post(
+  '/api/v1/patients/:patientId/primary-concerns',
+  async (request, response) => {
+    const newPrimaryConcern = request.body;
+    const { patientId } = request.params;
+
+    for (let requiredParameter of ['description']) {
+      if (!newPrimaryConcern[requiredParameter]) {
+        return response.status(422).json({
+          error: `Missing required parameter - ${requiredParameter}.`
+        });
+      }
+    }
+
+    const patientName = await database('patients')
+      .where('id', patientId)
+      .select();
+
+    if (!patientName.length) {
+      return response
+        .status(404)
+        .json({ error: `Patient by id ${patientId} not found.` });
+    }
+
+    const addPrimaryConcern = await Object.assign({}, newPrimaryConcern, {
+      patient_id: patientId
+    });
+
+    database('primary_concerns')
+      .returning('id')
+      .insert(addPrimaryConcern)
+      .then(id => {
+        return response.status(201).json(id);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
 //////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
@@ -422,6 +489,63 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     });
 });
 
+//////  UPDATE USER WITH CLINIC INFO //////
+app.put('/api/v1/users/:userId', async (request, response) => {
+  const { userId } = request.params;
+  const updatedUser = request.body;
+  const userToUpdate = await database('users')
+    .where('id', userId)
+    .select();
+
+  if (!userToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `User by id ${userId} not found.` });
+  }
+
+  await database('users')
+    .where('id', userId)
+    .update(updatedUser)
+    .then(() => {
+      return response.status(201).send({
+        success: `User ${userId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
+//////  UPDATE PRIMARY CONCERN //////
+app.put(
+  '/api/v1/primary-concerns/:primaryConcernId',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+    const updatedPrimaryConcern = request.body;
+    const primaryConcernToUpdate = await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .select();
+
+    if (!primaryConcernToUpdate.length) {
+      return response
+        .status(404)
+        .json({ error: `Primary concern ${primaryConcernId} not found.` });
+    }
+
+    await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .update(updatedPrimaryConcern)
+      .then(() => {
+        return response.status(201).send({
+          success: `Primary concern ${primaryConcernId} updated.`
+        });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
@@ -431,7 +555,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     .select();
 
   if (!termToUpdate.length) {
-    return response.status(422).json({ error: `Term ${terms_id} not found.` });
+    return response.status(404).json({ error: `Term ${terms_id} not found.` });
   }
 
   await database('terms')
@@ -457,7 +581,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     .select();
   if (!categoryToUpdate.length) {
     return response
-      .status(422)
+      .status(404)
       .json({ error: `Category ${category_id} not found.` });
   }
 

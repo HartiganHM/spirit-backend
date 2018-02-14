@@ -283,7 +283,7 @@ describe('API Routes', () => {
           response.should.have.status(200);
           response.should.be.json;
           response.body.should.be.a('array');
-          response.body.length.should.equal(2);
+          response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('abstracted_name');
           response.body[0].should.have.property('clinic_name');
@@ -302,6 +302,53 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"User 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET primary concerns by patient id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get primary concerns by patient id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/1/primary-concerns')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('description');
+          response.body[0].should.have.property('domain_1');
+          response.body[0].should.have.property('domain_2');
+          response.body[0].should.have.property('domain_3');
+          response.body[0].should.have.property('domain_4');
+          response.body[0].should.have.property('domain_5');
+          response.body[0].should.have.property('domain_6');
+          response.body[0].should.have.property('notes');
+          response.body[0].should.have.property('patient_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 if patient id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/0/primary-concerns')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Patient 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -683,6 +730,168 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST primary concern', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new primary concern to a patient', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/patients/1/primary-concerns')
+        .send({
+          description: 'Does not play well at school',
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 422 error if missing a required parameter', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/patients/1/primary-concerns')
+        .send({
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - description."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if patient id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/patients/0/primary-concerns')
+        .send({
+          description: 'Does not play well at school',
+          domain_1: true,
+          domain_2: false,
+          domain_3: true,
+          domain_4: true,
+          domain_5: false,
+          domain_6: true,
+          notes: 'Plays well with parents around, but not while away'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Patient by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT user', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a user', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/users/1')
+        .send({ clinic: 'Developmental_FX1' })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('User 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if no user is found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/users/0')
+        .send({ clinic: 'Developmental_FX1' })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"User by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT primary concern', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a primary concern', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/primary-concerns/1')
+        .send({ domain_1: true })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Primary concern 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if primary concern is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/primary-concerns/0')
+        .send({ domain_1: true })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -720,7 +929,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error when terms id is not found', () => {
+    it('Should return a 404 error when terms id is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/terms/0')
@@ -728,7 +937,7 @@ describe('API Routes', () => {
           definition: 'Look I have a new definition!'
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Term 0 not found."}');
         })
@@ -775,7 +984,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error when category is not found', () => {
+    it('Should return a 404 error when category is not found', () => {
       return chai
         .request(server)
         .put('/api/v1/categories/0')
@@ -783,7 +992,7 @@ describe('API Routes', () => {
           name: 'Look I have a new name!'
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Category 0 not found."}');
         })
