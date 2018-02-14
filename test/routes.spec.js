@@ -823,7 +823,7 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .put('/api/v1/users/1')
-        .send({clinic: 'Developmental_FX1'})
+        .send({ clinic: 'Developmental_FX1' })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -835,7 +835,20 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 error if no user is found', () => {
-
+      return chai
+        .request(server)
+        .put('/api/v1/users/0')
+        .send({ clinic: 'Developmental_FX1' })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"User by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
