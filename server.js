@@ -338,7 +338,7 @@ app.get('/api/v1/therapy-goals/:therapyGoalsId', async (request, response) => {
     if (!therapyGoals.length) {
       return response
         .status(404)
-        .json({ error: `Therapy Goal ${therapyGoalsId} not found.` });
+        .json({ error: `Therapy goal ${therapyGoalsId} not found.` });
     } else {
       return response.status(200).json(therapyGoals);
     }
