@@ -268,6 +268,236 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET primary concerns by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a primary concern by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('description');
+          response.body[0].should.have.property('domain_1');
+          response.body[0].should.have.property('domain_2');
+          response.body[0].should.have.property('domain_3');
+          response.body[0].should.have.property('domain_4');
+          response.body[0].should.have.property('domain_5');
+          response.body[0].should.have.property('domain_6');
+          response.body[0].should.have.property('notes');
+          response.body[0].should.have.property('patient_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if primary concern is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET sessions by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a session by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('concern_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET processes by process id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a process by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/processes/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('sen_h_vestibular');
+          response.body[0].should.have.property('sen_h_proprioception');
+          response.body[0].should.have.property('sen_h_tactile');
+          response.body[0].should.have.property('sen_h_auditory');
+          response.body[0].should.have.property('sen_h_visual');
+          response.body[0].should.have.property('sen_h_intero');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if process id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/processes/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET treatment plans by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a treament plan by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if treatment plan id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Treatment plan 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET therapy goals by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a therapy goal by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/therapy-goals/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('ot_importance');
+          response.body[0].should.have.property('parent_importance');
+          response.body[0].should.have.property('ot_performance');
+          response.body[0].should.have.property('parent_performance');
+          response.body[0].should.have.property('ot_satisfaction');
+          response.body[0].should.have.property('parent_satisfaction');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if therapy goal id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/therapy-goals/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Therapy goal 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -349,6 +579,185 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Patient 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET sessions by primary concern id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get sessions by primary concern id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/1/sessions')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('concern_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if primary concern id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/0/sessions')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET processes by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get processes by session id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/processes')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('sen_h_vestibular');
+          response.body[0].should.have.property('sen_h_proprioception');
+          response.body[0].should.have.property('sen_h_tactile');
+          response.body[0].should.have.property('sen_h_auditory');
+          response.body[0].should.have.property('sen_h_visual');
+          response.body[0].should.have.property('sen_h_intero');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/processes')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET treatment plans by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get treatment plans by session id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/treatment-plans')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/treatment-plans')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET therapy goals by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get therapy goals by session id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/therapy-goals')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('ot_importance');
+          response.body[0].should.have.property('parent_importance');
+          response.body[0].should.have.property('ot_performance');
+          response.body[0].should.have.property('parent_performance');
+          response.body[0].should.have.property('ot_satisfaction');
+          response.body[0].should.have.property('parent_satisfaction');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/therapy-goals')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -456,45 +865,6 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Term 0 not found."}');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-  });
-
-  describe('POST authenticate', () => {
-    xit('should create a new JWT', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          email: 'user@email.com',
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(201);
-          response.should.be.json;
-          response.body.should.be.a('string');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-
-    xit('Should send a 422 if missing a parameter', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(422);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Missing required parameter - email"}'
-          );
         })
         .catch(error => {
           throw error;
@@ -730,7 +1100,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST primary concern', () => {
+  describe('POST new primary concern', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
         done();
@@ -812,6 +1182,257 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new session', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new session to a primary concern', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/1/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if primary concern id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/0/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('POST new process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new process to a session', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/processes')
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/processes')
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('POST new treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new treatment plan to a session', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/treatment-plans')
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 422 error if missing a required paramter', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send({
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - category."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('POST new therapy goals', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new therapy goal to a session', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/therapy-goals')
+        .send({
+          category: 'Sensory',
+          ot_importance: 10,
+          parent_importance: 7,
+          ot_performance: 5,
+          parent_performance: 8,
+          ot_satisfaction: 8,
+          parent_satisfaction: 3
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/therapy-goals')
+        .send({
+          category: 'Sensory',
+          ot_importance: 10,
+          parent_importance: 7,
+          ot_performance: 5,
+          parent_performance: 8,
+          ot_satisfaction: 8,
+          parent_satisfaction: 3
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 422 error if missing a required paramter', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/therapy-goals')
+        .send({
+          category: 'Sensory',
+          parent_importance: 7,
+          ot_performance: 5,
+          parent_performance: 8,
+          ot_satisfaction: 8,
+          parent_satisfaction: 3
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - ot_importance."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('PUT user', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -884,6 +1505,136 @@ describe('API Routes', () => {
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a process', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/processes/1')
+        .send({
+          sen_h_vestibular: '3I'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Process 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if process is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/processes/0')
+        .send({
+          sen_h_vestibular: '3I'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a treatment plan', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/treatment-plans/1')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Treatment plan 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if treatment plan is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/treatment-plans/0')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Treatment plan 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT therapy goal', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a therapy goal', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/therapy-goals/1')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Therapy goal 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if therapy goal is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/therapy-goals/0')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Therapy goal 0 not found."}'
           );
         })
         .catch(error => {

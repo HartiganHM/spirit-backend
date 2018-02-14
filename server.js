@@ -239,6 +239,117 @@ app.get('/api/v1/patients/:patient_id', async (request, response) => {
   }
 });
 
+///// GET PRIMARY CONCERN BY PRIMARY CONCERN ID /////
+app.get(
+  '/api/v1/primary-concerns/:primaryConcernId',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+
+    try {
+      const primaryConcern = await database('primary_concerns')
+        .where('id', primaryConcernId)
+        .select();
+
+      if (!primaryConcern.length) {
+        return response
+          .status(404)
+          .json({ error: `Primary concern ${primaryConcernId} not found.` });
+      } else {
+        return response.status(200).json(primaryConcern);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET SESSION BY SESSION ID /////
+app.get('/api/v1/sessions/:sessionId', async (request, response) => {
+  const { sessionId } = request.params;
+
+  try {
+    const session = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!session.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(session);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
+///// GET PROCESS BY PROCESS ID /////
+app.get('/api/v1/processes/:processId', async (request, response) => {
+  const { processId } = request.params;
+
+  try {
+    const processes = await database('processes')
+      .where('id', processId)
+      .select();
+
+    if (!processes.length) {
+      return response
+        .status(404)
+        .json({ error: `Process ${processId} not found.` });
+    } else {
+      return response.status(200).json(processes);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
+///// GET TREATMENT PLAN BY TREATMENT PLAN ID /////
+app.get(
+  '/api/v1/treatment-plans/:treatmentPlanId',
+  async (request, response) => {
+    const { treatmentPlanId } = request.params;
+
+    try {
+      const treatmentPlan = await database('treatment_plans')
+        .where('id', treatmentPlanId)
+        .select();
+
+      if (!treatmentPlan.length) {
+        return response
+          .status(404)
+          .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
+      } else {
+        return response.status(200).json(treatmentPlan);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET THERAPY GOALS BY THERAPY GOALS ID /////
+app.get('/api/v1/therapy-goals/:therapyGoalsId', async (request, response) => {
+  const { therapyGoalsId } = request.params;
+
+  try {
+    const therapyGoals = await database('therapy_goals')
+      .where('id', therapyGoalsId)
+      .select();
+
+    if (!therapyGoals.length) {
+      return response
+        .status(404)
+        .json({ error: `Therapy goal ${therapyGoalsId} not found.` });
+    } else {
+      return response.status(200).json(therapyGoals);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
@@ -296,6 +407,99 @@ app.get(
           .json({ error: `Patient ${patientId} not found.` });
       } else {
         return response.status(200).json(primaryConcerns);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET SESSION BY PRIMARY CONCERNS ID /////
+app.get(
+  '/api/v1/primary-concerns/:primaryConcernId/sessions',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+
+    try {
+      const sessions = await database('sessions')
+        .where('concern_id', primaryConcernId)
+        .select();
+
+      if (!sessions.length) {
+        return response
+          .status(404)
+          .json({ error: `Primary concern ${primaryConcernId} not found.` });
+      } else {
+        return response.status(200).json(sessions);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET PROCESS BY SESSION ID /////
+app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
+  const { sessionId } = request.params;
+
+  try {
+    const processes = await database('processes')
+      .where('session_id', sessionId)
+      .select();
+
+    if (!processes.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(processes);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
+///// GET TREATMENT PLAN BY SESSION ID /////
+app.get(
+  '/api/v1/sessions/:sessionId/treatment-plans',
+  async (request, response) => {
+    const { sessionId } = request.params;
+
+    try {
+      const treatmentPlans = await database('treatment_plans')
+        .where('session_id', sessionId)
+        .select();
+
+      if (!treatmentPlans.length) {
+        return response
+          .status(404)
+          .json({ error: `Session ${sessionId} not found.` });
+      } else {
+        return response.status(200).json(treatmentPlans);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET THERAPY GOALS BY SESSION ID /////
+app.get(
+  '/api/v1/sessions/:sessionId/therapy-goals',
+  async (request, response) => {
+    const { sessionId } = request.params;
+
+    try {
+      const therapyGoals = await database('therapy_goals')
+        .where('session_id', sessionId)
+        .select();
+
+      if (!therapyGoals.length) {
+        return response
+          .status(404)
+          .json({ error: `Session ${sessionId} not found.` });
+      } else {
+        return response.status(200).json(therapyGoals);
       }
     } catch (error) {
       return response.status(500).json({ error });
@@ -402,7 +606,16 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     .returning('id')
     .insert(addPatient)
     .then(id => {
-      return response.status(201).json(id);
+      const newAbstractedName = newPatient.abstracted_name + id.toString();
+      database('patients')
+        .where('id', id[0])
+        .update('abstracted_name', newAbstractedName, 'abstracted_name')
+        .then(name => {
+          return response.status(201).json(name);
+        })
+        .catch(error => {
+          return response.status(500).json({ error });
+        });
     })
     .catch(error => {
       return response.status(500).json({ error });
@@ -410,7 +623,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
 });
 
 //////  CREATE NEW PRIMARY CONCERN //////
-// NOTE:  Requires patient id in params and all primary_concern propertis in body.
+// NOTE:  Requires patient id in params and description in body.
 //        Call will add the patient_id to primary concern.
 app.post(
   '/api/v1/patients/:patientId/primary-concerns',
@@ -443,6 +656,164 @@ app.post(
     database('primary_concerns')
       .returning('id')
       .insert(addPrimaryConcern)
+      .then(id => {
+        return response.status(201).json(id);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  CREATE NEW SESSION //////
+// NOTE:  Requires primary concern id in params.
+//        Call will add the concern_id to session.
+app.post(
+  '/api/v1/primary-concerns/:primaryConcernId/sessions',
+  async (request, response) => {
+    const newSession = request.body;
+    const { primaryConcernId } = request.params;
+
+    const primaryConcern = await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .select();
+
+    if (!primaryConcern.length) {
+      return response.status(404).json({
+        error: `Primary concern by id ${primaryConcernId} not found.`
+      });
+    }
+
+    const addSession = await Object.assign({}, newSession, {
+      concern_id: primaryConcernId
+    });
+
+    database('sessions')
+      .returning('id')
+      .insert(addSession)
+      .then(id => {
+        return response.status(201).json(id);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  CREATE NEW PROCESS //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to process.
+app.post('/api/v1/sessions/:sessionId/processes', async (request, response) => {
+  const newProcess = request.body;
+  const { sessionId } = request.params;
+
+  const session = await database('sessions')
+    .where('id', sessionId)
+    .select();
+
+  if (!session.length) {
+    return response
+      .status(404)
+      .json({ error: `Session by id ${sessionId} not found.` });
+  }
+
+  const addProcess = await Object.assign({}, newProcess, {
+    session_id: sessionId
+  });
+
+  database('processes')
+    .returning('id')
+    .insert(addProcess)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
+//////  CREATE NEW TREATMENT PLAN //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to treatment plan.
+app.post(
+  '/api/v1/sessions/:sessionId/treatment-plans',
+  async (request, response) => {
+    const newTreatmentPlan = request.body;
+    const { sessionId } = request.params;
+
+    for (let requiredParameter of ['category']) {
+      if (!newTreatmentPlan[requiredParameter]) {
+        return response.status(422).json({
+          error: `Missing required parameter - ${requiredParameter}.`
+        });
+      }
+    }
+
+    const session = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!session.length) {
+      return response
+        .status(404)
+        .json({ error: `Session by id ${sessionId} not found.` });
+    }
+
+    const addTreatmentPlan = await Object.assign({}, newTreatmentPlan, {
+      session_id: sessionId
+    });
+
+    database('treatment_plans')
+      .returning('id')
+      .insert(addTreatmentPlan)
+      .then(id => {
+        return response.status(201).json(id);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  CREATE NEW THERAPY GOAL //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to therapy goal.
+app.post(
+  '/api/v1/sessions/:sessionId/therapy-goals',
+  async (request, response) => {
+    const newTherapyGoal = request.body;
+    const { sessionId } = request.params;
+
+    for (let requiredParameter of [
+      'category',
+      'ot_importance',
+      'ot_performance',
+      'ot_satisfaction'
+    ]) {
+      if (!newTherapyGoal[requiredParameter]) {
+        return response.status(422).json({
+          error: `Missing required parameter - ${requiredParameter}.`
+        });
+      }
+    }
+
+    const session = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!session.length) {
+      return response
+        .status(404)
+        .json({ error: `Session by id ${sessionId} not found.` });
+    }
+
+    const addTherapyGoal = await Object.assign({}, newTherapyGoal, {
+      session_id: sessionId
+    });
+
+    database('therapy_goals')
+      .returning('id')
+      .insert(addTherapyGoal)
       .then(id => {
         return response.status(201).json(id);
       })
@@ -545,6 +916,90 @@ app.put(
       });
   }
 );
+
+//////  UPDATE PROCESS //////
+app.put('/api/v1/processes/:processId', async (request, response) => {
+  const { processId } = request.params;
+  const updatedProcess = request.body;
+  const processToUpdate = await database('processes')
+    .where('id', processId)
+    .select();
+
+  if (!processToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Process ${processId} not found.` });
+  }
+
+  await database('processes')
+    .where('id', processId)
+    .update(updatedProcess)
+    .then(() => {
+      return response.status(201).send({
+        success: `Process ${processId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
+//////  UPDATE TREATMENT PLAN //////
+app.put(
+  '/api/v1/treatment-plans/:treatmentPlanId',
+  async (request, response) => {
+    const { treatmentPlanId } = request.params;
+    const updatedTreatmentPlan = request.body;
+    const treatmentPlanToUpdate = await database('treatment_plans')
+      .where('id', treatmentPlanId)
+      .select();
+
+    if (!treatmentPlanToUpdate.length) {
+      return response
+        .status(404)
+        .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
+    }
+
+    await database('treatment_plans')
+      .where('id', treatmentPlanId)
+      .update(updatedTreatmentPlan)
+      .then(() => {
+        return response.status(201).send({
+          success: `Treatment plan ${treatmentPlanId} updated.`
+        });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  UPDATE THERAPY GOAL //////
+app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
+  const { therapyGoalId } = request.params;
+  const updatedTherapyGoal = request.body;
+  const therapyGoalToUpdate = await database('therapy_goals')
+    .where('id', therapyGoalId)
+    .select();
+
+  if (!therapyGoalToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Therapy goal ${therapyGoalId} not found.` });
+  }
+
+  await database('therapy_goals')
+    .where('id', therapyGoalId)
+    .update(updatedTherapyGoal)
+    .then(() => {
+      return response.status(201).send({
+        success: `Therapy goal ${therapyGoalId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
 
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {

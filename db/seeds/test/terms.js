@@ -41,6 +41,43 @@ const primaryConcerns = [
   }
 ];
 
+const sessions = [{}];
+
+const processes = [
+  {
+    sen_h_vestibular: '7F',
+    mod_2_autonomic: '3R',
+    exe_4b_self_control: '5A',
+    pos_5_alignment_COG: '10F',
+    soc_2_social_motivators: '3I'
+  }
+];
+
+const treatmentPlans = [
+  {
+    category: 'Sensory',
+    task: 'Puzzle Games',
+    environment: 'Solo play in quiet setting',
+    predictability:
+      'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+    self_regulation: 'Focus and attention',
+    interaction: 'Encourage problem solving with guidance',
+    JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+  }
+];
+
+const therapyGoals = [
+  {
+    category: 'Sensory',
+    ot_importance: 10,
+    parent_importance: 7,
+    ot_performance: 5,
+    parent_performance: 8,
+    ot_satisfaction: 8,
+    parent_satisfaction: 3
+  }
+];
+
 const createCategory = (knex, category) => {
   return knex('categories')
     .insert(category, 'id')
@@ -132,13 +169,107 @@ const createPatient = (knex, patient) => {
 };
 
 const createPrimaryConcerns = (knex, primaryConcern) => {
-  return knex('primary_concerns').insert(primaryConcern);
+  return knex('primary_concerns')
+    .insert(primaryConcern, 'id')
+    .then(primaryConcernId => {
+      let sessionsPromises = [];
+
+      sessions.forEach(session => {
+        sessionsPromises.push(
+          createSessions(knex, {
+            ...session,
+            concern_id: primaryConcernId[0]
+          })
+        );
+      });
+
+      return Promise.all(sessionsPromises);
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+const createSessions = (knex, session) => {
+  return knex('sessions')
+    .insert(session, 'id')
+    .then(sessionId => {
+      let processesPromises = [];
+      let treatmentPlansPromises = [];
+      let therapyGoalsPromises = [];
+
+      processes.forEach(processes => {
+        processesPromises.push(
+          createProcesses(knex, {
+            ...processes,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      treatmentPlans.forEach(treatmentPlan => {
+        treatmentPlansPromises.push(
+          createTreatmentPlans(knex, {
+            ...treatmentPlan,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      therapyGoals.forEach(therapyGoal => {
+        therapyGoalsPromises.push(
+          createNewTherapyGoals(knex, {
+            ...therapyGoal,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      const allSessionsPromises = [
+        processesPromises,
+        treatmentPlansPromises,
+        therapyGoalsPromises
+      ].map(innerPromiseArray => Promise.all(innerPromiseArray));
+
+      return Promise.all(allSessionsPromises);
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+const createProcesses = (knex, processes) => {
+  return knex('processes').insert(processes);
+};
+
+const createTreatmentPlans = (knex, treatmentPlan) => {
+  return knex('treatment_plans').insert(treatmentPlan);
+};
+
+const createNewTherapyGoals = (knex, therapyGoal) => {
+  return knex('therapy_goals').insert(therapyGoal);
 };
 
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('therapy_goals').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE therapy_goals_id_seq RESTART WITH 1');
+    })
+    .then(() => knex('treatment_plans').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE treatment_plans_id_seq RESTART WITH 1');
+    })
+    .then(() => knex('processes').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE processes_id_seq RESTART WITH 1');
+    })
+    .then(() => knex('sessions').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE sessions_id_seq RESTART WITH 1');
+    })
     .then(() => knex('primary_concerns').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE primary_concerns_id_seq RESTART WITH 1');
