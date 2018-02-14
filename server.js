@@ -350,7 +350,7 @@ app.get(
 
 ///// GET SESSION BY PRIMARY CONCERNS ID /////
 app.get(
-  '/api/v1/primary-concerns/:primaryConcernId/session',
+  '/api/v1/primary-concerns/:primaryConcernId/sessions',
   async (request, response) => {
     const { primaryConcernId } = request.params;
 
