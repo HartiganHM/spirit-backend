@@ -1212,7 +1212,30 @@ describe('API Routes', () => {
     });
 
     it('Should return a 404 error if session id is not found', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/treatment-plans')
+        .send(
+          {
+            category: 'Sensory',
+            task: 'Puzzle Games',
+            environment: 'Solo play in quiet setting',
+            predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+            self_regulation: 'Focus and attention',
+            interaction: 'Encourage problem solving with guidance',
+            JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
