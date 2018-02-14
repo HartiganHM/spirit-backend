@@ -388,16 +388,16 @@ describe('API Routes', () => {
 
     it('Should return a 404 error if process id is not found', () => {
       return chai
-      .request(server)
-      .get('/api/v1/processes/0')
-      .then(response => {
-        response.should.have.status(404);
-        response.should.be.json;
-        response.error.text.should.equal('{"error":"Process 0 not found."}');
-      })
-      .catch(error => {
-        throw error;
-      });
+        .request(server)
+        .get('/api/v1/processes/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
@@ -538,11 +538,40 @@ describe('API Routes', () => {
     });
 
     it('Should get processes by session id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/processes')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('sen_h_vestibular');
+          response.body[0].should.have.property('sen_h_proprioception');
+          response.body[0].should.have.property('sen_h_tactile');
+          response.body[0].should.have.property('sen_h_auditory');
+          response.body[0].should.have.property('sen_h_visual');
+          response.body[0].should.have.property('sen_h_intero');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should send a 404 if session id is not found', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/processes')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
