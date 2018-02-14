@@ -1409,7 +1409,27 @@ describe('API Routes', () => {
     });
 
     it('Should return a 422 error if missing a required paramter', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/therapy-goals')
+        .send({
+          category: 'Sensory',
+          parent_importance: 7,
+          ot_performance: 5,
+          parent_performance: 8,
+          ot_satisfaction: 8,
+          parent_satisfaction: 3
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - ot_importance."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
     });
   });
 
