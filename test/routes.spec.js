@@ -356,6 +356,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET processes by process id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a process by id', () => {
+
+    });
+
+    it('Should return a 404 error if process id is not found', () => {
+
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
