@@ -910,7 +910,17 @@ describe('API Routes', () => {
     });
 
     it('Should add a new session to a primary concern', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/1/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if primary concern id is not found', () => {
