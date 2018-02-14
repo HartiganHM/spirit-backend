@@ -1382,6 +1382,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('PUT treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a treatment plan', () => {
+
+    });
+
+    it('Should throw a 404 error if treatment plan is not found', () => {
+
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
