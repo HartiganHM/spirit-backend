@@ -944,6 +944,33 @@ app.put('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) =>
     });
 });
 
+//////  UPDATE THERAPY GOAL //////
+app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
+  const { therapyGoalId } = request.params;
+  const updatedTherapyGoal = request.body;
+  const therapyGoalToUpdate = await database('therapy_goals')
+    .where('id', therapyGoalId)
+    .select();
+
+  if (!therapyGoalToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Therapy goal ${therapyGoalId} not found.` });
+  }
+
+  await database('therapy_goals')
+    .where('id', therapyGoalId)
+    .update(updatedTherapyGoal)
+    .then(() => {
+      return response.status(201).send({
+        success: `Treatment plan ${therapyGoalId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
