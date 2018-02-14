@@ -325,7 +325,20 @@ describe('API Routes', () => {
     });
 
     it('Should get a session by id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('concern_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if session id is not found', () => {
