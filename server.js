@@ -745,7 +745,7 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
     .update(updatedProcess)
     .then(() => {
       return response.status(201).send({
-        success: `Primary concern ${processId} updated.`
+        success: `Process ${processId} updated.`
       });
     })
     .catch(error => {
