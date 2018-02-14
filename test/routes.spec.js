@@ -276,7 +276,28 @@ describe('API Routes', () => {
     });
 
     it('Should get a primary concern by id', () => {
-
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('description');
+          response.body[0].should.have.property('domain_1');
+          response.body[0].should.have.property('domain_2');
+          response.body[0].should.have.property('domain_3');
+          response.body[0].should.have.property('domain_4');
+          response.body[0].should.have.property('domain_5');
+          response.body[0].should.have.property('domain_6');
+          response.body[0].should.have.property('notes');
+          response.body[0].should.have.property('patient_id');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if primary concern is not found', () => {
