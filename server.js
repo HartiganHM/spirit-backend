@@ -399,7 +399,7 @@ app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
 
   try {
     const processes = await database('processes')
-      .where('session_id', sessionsId)
+      .where('session_id', sessionId)
       .select();
 
     if (!processes.length) {
