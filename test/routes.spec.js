@@ -1188,7 +1188,27 @@ describe('API Routes', () => {
     });
 
     it('Should add a new treatment plan to a session', () => {
-
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send(
+          {
+            category: 'Sensory',
+            task: 'Puzzle Games',
+            environment: 'Solo play in quiet setting',
+            predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+            self_regulation: 'Focus and attention',
+            interaction: 'Encourage problem solving with guidance',
+            JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+          }
+        )
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should return a 404 error if session id is not found', () => {
