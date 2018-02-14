@@ -440,7 +440,9 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal('{"error":"Treatment plan 0 not found."}');
+          response.error.text.should.equal(
+            '{"error":"Treatment plan 0 not found."}'
+          );
         })
         .catch(error => {
           throw error;
@@ -1136,15 +1138,13 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/1/processes')
-        .send(
-          {
-            sen_h_vestibular: '7F',
-            mod_2_autonomic: '3R',
-            exe_4b_self_control: '5A',
-            pos_5_alignment_COG: '10F',
-            soc_2_social_motivators: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -1158,15 +1158,13 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/0/processes')
-        .send(
-          {
-            sen_h_vestibular: '7F',
-            mod_2_autonomic: '3R',
-            exe_4b_self_control: '5A',
-            pos_5_alignment_COG: '10F',
-            soc_2_social_motivators: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
@@ -1191,17 +1189,16 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/1/treatment-plans')
-        .send(
-          {
-            category: 'Sensory',
-            task: 'Puzzle Games',
-            environment: 'Solo play in quiet setting',
-            predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-            self_regulation: 'Focus and attention',
-            interaction: 'Encourage problem solving with guidance',
-            JRC_AR_notes: 'Record results from distance, but be engaged if needed'
-          }
-        )
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -1215,22 +1212,46 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/0/treatment-plans')
-        .send(
-          {
-            category: 'Sensory',
-            task: 'Puzzle Games',
-            environment: 'Solo play in quiet setting',
-            predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-            self_regulation: 'Focus and attention',
-            interaction: 'Encourage problem solving with guidance',
-            JRC_AR_notes: 'Record results from distance, but be engaged if needed'
-          }
-        )
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 422 error if missing a required paramter', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send({
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - category."}'
           );
         })
         .catch(error => {
@@ -1330,11 +1351,9 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .put('/api/v1/processes/1')
-        .send(
-          {
-            sen_h_vestibular: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '3I'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -1349,17 +1368,13 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .put('/api/v1/processes/0')
-        .send(
-          {
-            sen_h_vestibular: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '3I'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Process 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
         })
         .catch(error => {
           throw error;
