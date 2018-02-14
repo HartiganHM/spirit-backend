@@ -305,6 +305,27 @@ app.get('/api/v1/processes/:processId', async (request, response) => {
   }
 });
 
+///// GET TREATMENT PLAN BY TREATMENT PLAN ID /////
+app.get('/api/v1/treatment_plans/:treatmentPlanId', async (request, response) => {
+  const { treatmentPlanId } = request.params;
+
+  try {
+    const treatmentPlan = await database('treatment_plans')
+      .where('id', treatmentPlanId)
+      .select();
+
+    if (!treatmentPlan.length) {
+      return response
+        .status(404)
+        .json({ error: `Process ${treatmentPlanId} not found.` });
+    } else {
+      return response.status(200).json(treatmentPlan);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
