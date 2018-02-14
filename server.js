@@ -264,7 +264,7 @@ app.get(
 );
 
 ///// GET SESSION BY SESSION ID /////
-app.get('/api/v1/session/:sessionId', async (request, response) => {
+app.get('/api/v1/sessions/:sessionId', async (request, response) => {
   const { sessionId } = request.params;
 
   try {
