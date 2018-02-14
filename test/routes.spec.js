@@ -1409,14 +1409,16 @@ describe('API Routes', () => {
     it('Should throw a 404 error if treatment plan is not found', () => {
       return chai
         .request(server)
-        .put('/api/v1/treatment/0')
+        .put('/api/v1/treatment-plans/0')
         .send({
           category: 'Executive Functioning'
         })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal('{"error":"Process 0 not found."}');
+          response.error.text.should.equal(
+            '{"error":"Treatment plan 0 not found."}'
+          );
         })
         .catch(error => {
           throw error;
