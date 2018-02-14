@@ -317,7 +317,7 @@ app.get('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) =>
     if (!treatmentPlan.length) {
       return response
         .status(404)
-        .json({ error: `Process ${treatmentPlanId} not found.` });
+        .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
     } else {
       return response.status(200).json(treatmentPlan);
     }
