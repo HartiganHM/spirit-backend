@@ -682,7 +682,7 @@ app.post('/api/v1/sessions/:sessionId/treatment-plans', async (request, response
   const { sessionId } = request.params;
 
   for (let requiredParameter of ['category']) {
-    if (!newPrimaryConcern[requiredParameter]) {
+    if (!newTreatmentPlan[requiredParameter]) {
       return response.status(422).json({
         error: `Missing required parameter - ${requiredParameter}.`
       });
