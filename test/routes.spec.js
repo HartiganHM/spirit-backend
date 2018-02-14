@@ -820,7 +820,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST primary concern', () => {
+  describe('POST new primary concern', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
         done();
@@ -899,6 +899,22 @@ describe('API Routes', () => {
         .catch(error => {
           throw error;
         });
+    });
+  });
+
+  describe('POST new session', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new session to a primary concern', () => {
+
+    });
+
+    it('Should return a 404 error if primary concern id is not found', () => {
+
     });
   });
 
