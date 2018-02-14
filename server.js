@@ -263,6 +263,30 @@ app.get(
   }
 );
 
+///// GET SESSION BY SESSION ID /////
+app.get(
+  '/api/v1/session/:sessionId',
+  async (request, response) => {
+    const { sessionId } = request.params;
+
+    try {
+      const session = await database('sessions')
+        .where('id', sessionId)
+        .select();
+
+      if (!session.length) {
+        return response
+          .status(404)
+          .json({ error: `Session ${sessionId} not found.` });
+      } else {
+        return response.status(200).json(session);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
