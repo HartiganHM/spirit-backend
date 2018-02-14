@@ -284,6 +284,27 @@ app.get('/api/v1/sessions/:sessionId', async (request, response) => {
   }
 });
 
+///// GET PROCESS BY PROCESS ID /////
+app.get('/api/v1/processes/:processId', async (request, response) => {
+  const { processId } = request.params;
+
+  try {
+    const processes = await database('processes')
+      .where('id', processId)
+      .select();
+
+    if (!processes.length) {
+      return response
+        .status(404)
+        .json({ error: `Process ${processId} not found.` });
+    } else {
+      return response.status(200).json(processes);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
