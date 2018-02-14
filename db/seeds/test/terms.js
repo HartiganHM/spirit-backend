@@ -51,6 +51,18 @@ const processes = [
   }
 ];
 
+const treatmentPlans = [
+  {
+    category: 'Sensory',
+    task: 'Puzzle Games',
+    environment: 'Solo play in quiet setting',
+    predictability: 'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+    'self-regulation': 'Focus and attention',
+    interaction: 'Encourage problem solving with guidance',
+    JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+  }
+]
+
 const sessions = [{}];
 
 const createCategory = (knex, category) => {
@@ -182,6 +194,20 @@ const createSessions = (knex, session) => {
 
       return Promise.all(processesPromises);
     })
+    .then(sessionId => {
+      let treatmentPlansPromises = [];
+
+      treatmentPlans.forEach(treatmentPlan => {
+        treatmentPlansPromises.push(
+          createProcesses(knex, {
+            ...treatmentPlan,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      return Promise.all(treatmentPlansPromises);
+    })
     .catch(error => {
       throw error;
     });
@@ -191,10 +217,18 @@ const createProcesses = (knex, processes) => {
   return knex('processes').insert(processes);
 };
 
+const createTreatmentPlans = (knex, treatmentPlan) => {
+  return knex('treatment_plans').insert(treatmentPlan);
+};
+
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('treatment_plans').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE treatment_plans_id_seq RESTART WITH 1');
+    })
     .then(() => knex('processes').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE processes_id_seq RESTART WITH 1');
