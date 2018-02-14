@@ -820,7 +820,18 @@ describe('API Routes', () => {
     });
 
     it('Should update a primary concern', () => {
-
+      return chai
+        .request(server)
+        .put('/api/v1/primary-concerns/1')
+        .send({ domain_1: true })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Primary concern 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should throw a 404 error if primary concern is not found')
