@@ -984,7 +984,7 @@ app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
     .update(updatedTherapyGoal)
     .then(() => {
       return response.status(201).send({
-        success: `Treatment plan ${therapyGoalId} updated.`
+        success: `Therapy goal ${therapyGoalId} updated.`
       });
     })
     .catch(error => {

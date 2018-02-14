@@ -1607,7 +1607,20 @@ describe('API Routes', () => {
     });
 
     it('Should update a therapy goal', () => {
-      
+      return chai
+        .request(server)
+        .put('/api/v1/therapy-goals/1')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Therapy goal 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
     });
 
     it('Should throw a 404 error if therapy goal is not found', () => {
