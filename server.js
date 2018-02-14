@@ -827,6 +827,33 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
     });
 });
 
+//////  UPDATE TREATMENT PLAN //////
+app.put('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) => {
+  const { treatmentPlanId } = request.params;
+  const updatedTreatmentPlan = request.body;
+  const treatmentPlanToUpdate = await database('treatment_plans')
+    .where('id', treatmentPlanId)
+    .select();
+
+  if (!treatmentPlanToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Treatment Plan ${treatmentPlanId} not found.` });
+  }
+
+  await database('treatment_plans')
+    .where('id', treatmentPlanId)
+    .update(updatedTreatmentPlan)
+    .then(() => {
+      return response.status(201).send({
+        success: `Treatment Plan ${treatmentPlanId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
