@@ -309,6 +309,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET primary concerns by patient id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get primary concerns by patient id', () => {
+
+    });
+
+    it('Should retunr a 404 if patient id is not found', () => {
+
+    });
+  });
+
   describe('GET terms by terms name', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
