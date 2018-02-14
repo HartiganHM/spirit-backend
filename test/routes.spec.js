@@ -1354,6 +1354,26 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new therapy goals', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new therapy goal to a session', () => {
+
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+
+    });
+
+    it('Should return a 422 error if missing a required paramter', () => {
+
+    });
+  });
+
   describe('PUT user', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
