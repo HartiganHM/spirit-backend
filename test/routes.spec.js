@@ -401,6 +401,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET treatment plans by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a treament plan by id', () => {
+
+    });
+
+    it('Should return a 404 error if treatment plan id is not found', () => {
+
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
