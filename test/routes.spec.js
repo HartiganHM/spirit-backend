@@ -1599,6 +1599,22 @@ describe('API Routes', () => {
     });
   });
 
+  describe('PUT therapy goal', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a therapy goal', () => {
+      
+    });
+
+    it('Should throw a 404 error if therapy goal is not found', () => {
+      
+    });
+  });
+
   describe('PUT terms', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
