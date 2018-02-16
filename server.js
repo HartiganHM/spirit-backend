@@ -668,7 +668,6 @@ app.post(
 app.post(
   '/api/v1/primary-concerns/:primaryConcernId/sessions',
   async (request, response) => {
-    const newSession = request.body;
     const { primaryConcernId } = request.params;
 
     const primaryConcern = await database('primary_concerns')
@@ -681,7 +680,7 @@ app.post(
       });
     }
 
-    const addSession = await Object.assign({}, newSession, {
+    const addSession = await Object.assign({}, {
       concern_id: primaryConcernId
     });
 
