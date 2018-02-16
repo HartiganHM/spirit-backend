@@ -425,13 +425,7 @@ app.get(
         .where('concern_id', primaryConcernId)
         .select();
 
-      if (!sessions.length) {
-        return response
-          .status(404)
-          .json({ error: `Primary concern ${primaryConcernId} not found.` });
-      } else {
-        return response.status(200).json(sessions);
-      }
+      return response.status(200).json(sessions);
     } catch (error) {
       return response.status(500).json({ error });
     }
