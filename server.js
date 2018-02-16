@@ -401,13 +401,7 @@ app.get(
         .where('patient_id', patientId)
         .select();
 
-      if (!primaryConcerns.length) {
-        return response
-          .status(404)
-          .json({ error: `Patient ${patientId} not found.` });
-      } else {
-        return response.status(200).json(primaryConcerns);
-      }
+      return response.status(200).json(primaryConcerns);
     } catch (error) {
       return response.status(500).json({ error });
     }
