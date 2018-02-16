@@ -570,20 +570,6 @@ describe('API Routes', () => {
           throw error;
         });
     });
-
-    it('Should return a 404 if patient id is not found', () => {
-      return chai
-        .request(server)
-        .get('/api/v1/patients/0/primary-concerns')
-        .then(response => {
-          response.should.have.status(404);
-          response.should.be.json;
-          response.error.text.should.equal('{"error":"Patient 0 not found."}');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
   });
 
   describe('GET sessions by primary concern id', () => {
