@@ -609,22 +609,6 @@ describe('API Routes', () => {
           throw error;
         });
     });
-
-    it('Should send a 404 if primary concern id is not found', () => {
-      return chai
-        .request(server)
-        .get('/api/v1/primary-concerns/0/sessions')
-        .then(response => {
-          response.should.have.status(404);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Primary concern 0 not found."}'
-          );
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
   });
 
   describe('GET processes by session id', () => {
