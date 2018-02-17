@@ -891,6 +891,36 @@ app.put(
   }
 );
 
+//////  UPDATE SESSION //////
+app.put(
+  '/api/v1/sessions/:sessionId',
+  async (request, response) => {
+    const { sessionId } = request.params;
+    const updatedSession = request.body;
+    const sessionToUpdate = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!sessionToUpdate.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    }
+
+    await database('sessions')
+      .where('id', sessionId)
+      .update(updatedSession)
+      .then(() => {
+        return response.status(201).send({
+          success: `Session ${sessionId} updated.`
+        });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
 //////  UPDATE PROCESS //////
 app.put('/api/v1/processes/:processId', async (request, response) => {
   const { processId } = request.params;
