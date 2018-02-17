@@ -771,19 +771,6 @@ app.post(
     const newTherapyGoal = request.body;
     const { sessionId } = request.params;
 
-    for (let requiredParameter of [
-      'category',
-      'ot_importance',
-      'ot_performance',
-      'ot_satisfaction'
-    ]) {
-      if (!newTherapyGoal[requiredParameter]) {
-        return response.status(422).json({
-          error: `Missing required parameter - ${requiredParameter}.`
-        });
-      }
-    }
-
     const session = await database('sessions')
       .where('id', sessionId)
       .select();
