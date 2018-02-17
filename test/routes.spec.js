@@ -1272,11 +1272,12 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error if missing a required paramter', () => {
+    it('Should return a 404 error if session id is not found', () => {
       return chai
         .request(server)
-        .post('/api/v1/sessions/1/treatment-plans')
+        .post('/api/v1/sessions/0/treatment-plans')
         .send({
+          category: 'Sensory',
           task: 'Puzzle Games',
           environment: 'Solo play in quiet setting',
           predictability:
@@ -1286,10 +1287,10 @@ describe('API Routes', () => {
           JRC_AR_notes: 'Record results from distance, but be engaged if needed'
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal(
-            '{"error":"Missing required parameter - category."}'
+            '{"error":"Session by id 0 not found."}'
           );
         })
         .catch(error => {
@@ -1327,12 +1328,13 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 422 error if missing a required paramter', () => {
+    it('Should return a 404 error if session id is not found', () => {
       return chai
         .request(server)
-        .post('/api/v1/sessions/1/therapy-goals')
+        .post('/api/v1/sessions/0/therapy-goals')
         .send({
           category: 'Sensory',
+          ot_importance: 10,
           parent_importance: 7,
           ot_performance: 5,
           parent_performance: 8,
@@ -1340,10 +1342,10 @@ describe('API Routes', () => {
           parent_satisfaction: 3
         })
         .then(response => {
-          response.should.have.status(422);
+          response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal(
-            '{"error":"Missing required parameter - ot_importance."}'
+            '{"error":"Session by id 0 not found."}'
           );
         })
         .catch(error => {
