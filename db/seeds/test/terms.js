@@ -3,7 +3,7 @@
 
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
-const clinis = require('../../data/mockClinics');
+const clinics = require('../../data/mockClinics');
 const users = require('../../data/mockUsers');
 const patients = require('../../data/mockPatients');
 const primaryConcerns = require('../../data/mockPrimaryConcerns');
