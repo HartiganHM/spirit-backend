@@ -532,9 +532,13 @@ describe('API Routes', () => {
           response.body[0].should.have.property('modulation_ot_importance');
           response.body[0].should.have.property('modulation_parent_importance');
           response.body[0].should.have.property('modulation_ot_performance');
-          response.body[0].should.have.property('modulation_parent_performance');
+          response.body[0].should.have.property(
+            'modulation_parent_performance'
+          );
           response.body[0].should.have.property('modulation_ot_satisfaction');
-          response.body[0].should.have.property('modulation_parent_satisfaction');
+          response.body[0].should.have.property(
+            'modulation_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('posture_goal');
           response.body[0].should.have.property('posture_ot_importance');
@@ -545,28 +549,64 @@ describe('API Routes', () => {
           response.body[0].should.have.property('posture_parent_satisfaction');
 
           response.body[0].should.have.property('sensory_discrimination_goal');
-          response.body[0].should.have.property('sensory_discrimination_ot_importance');
-          response.body[0].should.have.property('sensory_discrimination_parent_importance');
-          response.body[0].should.have.property('sensory_discrimination_ot_performance');
-          response.body[0].should.have.property('sensory_discrimination_parent_performance');
-          response.body[0].should.have.property('sensory_discrimination_ot_satisfaction');
-          response.body[0].should.have.property('sensory_discrimination_parent_satisfaction');
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('social_emotional_goal');
-          response.body[0].should.have.property('social_emotional_ot_importance');
-          response.body[0].should.have.property('social_emotional_parent_importance');
-          response.body[0].should.have.property('social_emotional_ot_performance');
-          response.body[0].should.have.property('social_emotional_parent_performance');
-          response.body[0].should.have.property('social_emotional_ot_satisfaction');
-          response.body[0].should.have.property('social_emotional_parent_satisfaction');
+          response.body[0].should.have.property(
+            'social_emotional_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('executive_functioning_goal');
-          response.body[0].should.have.property('executive_functioning_ot_importance');
-          response.body[0].should.have.property('executive_functioning_parent_importance');
-          response.body[0].should.have.property('executive_functioning_ot_performance');
-          response.body[0].should.have.property('executive_functioning_parent_performance');
-          response.body[0].should.have.property('executive_functioning_ot_satisfaction');
-          response.body[0].should.have.property('executive_functioning_parent_satisfaction');
+          response.body[0].should.have.property(
+            'executive_functioning_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_satisfaction'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -864,9 +904,13 @@ describe('API Routes', () => {
           response.body[0].should.have.property('modulation_ot_importance');
           response.body[0].should.have.property('modulation_parent_importance');
           response.body[0].should.have.property('modulation_ot_performance');
-          response.body[0].should.have.property('modulation_parent_performance');
+          response.body[0].should.have.property(
+            'modulation_parent_performance'
+          );
           response.body[0].should.have.property('modulation_ot_satisfaction');
-          response.body[0].should.have.property('modulation_parent_satisfaction');
+          response.body[0].should.have.property(
+            'modulation_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('posture_goal');
           response.body[0].should.have.property('posture_ot_importance');
@@ -877,28 +921,64 @@ describe('API Routes', () => {
           response.body[0].should.have.property('posture_parent_satisfaction');
 
           response.body[0].should.have.property('sensory_discrimination_goal');
-          response.body[0].should.have.property('sensory_discrimination_ot_importance');
-          response.body[0].should.have.property('sensory_discrimination_parent_importance');
-          response.body[0].should.have.property('sensory_discrimination_ot_performance');
-          response.body[0].should.have.property('sensory_discrimination_parent_performance');
-          response.body[0].should.have.property('sensory_discrimination_ot_satisfaction');
-          response.body[0].should.have.property('sensory_discrimination_parent_satisfaction');
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('social_emotional_goal');
-          response.body[0].should.have.property('social_emotional_ot_importance');
-          response.body[0].should.have.property('social_emotional_parent_importance');
-          response.body[0].should.have.property('social_emotional_ot_performance');
-          response.body[0].should.have.property('social_emotional_parent_performance');
-          response.body[0].should.have.property('social_emotional_ot_satisfaction');
-          response.body[0].should.have.property('social_emotional_parent_satisfaction');
+          response.body[0].should.have.property(
+            'social_emotional_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_satisfaction'
+          );
 
           response.body[0].should.have.property('executive_functioning_goal');
-          response.body[0].should.have.property('executive_functioning_ot_importance');
-          response.body[0].should.have.property('executive_functioning_parent_importance');
-          response.body[0].should.have.property('executive_functioning_ot_performance');
-          response.body[0].should.have.property('executive_functioning_parent_performance');
-          response.body[0].should.have.property('executive_functioning_ot_satisfaction');
-          response.body[0].should.have.property('executive_functioning_parent_satisfaction');
+          response.body[0].should.have.property(
+            'executive_functioning_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_satisfaction'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -1499,13 +1579,13 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/1/therapy-goals')
         .send({
-          category: 'Sensory',
-          ot_importance: 10,
-          parent_importance: 7,
-          ot_performance: 5,
-          parent_performance: 8,
-          ot_satisfaction: 8,
-          parent_satisfaction: 3
+          modulation_goal: 'Goal 1',
+          modulation_ot_importance: 5,
+          modulation_parent_importance: 5,
+          modulation_ot_performance: 5,
+          modulation_parent_performance: 5,
+          modulation_ot_satisfaction: 5,
+          modulation_parent_satisfaction: 5
         })
         .then(response => {
           response.should.have.status(201);
@@ -1521,13 +1601,13 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/0/therapy-goals')
         .send({
-          category: 'Sensory',
-          ot_importance: 10,
-          parent_importance: 7,
-          ot_performance: 5,
-          parent_performance: 8,
-          ot_satisfaction: 8,
-          parent_satisfaction: 3
+          modulation_goal: 'Goal 1',
+          modulation_ot_importance: 5,
+          modulation_parent_importance: 5,
+          modulation_ot_performance: 5,
+          modulation_parent_performance: 5,
+          modulation_ot_satisfaction: 5,
+          modulation_parent_satisfaction: 5
         })
         .then(response => {
           response.should.have.status(404);
