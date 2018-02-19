@@ -4,12 +4,7 @@
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
 
-const clinics = [
-  {
-    name: 'Developmental_FX',
-    abbreviation: 'DFX'
-  }
-];
+
 
 const users = [
   {
