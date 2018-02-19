@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const patients = [
   {
     abstracted_name: 'DFXHH3',

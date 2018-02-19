@@ -1,4 +1,3 @@
-/*eslint-disable camelcase*/
 /*eslint-disable no-console*/
 
 const categories = require('../../data/categories');

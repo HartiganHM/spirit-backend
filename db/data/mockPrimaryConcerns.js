@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const primaryConcerns = [
   {
     description: 'Does not play well at school',

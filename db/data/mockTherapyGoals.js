@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const therapyGoals = [
   {
     modulation_goal: 'Goal 1',

@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const treatmentPlans = [
   {
     modulation_sensory: 'Needs help recognizing social cues',

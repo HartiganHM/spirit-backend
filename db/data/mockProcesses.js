@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const processes = [
   {
     sen_h_vestibular: '7F',

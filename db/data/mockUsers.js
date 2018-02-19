@@ -1,3 +1,5 @@
+/*eslint-disable camelcase*/
+
 const users = [
   {
     authrocket_id: 'usr_0vYfOixWwPnBDh1w8rxjGm',
