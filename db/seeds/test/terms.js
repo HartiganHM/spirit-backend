@@ -1,4 +1,5 @@
 /*eslint-disable no-console*/
+/*eslint-disable camelcase*/
 
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
