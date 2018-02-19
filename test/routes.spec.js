@@ -1794,7 +1794,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/treatment-plans/1')
         .send({
-          category: 'Executive Functioning'
+          modulation_task: 'Active play with obstacles'
         })
         .then(response => {
           response.should.have.status(201);
@@ -1811,7 +1811,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/treatment-plans/0')
         .send({
-          category: 'Executive Functioning'
+          modulation_task: 'Active play with obstacles'
         })
         .then(response => {
           response.should.have.status(404);
@@ -1838,7 +1838,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/therapy-goals/1')
         .send({
-          category: 'Executive Functioning'
+          modulation_goal: 'Better balance'
         })
         .then(response => {
           response.should.have.status(201);
@@ -1855,7 +1855,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/therapy-goals/0')
         .send({
-          category: 'Executive Functioning'
+          modulation_goal: 'Better balance'
         })
         .then(response => {
           response.should.have.status(404);
