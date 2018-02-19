@@ -3,18 +3,8 @@
 
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
-
-
-
-const users = [
-  {
-    authrocket_id: 'usr_0vYfOixWwPnBDh1w8rxjGm',
-    name: 'Hugh Hartigan',
-    email: 'hartigan.hm@gmail.com',
-    clinic: 'Developmental_FX',
-    clinic_abbreviation: 'DFX'
-  }
-];
+const clinis = require('../../data/mockClinics');
+const users = require('../../data/mockUsers');
 
 const patients = [
   {
