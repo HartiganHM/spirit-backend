@@ -5,4 +5,4 @@ const clinics = [
   }
 ];
 
-export default clinics;
+module.exports = clinics;

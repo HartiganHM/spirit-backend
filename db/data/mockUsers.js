@@ -8,4 +8,4 @@ const users = [
   }
 ];
 
-export default users;
+module.exports = users;
