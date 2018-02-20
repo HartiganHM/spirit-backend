@@ -3,7 +3,8 @@
 const clinics = [
   {
     name: 'Developmental_FX',
-    abbreviation: 'DFX'
+    abbreviation: 'DFX',
+    passcode: '5v1sy7'
   }
 ];
 
