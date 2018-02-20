@@ -108,6 +108,7 @@ describe('API Routes', () => {
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('abbreviation');
+          response.body[0].should.have.property('passcode');
         })
         .catch(error => {
           throw error;
@@ -212,6 +213,7 @@ describe('API Routes', () => {
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('abbreviation');
+          response.body[0].should.have.property('passcode');
         });
     });
 
