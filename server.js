@@ -543,7 +543,7 @@ app.post('/api/v1/categories', (request, response) => {
 app.post('/api/v1/clinics', (request, response) => {
   const newClinic = request.body;
 
-  for (let requiredParameter of ['name', 'abbreviation']) {
+  for (let requiredParameter of ['name', 'abbreviation', 'passcode']) {
     if (!newClinic[requiredParameter]) {
       return response
         .status(422)
