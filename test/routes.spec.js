@@ -1251,7 +1251,8 @@ describe('API Routes', () => {
         .post('/api/v1/clinics')
         .send({
           name: 'Developmental_FX',
-          abbreviation: 'DFX'
+          abbreviation: 'DFX',
+          passcode: '5v1sy7'
         })
         .then(response => {
           response.should.have.status(201);
