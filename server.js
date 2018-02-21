@@ -284,6 +284,19 @@ app.get('/api/v1/sessions/:sessionId', async (request, response) => {
   }
 });
 
+//////  GET THERAPY GOALS FOR COMPARISON  //////
+app.post('/api/v1/therapy-goals/compare', async (request, response) => {
+  const { idArray } = request.body;
+
+  if (idArray.length > 1) {
+    const therapyGoals = await database('therapy_goals').whereIn('session_id', idArray).select();
+    return response.status(200).json(therapyGoals);
+  } else {
+    return response.status(422).json({ error: 'At least 2 ids required for comparison' });
+  }
+
+});
+
 ///// GET PROCESS BY PROCESS ID /////
 app.get('/api/v1/processes/:processId', async (request, response) => {
   const { processId } = request.params;
