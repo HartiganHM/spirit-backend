@@ -239,6 +239,30 @@ app.get('/api/v1/patients/:patient_id', async (request, response) => {
   }
 });
 
+///// GET PRIMARY CONCERN BY PRIMARY CONCERN ID /////
+app.get(
+  '/api/v1/primary-concerns/:primaryConcernId',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+
+    try {
+      const primaryConcern = await database('primary_concerns')
+        .where('id', primaryConcernId)
+        .select();
+
+      if (!primaryConcern.length) {
+        return response
+          .status(404)
+          .json({ error: `Primary concern ${primaryConcernId} not found.` });
+      } else {
+        return response.status(200).json(primaryConcern);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
