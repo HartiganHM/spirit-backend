@@ -606,7 +606,16 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     .returning('id')
     .insert(addPatient)
     .then(id => {
-      return response.status(201).json(id);
+      const newAbstractedName = newPatient.abstracted_name + id.toString();
+      database('patients')
+        .where('id', id[0])
+        .update('abstracted_name', newAbstractedName, 'abstracted_name')
+        .then(name => {
+          return response.status(201).json(name);
+        })
+        .catch(error => {
+          return response.status(500).json({ error });
+        });
     })
     .catch(error => {
       return response.status(500).json({ error });
