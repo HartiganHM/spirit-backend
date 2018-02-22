@@ -108,6 +108,7 @@ describe('API Routes', () => {
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('abbreviation');
+          response.body[0].should.have.property('passcode');
         })
         .catch(error => {
           throw error;
@@ -212,6 +213,7 @@ describe('API Routes', () => {
           response.body[0].should.have.property('id');
           response.body[0].should.have.property('name');
           response.body[0].should.have.property('abbreviation');
+          response.body[0].should.have.property('passcode');
         });
     });
 
@@ -1249,7 +1251,8 @@ describe('API Routes', () => {
         .post('/api/v1/clinics')
         .send({
           name: 'Developmental_FX',
-          abbreviation: 'DFX'
+          abbreviation: 'DFX',
+          passcode: '5v1sy7'
         })
         .then(response => {
           response.should.have.status(201);
