@@ -363,7 +363,7 @@ app.post('/api/v1/processes/compare', async (request, response) => {
   } else {
     return response.status(422).json({
       error: 'At least 2 ids required for comparison'
-    })
+    });
   }
 });
 
