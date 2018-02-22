@@ -356,6 +356,51 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET processes by process id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a process by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/processes/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('sen_h_vestibular');
+          response.body[0].should.have.property('sen_h_proprioception');
+          response.body[0].should.have.property('sen_h_tactile');
+          response.body[0].should.have.property('sen_h_auditory');
+          response.body[0].should.have.property('sen_h_visual');
+          response.body[0].should.have.property('sen_h_intero');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if process id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/processes/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -478,6 +523,51 @@ describe('API Routes', () => {
           response.error.text.should.equal(
             '{"error":"Primary concern 0 not found."}'
           );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET processes by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get processes by session id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/processes')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('sen_h_vestibular');
+          response.body[0].should.have.property('sen_h_proprioception');
+          response.body[0].should.have.property('sen_h_tactile');
+          response.body[0].should.have.property('sen_h_auditory');
+          response.body[0].should.have.property('sen_h_visual');
+          response.body[0].should.have.property('sen_h_intero');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/processes')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -938,6 +1028,58 @@ describe('API Routes', () => {
     });
   });
 
+  describe('POST new process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new process to a session', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/processes')
+        .send(
+          {
+            sen_h_vestibular: '7F',
+            mod_2_autonomic: '3R',
+            exe_4b_self_control: '5A',
+            pos_5_alignment_COG: '10F',
+            soc_2_social_motivators: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/processes')
+        .send(
+          {
+            sen_h_vestibular: '7F',
+            mod_2_autonomic: '3R',
+            exe_4b_self_control: '5A',
+            pos_5_alignment_COG: '10F',
+            soc_2_social_motivators: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        });
+    });
+  });
+
   describe('PUT user', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -1010,6 +1152,54 @@ describe('API Routes', () => {
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT process', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a process', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/processes/1')
+        .send(
+          {
+            sen_h_vestibular: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Process 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if process is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/processes/0')
+        .send(
+          {
+            sen_h_vestibular: '3I'
+          }
+        )
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Process 0 not found."}'
           );
         })
         .catch(error => {

@@ -41,6 +41,16 @@ const primaryConcerns = [
   }
 ];
 
+const processes = [
+  {
+    sen_h_vestibular: '7F',
+    mod_2_autonomic: '3R',
+    exe_4b_self_control: '5A',
+    pos_5_alignment_COG: '10F',
+    soc_2_social_motivators: '3I'
+  }
+];
+
 const sessions = [{}];
 
 const createCategory = (knex, category) => {
@@ -156,13 +166,39 @@ const createPrimaryConcerns = (knex, primaryConcern) => {
 };
 
 const createSessions = (knex, session) => {
-  return knex('sessions').insert(session);
+  return knex('sessions')
+    .insert(session, 'id')
+    .then(sessionId => {
+      let processesPromises = [];
+
+      processes.forEach(processes => {
+        processesPromises.push(
+          createProcesses(knex, {
+            ...processes,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      return Promise.all(processesPromises);
+    })
+    .catch(error => {
+      throw error;
+    });
+};
+
+const createProcesses = (knex, processes) => {
+  return knex('processes').insert(processes);
 };
 
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('processes').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE processes_id_seq RESTART WITH 1');
+    })
     .then(() => knex('sessions').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE sessions_id_seq RESTART WITH 1');
