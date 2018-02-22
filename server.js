@@ -130,6 +130,18 @@ app.get('/api/v1/users', async (request, response) => {
     });
 });
 
+//////  GET ALL CLINICS //////
+app.get('/api/v1/clinics', (request, response) => {
+  database('clinics')
+    .select()
+    .then(clinics => {
+      return response.status(200).json(clinics);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  GET ALL PATIENTS //////
 app.get('/api/v1/patients', (request, response) => {
   database('patients')
@@ -179,6 +191,27 @@ app.get('/api/v1/terms', async (request, response) => {
       return response.status(404).json({ error: `Term ${query} not found.` });
     } else {
       return response.status(200).json(term);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
+//////  GET CLINIC BY CLINIC ID //////
+app.get('/api/v1/clinics/:clinic_id', async (request, response) => {
+  const { clinic_id } = request.params;
+
+  try {
+    const clinic = await database('clinics')
+      .where('id', clinic_id)
+      .select();
+
+    if (!clinic.length) {
+      return response
+        .status(404)
+        .json({ error: `Clinic ${clinic_id} not found.` });
+    } else {
+      return response.status(200).json(clinic);
     }
   } catch (error) {
     return response.status(500).json({ error });
@@ -267,11 +300,7 @@ app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
   }
 });
 
-// if (environment !== 'test') {
-//   app.use(checkAdmin);
-// }
-
-//////  CREATE NEW CATEGORY (admin only) //////
+//////  CREATE NEW CATEGORY //////
 app.post('/api/v1/categories', (request, response) => {
   const newCategory = request.body;
 
@@ -293,9 +322,33 @@ app.post('/api/v1/categories', (request, response) => {
     });
 });
 
+//////  CREATE NEW CLINIC //////
+// NOTE:  Requires name and abbreviation in body.
+app.post('/api/v1/clinics', (request, response) => {
+  const newClinic = request.body;
+
+  for (let requiredParameter of ['name', 'abbreviation']) {
+    if (!newClinic[requiredParameter]) {
+      return response
+        .status(422)
+        .json({ error: `Missing required parameter - ${requiredParameter}` });
+    }
+  }
+
+  database('clinics')
+    .returning('id')
+    .insert(newClinic)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW PATIENT //////
 // NOTE:  Requires user id in params and then abstracted_name in body.
-//        Call will add the clinic_name to the term.
+//        Call will add the clinic_name to the patient.
 app.post('/api/v1/users/:user_id/patients', async (request, response) => {
   const newPatient = request.body;
   const { user_id } = request.params;
@@ -313,7 +366,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     .select();
 
   if (!clinicName.length) {
-    return response.status(404).json({ error: `User not found` });
+    return response.status(404).json({ error: `User ${user_id} not found.` });
   }
 
   const addPatient = await Object.assign({}, newPatient, {
@@ -332,7 +385,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
     });
 });
 
-//////  CREATE NEW TERM (admin only) //////
+//////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
 app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
@@ -369,7 +422,7 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     });
 });
 
-//////  UPDATE TERM (admin only) //////
+//////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
   const updatedTerm = request.body;
@@ -394,7 +447,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     });
 });
 
-//////  UPDATE CATEGORY (admin only) //////
+//////  UPDATE CATEGORY //////
 app.put('/api/v1/categories/:category_id', async (request, response) => {
   const { category_id } = request.params;
   const updatedCategory = request.body;
@@ -421,7 +474,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     });
 });
 
-//////  DELETE TERM (admin only) //////
+//////  DELETE TERM //////
 app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
 
@@ -442,7 +495,7 @@ app.delete('/api/v1/terms/:terms_id', async (request, response) => {
   }
 });
 
-//////  DELETE CATEGORY (admin only) //////
+//////  DELETE CATEGORY //////
 app.delete('/api/v1/categories/:category_id', (request, response) => {
   const { category_id } = request.params;
 
