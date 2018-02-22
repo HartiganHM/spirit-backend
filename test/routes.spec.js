@@ -317,6 +317,45 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET sessions by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a session by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('concern_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -398,6 +437,47 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Patient 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET sessions by primary concern id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get sessions by primary concern id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/1/sessions')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('concern_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if primary concern id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/primary-concerns/0/sessions')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern 0 not found."}'
+          );
         })
         .catch(error => {
           throw error;
@@ -505,45 +585,6 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Term 0 not found."}');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-  });
-
-  describe('POST authenticate', () => {
-    xit('should create a new JWT', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          email: 'user@email.com',
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(201);
-          response.should.be.json;
-          response.body.should.be.a('string');
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-
-    xit('Should send a 422 if missing a parameter', () => {
-      return chai
-        .request(server)
-        .post('/authenticate')
-        .send({
-          appName: 'spirit'
-        })
-        .then(response => {
-          response.should.have.status(422);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Missing required parameter - email"}'
-          );
         })
         .catch(error => {
           throw error;
@@ -779,7 +820,7 @@ describe('API Routes', () => {
     });
   });
 
-  describe('POST primary concern', () => {
+  describe('POST new primary concern', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
         done();
@@ -857,6 +898,42 @@ describe('API Routes', () => {
         })
         .catch(error => {
           throw error;
+        });
+    });
+  });
+
+  describe('POST new session', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new session to a primary concern', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/1/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if primary concern id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/primary-concerns/0/sessions')
+        .send({})
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Primary concern by id 0 not found."}'
+          );
         });
     });
   });

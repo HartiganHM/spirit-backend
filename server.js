@@ -263,6 +263,27 @@ app.get(
   }
 );
 
+///// GET SESSION BY SESSION ID /////
+app.get('/api/v1/sessions/:sessionId', async (request, response) => {
+  const { sessionId } = request.params;
+
+  try {
+    const session = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!session.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(session);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
@@ -320,6 +341,30 @@ app.get(
           .json({ error: `Patient ${patientId} not found.` });
       } else {
         return response.status(200).json(primaryConcerns);
+      }
+    } catch (error) {
+      return response.status(500).json({ error });
+    }
+  }
+);
+
+///// GET SESSION BY PRIMARY CONCERNS ID /////
+app.get(
+  '/api/v1/primary-concerns/:primaryConcernId/sessions',
+  async (request, response) => {
+    const { primaryConcernId } = request.params;
+
+    try {
+      const sessions = await database('sessions')
+        .where('concern_id', primaryConcernId)
+        .select();
+
+      if (!sessions.length) {
+        return response
+          .status(404)
+          .json({ error: `Primary concern ${primaryConcernId} not found.` });
+      } else {
+        return response.status(200).json(sessions);
       }
     } catch (error) {
       return response.status(500).json({ error });
@@ -434,7 +479,7 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
 });
 
 //////  CREATE NEW PRIMARY CONCERN //////
-// NOTE:  Requires patient id in params and all primary_concern propertis in body.
+// NOTE:  Requires patient id in params and description in body.
 //        Call will add the patient_id to primary concern.
 app.post(
   '/api/v1/patients/:patientId/primary-concerns',
@@ -467,6 +512,41 @@ app.post(
     database('primary_concerns')
       .returning('id')
       .insert(addPrimaryConcern)
+      .then(id => {
+        return response.status(201).json(id);
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  CREATE NEW SESSION //////
+// NOTE:  Requires primary concern id in params.
+//        Call will add the concern_id to session.
+app.post(
+  '/api/v1/primary-concerns/:primaryConcernId/sessions',
+  async (request, response) => {
+    const newSession = request.body;
+    const { primaryConcernId } = request.params;
+
+    const primaryConcern = await database('primary_concerns')
+      .where('id', primaryConcernId)
+      .select();
+
+    if (!primaryConcern.length) {
+      return response
+        .status(404)
+        .json({ error: `Primary concern by id ${primaryConcernId} not found.` });
+    }
+
+    const addSession = await Object.assign({}, newSession, {
+      concern_id: primaryConcernId
+    });
+
+    database('sessions')
+      .returning('id')
+      .insert(addSession)
       .then(id => {
         return response.status(201).json(id);
       })
