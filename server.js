@@ -401,13 +401,7 @@ app.get(
         .where('patient_id', patientId)
         .select();
 
-      if (!primaryConcerns.length) {
-        return response
-          .status(404)
-          .json({ error: `Patient ${patientId} not found.` });
-      } else {
-        return response.status(200).json(primaryConcerns);
-      }
+      return response.status(200).json(primaryConcerns);
     } catch (error) {
       return response.status(500).json({ error });
     }
@@ -425,13 +419,7 @@ app.get(
         .where('concern_id', primaryConcernId)
         .select();
 
-      if (!sessions.length) {
-        return response
-          .status(404)
-          .json({ error: `Primary concern ${primaryConcernId} not found.` });
-      } else {
-        return response.status(200).json(sessions);
-      }
+      return response.status(200).json(sessions);
     } catch (error) {
       return response.status(500).json({ error });
     }
@@ -609,12 +597,17 @@ app.post('/api/v1/users/:user_id/patients', async (request, response) => {
       const newAbstractedName = newPatient.abstracted_name + id.toString();
       database('patients')
         .where('id', id[0])
-        .update('abstracted_name', newAbstractedName, 'abstracted_name')
-        .then(name => {
-          return response.status(201).json(name);
-        })
-        .catch(error => {
-          return response.status(500).json({ error });
+        .update('abstracted_name', newAbstractedName, 'id')
+        .then(id => {
+          database('patients')
+            .where('id', id[0])
+            .select()
+            .then(patient => {
+              return response.status(201).json(patient);
+            })
+            .catch(error => {
+              return response.status(500).json({ error });
+            });
         });
     })
     .catch(error => {
@@ -671,7 +664,6 @@ app.post(
 app.post(
   '/api/v1/primary-concerns/:primaryConcernId/sessions',
   async (request, response) => {
-    const newSession = request.body;
     const { primaryConcernId } = request.params;
 
     const primaryConcern = await database('primary_concerns')
@@ -684,9 +676,12 @@ app.post(
       });
     }
 
-    const addSession = await Object.assign({}, newSession, {
-      concern_id: primaryConcernId
-    });
+    const addSession = await Object.assign(
+      {},
+      {
+        concern_id: primaryConcernId
+      }
+    );
 
     database('sessions')
       .returning('id')
