@@ -736,14 +736,6 @@ app.post(
     const newTreatmentPlan = request.body;
     const { sessionId } = request.params;
 
-    for (let requiredParameter of ['category']) {
-      if (!newTreatmentPlan[requiredParameter]) {
-        return response.status(422).json({
-          error: `Missing required parameter - ${requiredParameter}.`
-        });
-      }
-    }
-
     const session = await database('sessions')
       .where('id', sessionId)
       .select();
@@ -778,19 +770,6 @@ app.post(
   async (request, response) => {
     const newTherapyGoal = request.body;
     const { sessionId } = request.params;
-
-    for (let requiredParameter of [
-      'category',
-      'ot_importance',
-      'ot_performance',
-      'ot_satisfaction'
-    ]) {
-      if (!newTherapyGoal[requiredParameter]) {
-        return response.status(422).json({
-          error: `Missing required parameter - ${requiredParameter}.`
-        });
-      }
-    }
 
     const session = await database('sessions')
       .where('id', sessionId)
@@ -904,6 +883,36 @@ app.put(
       .then(() => {
         return response.status(201).send({
           success: `Primary concern ${primaryConcernId} updated.`
+        });
+      })
+      .catch(error => {
+        return response.status(500).json({ error });
+      });
+  }
+);
+
+//////  UPDATE SESSION //////
+app.put(
+  '/api/v1/sessions/:sessionId',
+  async (request, response) => {
+    const { sessionId } = request.params;
+    const updatedSession = request.body;
+    const sessionToUpdate = await database('sessions')
+      .where('id', sessionId)
+      .select();
+
+    if (!sessionToUpdate.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    }
+
+    await database('sessions')
+      .where('id', sessionId)
+      .update(updatedSession)
+      .then(() => {
+        return response.status(201).send({
+          success: `Session ${sessionId} updated.`
         });
       })
       .catch(error => {

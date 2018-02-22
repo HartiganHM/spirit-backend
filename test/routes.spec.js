@@ -1297,31 +1297,6 @@ describe('API Routes', () => {
           throw error;
         });
     });
-
-    it('Should return a 422 error if missing a required paramter', () => {
-      return chai
-        .request(server)
-        .post('/api/v1/sessions/1/treatment-plans')
-        .send({
-          task: 'Puzzle Games',
-          environment: 'Solo play in quiet setting',
-          predictability:
-            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-          self_regulation: 'Focus and attention',
-          interaction: 'Encourage problem solving with guidance',
-          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
-        })
-        .then(response => {
-          response.should.have.status(422);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Missing required parameter - category."}'
-          );
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
   });
 
   describe('POST new therapy goals', () => {
@@ -1371,30 +1346,6 @@ describe('API Routes', () => {
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Session by id 0 not found."}'
-          );
-        })
-        .catch(error => {
-          throw error;
-        });
-    });
-
-    it('Should return a 422 error if missing a required paramter', () => {
-      return chai
-        .request(server)
-        .post('/api/v1/sessions/1/therapy-goals')
-        .send({
-          category: 'Sensory',
-          parent_importance: 7,
-          ot_performance: 5,
-          parent_performance: 8,
-          ot_satisfaction: 8,
-          parent_satisfaction: 3
-        })
-        .then(response => {
-          response.should.have.status(422);
-          response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Missing required parameter - ot_importance."}'
           );
         })
         .catch(error => {
@@ -1475,6 +1426,46 @@ describe('API Routes', () => {
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Primary concern 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT session', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a session', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/sessions/1')
+        .send({ completed: true })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Session 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if session is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/sessions/0')
+        .send({ completed: true })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session 0 not found."}'
           );
         })
         .catch(error => {
