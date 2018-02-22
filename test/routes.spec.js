@@ -89,6 +89,32 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET all patients', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get all patients', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('abstracted_name');
+          response.body[0].should.have.property('clinic_name');
+          response.body[0].should.have.property('ot_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET terms by category id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -134,6 +160,88 @@ describe('API Routes', () => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal('{"error":"Category 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET patients by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get patients by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('abstracted_name');
+          response.body[0].should.have.property('clinic_name');
+          response.body[0].should.have.property('ot_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 if user id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/patients/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Patient 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET patients by user_id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get patients by user id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/users/1/patients')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(2);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('abstracted_name');
+          response.body[0].should.have.property('clinic_name');
+          response.body[0].should.have.property('ot_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 if user id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/users/0/patients')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"User 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -249,7 +357,7 @@ describe('API Routes', () => {
   });
 
   describe('POST authenticate', () => {
-    it('should create a new JWT', () => {
+    xit('should create a new JWT', () => {
       return chai
         .request(server)
         .post('/authenticate')
@@ -267,7 +375,7 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should send a 422 if missing a parameter', () => {
+    xit('Should send a 422 if missing a parameter', () => {
       return chai
         .request(server)
         .post('/authenticate')

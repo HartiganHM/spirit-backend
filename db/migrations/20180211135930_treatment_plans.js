@@ -14,7 +14,7 @@ exports.up = function(knex, Promise) {
       table.foreign('session_id').references('sessions.id');
       table.timestamps(true, true);
     })
-  ])
+  ]);
 };
 
 exports.down = function(knex, Promise) {
