@@ -1,82 +1,16 @@
-/*eslint-disable camelcase*/
 /*eslint-disable no-console*/
+/*eslint-disable camelcase*/
 
 const categories = require('../../data/categories');
 const terms = require('../../data/terms');
-
-const clinics = [
-  {
-    name: 'Developmental_FX',
-    abbreviation: 'DFX'
-  }
-];
-
-const users = [
-  {
-    authrocket_id: 'usr_0vYfOixWwPnBDh1w8rxjGm',
-    name: 'Hugh Hartigan',
-    email: 'hartigan.hm@gmail.com',
-    clinic: 'Developmental_FX',
-    clinic_abbreviation: 'DFX'
-  }
-];
-
-const patients = [
-  {
-    abstracted_name: 'DFXHH3',
-    clinic_name: 'Developmental_FX'
-  }
-];
-
-const primaryConcerns = [
-  {
-    description: 'Does not play well at school',
-    domain_1: true,
-    domain_2: false,
-    domain_3: true,
-    domain_4: true,
-    domain_5: false,
-    domain_6: true,
-    notes: 'Plays well with parents around, but not while away'
-  }
-];
-
+const clinics = require('../../data/mockClinics');
+const users = require('../../data/mockUsers');
+const patients = require('../../data/mockPatients');
+const primaryConcerns = require('../../data/mockPrimaryConcerns');
 const sessions = [{}];
-
-const processes = [
-  {
-    sen_h_vestibular: '7F',
-    mod_2_autonomic: '3R',
-    exe_4b_self_control: '5A',
-    pos_5_alignment_COG: '10F',
-    soc_2_social_motivators: '3I'
-  }
-];
-
-const treatmentPlans = [
-  {
-    category: 'Sensory',
-    task: 'Puzzle Games',
-    environment: 'Solo play in quiet setting',
-    predictability:
-      'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-    self_regulation: 'Focus and attention',
-    interaction: 'Encourage problem solving with guidance',
-    JRC_AR_notes: 'Record results from distance, but be engaged if needed'
-  }
-];
-
-const therapyGoals = [
-  {
-    category: 'Sensory',
-    ot_importance: 10,
-    parent_importance: 7,
-    ot_performance: 5,
-    parent_performance: 8,
-    ot_satisfaction: 8,
-    parent_satisfaction: 3
-  }
-];
+const processes = require('../../data/mockProcesses');
+const treatmentPlans = require('../../data/mockTreatmentPlans');
+const therapyGoals = require('../../data/mockTherapyGoals');
 
 const createCategory = (knex, category) => {
   return knex('categories')

@@ -418,14 +418,75 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
-          response.body[0].should.have.property('category');
-          response.body[0].should.have.property('sensory');
-          response.body[0].should.have.property('task');
-          response.body[0].should.have.property('environment');
-          response.body[0].should.have.property('predictability');
-          response.body[0].should.have.property('self_regulation');
-          response.body[0].should.have.property('interaction');
-          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('modulation_sensory');
+          response.body[0].should.have.property('modulation_task');
+          response.body[0].should.have.property('modulation_environment');
+          response.body[0].should.have.property('modulation_predictability');
+          response.body[0].should.have.property('modulation_self_regulation');
+          response.body[0].should.have.property('modulation_interaction');
+          response.body[0].should.have.property('modulation_JRC_AR_notes');
+
+          response.body[0].should.have.property('posture_sensory');
+          response.body[0].should.have.property('posture_task');
+          response.body[0].should.have.property('posture_environment');
+          response.body[0].should.have.property('posture_predictability');
+          response.body[0].should.have.property('posture_self_regulation');
+          response.body[0].should.have.property('posture_interaction');
+          response.body[0].should.have.property('posture_JRC_AR_notes');
+
+          response.body[0].should.have.property(
+            'sensory_discrimination_sensory'
+          );
+          response.body[0].should.have.property('sensory_discrimination_task');
+          response.body[0].should.have.property(
+            'sensory_discrimination_environment'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_predictability'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_self_regulation'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_interaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_JRC_AR_notes'
+          );
+
+          response.body[0].should.have.property('social_emotional_sensory');
+          response.body[0].should.have.property('social_emotional_task');
+          response.body[0].should.have.property('social_emotional_environment');
+          response.body[0].should.have.property(
+            'social_emotional_predictability'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_self_regulation'
+          );
+          response.body[0].should.have.property('social_emotional_interaction');
+          response.body[0].should.have.property(
+            'social_emotional_JRC_AR_notes'
+          );
+
+          response.body[0].should.have.property(
+            'executive_functioning_sensory'
+          );
+          response.body[0].should.have.property('executive_functioning_task');
+          response.body[0].should.have.property(
+            'executive_functioning_environment'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_predictability'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_self_regulation'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_interaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_JRC_AR_notes'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -467,13 +528,85 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
-          response.body[0].should.have.property('category');
-          response.body[0].should.have.property('ot_importance');
-          response.body[0].should.have.property('parent_importance');
-          response.body[0].should.have.property('ot_performance');
-          response.body[0].should.have.property('parent_performance');
-          response.body[0].should.have.property('ot_satisfaction');
-          response.body[0].should.have.property('parent_satisfaction');
+          response.body[0].should.have.property('modulation_goal');
+          response.body[0].should.have.property('modulation_ot_importance');
+          response.body[0].should.have.property('modulation_parent_importance');
+          response.body[0].should.have.property('modulation_ot_performance');
+          response.body[0].should.have.property(
+            'modulation_parent_performance'
+          );
+          response.body[0].should.have.property('modulation_ot_satisfaction');
+          response.body[0].should.have.property(
+            'modulation_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('posture_goal');
+          response.body[0].should.have.property('posture_ot_importance');
+          response.body[0].should.have.property('posture_parent_importance');
+          response.body[0].should.have.property('posture_ot_performance');
+          response.body[0].should.have.property('posture_parent_performance');
+          response.body[0].should.have.property('posture_ot_satisfaction');
+          response.body[0].should.have.property('posture_parent_satisfaction');
+
+          response.body[0].should.have.property('sensory_discrimination_goal');
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('social_emotional_goal');
+          response.body[0].should.have.property(
+            'social_emotional_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('executive_functioning_goal');
+          response.body[0].should.have.property(
+            'executive_functioning_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_satisfaction'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -659,14 +792,75 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
-          response.body[0].should.have.property('category');
-          response.body[0].should.have.property('sensory');
-          response.body[0].should.have.property('task');
-          response.body[0].should.have.property('environment');
-          response.body[0].should.have.property('predictability');
-          response.body[0].should.have.property('self_regulation');
-          response.body[0].should.have.property('interaction');
-          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('modulation_sensory');
+          response.body[0].should.have.property('modulation_task');
+          response.body[0].should.have.property('modulation_environment');
+          response.body[0].should.have.property('modulation_predictability');
+          response.body[0].should.have.property('modulation_self_regulation');
+          response.body[0].should.have.property('modulation_interaction');
+          response.body[0].should.have.property('modulation_JRC_AR_notes');
+
+          response.body[0].should.have.property('posture_sensory');
+          response.body[0].should.have.property('posture_task');
+          response.body[0].should.have.property('posture_environment');
+          response.body[0].should.have.property('posture_predictability');
+          response.body[0].should.have.property('posture_self_regulation');
+          response.body[0].should.have.property('posture_interaction');
+          response.body[0].should.have.property('posture_JRC_AR_notes');
+
+          response.body[0].should.have.property(
+            'sensory_discrimination_sensory'
+          );
+          response.body[0].should.have.property('sensory_discrimination_task');
+          response.body[0].should.have.property(
+            'sensory_discrimination_environment'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_predictability'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_self_regulation'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_interaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_JRC_AR_notes'
+          );
+
+          response.body[0].should.have.property('social_emotional_sensory');
+          response.body[0].should.have.property('social_emotional_task');
+          response.body[0].should.have.property('social_emotional_environment');
+          response.body[0].should.have.property(
+            'social_emotional_predictability'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_self_regulation'
+          );
+          response.body[0].should.have.property('social_emotional_interaction');
+          response.body[0].should.have.property(
+            'social_emotional_JRC_AR_notes'
+          );
+
+          response.body[0].should.have.property(
+            'executive_functioning_sensory'
+          );
+          response.body[0].should.have.property('executive_functioning_task');
+          response.body[0].should.have.property(
+            'executive_functioning_environment'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_predictability'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_self_regulation'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_interaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_JRC_AR_notes'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -706,13 +900,85 @@ describe('API Routes', () => {
           response.body.should.be.a('array');
           response.body.length.should.equal(1);
           response.body[0].should.have.property('id');
-          response.body[0].should.have.property('category');
-          response.body[0].should.have.property('ot_importance');
-          response.body[0].should.have.property('parent_importance');
-          response.body[0].should.have.property('ot_performance');
-          response.body[0].should.have.property('parent_performance');
-          response.body[0].should.have.property('ot_satisfaction');
-          response.body[0].should.have.property('parent_satisfaction');
+          response.body[0].should.have.property('modulation_goal');
+          response.body[0].should.have.property('modulation_ot_importance');
+          response.body[0].should.have.property('modulation_parent_importance');
+          response.body[0].should.have.property('modulation_ot_performance');
+          response.body[0].should.have.property(
+            'modulation_parent_performance'
+          );
+          response.body[0].should.have.property('modulation_ot_satisfaction');
+          response.body[0].should.have.property(
+            'modulation_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('posture_goal');
+          response.body[0].should.have.property('posture_ot_importance');
+          response.body[0].should.have.property('posture_parent_importance');
+          response.body[0].should.have.property('posture_ot_performance');
+          response.body[0].should.have.property('posture_parent_performance');
+          response.body[0].should.have.property('posture_ot_satisfaction');
+          response.body[0].should.have.property('posture_parent_satisfaction');
+
+          response.body[0].should.have.property('sensory_discrimination_goal');
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'sensory_discrimination_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('social_emotional_goal');
+          response.body[0].should.have.property(
+            'social_emotional_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'social_emotional_parent_satisfaction'
+          );
+
+          response.body[0].should.have.property('executive_functioning_goal');
+          response.body[0].should.have.property(
+            'executive_functioning_ot_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_importance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_performance'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_ot_satisfaction'
+          );
+          response.body[0].should.have.property(
+            'executive_functioning_parent_satisfaction'
+          );
           response.body[0].should.have.property('session_id');
         })
         .catch(error => {
@@ -1254,14 +1520,15 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/1/treatment-plans')
         .send({
-          category: 'Sensory',
-          task: 'Puzzle Games',
-          environment: 'Solo play in quiet setting',
-          predictability:
+          modulation_sensory: 'Needs help recognizing social cues',
+          modulation_task: 'Puzzle Games',
+          modulation_environment: 'Solo play in quiet setting',
+          modulation_predictability:
             'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-          self_regulation: 'Focus and attention',
-          interaction: 'Encourage problem solving with guidance',
-          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+          modulation_self_regulation: 'Focus and attention',
+          modulation_interaction: 'Encourage problem solving with guidance',
+          modulation_JRC_AR_notes:
+            'Record results from distance, but be engaged if needed'
         })
         .then(response => {
           response.should.have.status(201);
@@ -1277,14 +1544,15 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/0/treatment-plans')
         .send({
-          category: 'Sensory',
-          task: 'Puzzle Games',
-          environment: 'Solo play in quiet setting',
-          predictability:
+          modulation_sensory: 'Needs help recognizing social cues',
+          modulation_task: 'Puzzle Games',
+          modulation_environment: 'Solo play in quiet setting',
+          modulation_predictability:
             'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
-          self_regulation: 'Focus and attention',
-          interaction: 'Encourage problem solving with guidance',
-          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+          modulation_self_regulation: 'Focus and attention',
+          modulation_interaction: 'Encourage problem solving with guidance',
+          modulation_JRC_AR_notes:
+            'Record results from distance, but be engaged if needed'
         })
         .then(response => {
           response.should.have.status(404);
@@ -1311,13 +1579,13 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/1/therapy-goals')
         .send({
-          category: 'Sensory',
-          ot_importance: 10,
-          parent_importance: 7,
-          ot_performance: 5,
-          parent_performance: 8,
-          ot_satisfaction: 8,
-          parent_satisfaction: 3
+          modulation_goal: 'Goal 1',
+          modulation_ot_importance: 5,
+          modulation_parent_importance: 5,
+          modulation_ot_performance: 5,
+          modulation_parent_performance: 5,
+          modulation_ot_satisfaction: 5,
+          modulation_parent_satisfaction: 5
         })
         .then(response => {
           response.should.have.status(201);
@@ -1333,13 +1601,13 @@ describe('API Routes', () => {
         .request(server)
         .post('/api/v1/sessions/0/therapy-goals')
         .send({
-          category: 'Sensory',
-          ot_importance: 10,
-          parent_importance: 7,
-          ot_performance: 5,
-          parent_performance: 8,
-          ot_satisfaction: 8,
-          parent_satisfaction: 3
+          modulation_goal: 'Goal 1',
+          modulation_ot_importance: 5,
+          modulation_parent_importance: 5,
+          modulation_ot_performance: 5,
+          modulation_parent_performance: 5,
+          modulation_ot_satisfaction: 5,
+          modulation_parent_satisfaction: 5
         })
         .then(response => {
           response.should.have.status(404);
@@ -1464,9 +1732,7 @@ describe('API Routes', () => {
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal(
-            '{"error":"Session 0 not found."}'
-          );
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
         })
         .catch(error => {
           throw error;
@@ -1528,7 +1794,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/treatment-plans/1')
         .send({
-          category: 'Executive Functioning'
+          modulation_task: 'Active play with obstacles'
         })
         .then(response => {
           response.should.have.status(201);
@@ -1545,7 +1811,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/treatment-plans/0')
         .send({
-          category: 'Executive Functioning'
+          modulation_task: 'Active play with obstacles'
         })
         .then(response => {
           response.should.have.status(404);
@@ -1572,7 +1838,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/therapy-goals/1')
         .send({
-          category: 'Executive Functioning'
+          modulation_goal: 'Better balance'
         })
         .then(response => {
           response.should.have.status(201);
@@ -1589,7 +1855,7 @@ describe('API Routes', () => {
         .request(server)
         .put('/api/v1/therapy-goals/0')
         .send({
-          category: 'Executive Functioning'
+          modulation_goal: 'Better balance'
         })
         .then(response => {
           response.should.have.status(404);
