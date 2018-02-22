@@ -41,6 +41,8 @@ const primaryConcerns = [
   }
 ];
 
+const sessions = [{}];
+
 const processes = [
   {
     sen_h_vestibular: '7F',
@@ -64,7 +66,17 @@ const treatmentPlans = [
   }
 ];
 
-const sessions = [{}];
+const therapyGoals = [
+  {
+    category: 'Sensory',
+    ot_importance: 10,
+    parent_importance: 7,
+    ot_performance: 5,
+    parent_performance: 8,
+    ot_satisfaction: 8,
+    parent_satisfaction: 3
+  }
+];
 
 const createCategory = (knex, category) => {
   return knex('categories')
@@ -184,6 +196,7 @@ const createSessions = (knex, session) => {
     .then(sessionId => {
       let processesPromises = [];
       let treatmentPlansPromises = [];
+      let therapyGoalsPromises = [];
 
       processes.forEach(processes => {
         processesPromises.push(
@@ -203,9 +216,19 @@ const createSessions = (knex, session) => {
         );
       });
 
+      therapyGoals.forEach(therapyGoal => {
+        therapyGoalsPromises.push(
+          createNewTherapyGoals(knex, {
+            ...therapyGoal,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
       const allSessionsPromises = [
         processesPromises,
-        treatmentPlansPromises
+        treatmentPlansPromises,
+        therapyGoalsPromises
       ].map(innerPromiseArray => Promise.all(innerPromiseArray));
 
       return Promise.all(allSessionsPromises);
@@ -223,10 +246,18 @@ const createTreatmentPlans = (knex, treatmentPlan) => {
   return knex('treatment_plans').insert(treatmentPlan);
 };
 
+const createNewTherapyGoals = (knex, therapyGoal) => {
+  return knex('therapy_goals').insert(therapyGoal);
+};
+
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('therapy_goals').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE therapy_goals_id_seq RESTART WITH 1');
+    })
     .then(() => knex('treatment_plans').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE treatment_plans_id_seq RESTART WITH 1');
