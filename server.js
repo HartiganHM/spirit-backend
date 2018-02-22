@@ -861,6 +861,33 @@ app.put('/api/v1/users/:userId', async (request, response) => {
     });
 });
 
+//////  CHECK PASSWORD AND UPDATE USER CLINIC INFO  //////
+app.put('/api/v1/users/:userId/join', async (request, response) => {
+  const { userId } = request.params;
+  const updatedUser = request.body;
+  const password = updatedUser.passcode;
+
+  const clinic = await database('clinics').where('passcode', password).select();
+  if (!clinic.length) {
+    return response.status(404).json({ error: 'Passcode does not match any existing clinics'})
+  }
+
+  const infoToSave = {
+    clinic: clinic[0].name, 
+    clinic_abbreviation: clinic[0].abbreviation, 
+    clinic_id: clinic[0].id, 
+    clinic_passcode: clinic[0].passcode
+  }
+
+  await database('users').where('id', userId).update(infoToSave)
+  .then(() => {
+    return response.status(201).json(infoToSave);
+  })
+  .catch(error => {
+    return response.status(500).json({ error })
+  })
+})
+
 //////  UPDATE PRIMARY CONCERN //////
 app.put(
   '/api/v1/primary-concerns/:primaryConcernId',
