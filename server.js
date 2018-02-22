@@ -420,11 +420,9 @@ app.post(
 
     for (let requiredParameter of ['description']) {
       if (!newPrimaryConcern[requiredParameter]) {
-        return response
-          .status(422)
-          .json({
-            error: `Missing required parameter - ${requiredParameter}.`
-          });
+        return response.status(422).json({
+          error: `Missing required parameter - ${requiredParameter}.`
+        });
       }
     }
 
@@ -485,6 +483,33 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
     .insert(addTerm)
     .then(id => {
       return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
+//////  UPDATE USER WITH CLINIC INFO //////
+app.put('/api/v1/users/:userId', async (request, response) => {
+  const { userId } = request.params;
+  const updatedUser = request.body;
+  const userToUpdate = await database('users')
+    .where('id', userId)
+    .select();
+
+  if (!userToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `User by id ${userId} not found.` });
+  }
+
+  await database('users')
+    .where('id', userId)
+    .update(updatedUser)
+    .then(() => {
+      return response.status(201).send({
+        success: `User ${userId} updated.`
+      });
     })
     .catch(error => {
       return response.status(500).json({ error });
