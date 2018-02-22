@@ -305,6 +305,27 @@ app.get('/api/v1/processes/:processId', async (request, response) => {
   }
 });
 
+///// GET TREATMENT PLAN BY TREATMENT PLAN ID /////
+app.get('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) => {
+  const { treatmentPlanId } = request.params;
+
+  try {
+    const treatmentPlan = await database('treatment_plans')
+      .where('id', treatmentPlanId)
+      .select();
+
+    if (!treatmentPlan.length) {
+      return response
+        .status(404)
+        .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
+    } else {
+      return response.status(200).json(treatmentPlan);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
   const { terms_id } = request.params;
@@ -408,6 +429,27 @@ app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
         .json({ error: `Session ${sessionId} not found.` });
     } else {
       return response.status(200).json(processes);
+    }
+  } catch (error) {
+    return response.status(500).json({ error });
+  }
+});
+
+///// GET TREATMENT PLAN BY SESSION ID /////
+app.get('/api/v1/sessions/:sessionId/treatment-plans', async (request, response) => {
+  const { sessionId } = request.params;
+
+  try {
+    const treatmentPlans = await database('treatment_plans')
+      .where('session_id', sessionId)
+      .select();
+
+    if (!treatmentPlans.length) {
+      return response
+        .status(404)
+        .json({ error: `Session ${sessionId} not found.` });
+    } else {
+      return response.status(200).json(treatmentPlans);
     }
   } catch (error) {
     return response.status(500).json({ error });
@@ -632,6 +674,46 @@ app.post('/api/v1/sessions/:sessionId/processes', async (request, response) => {
     });
 });
 
+//////  CREATE NEW TREATMENT PLAN //////
+// NOTE:  Requires session id in params.
+//        Call will add the session_id to treatment plan.
+app.post('/api/v1/sessions/:sessionId/treatment-plans', async (request, response) => {
+  const newTreatmentPlan = request.body;
+  const { sessionId } = request.params;
+
+  for (let requiredParameter of ['category']) {
+    if (!newTreatmentPlan[requiredParameter]) {
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}.`
+      });
+    }
+  }
+
+  const session = await database('sessions')
+    .where('id', sessionId)
+    .select();
+
+  if (!session.length) {
+    return response
+      .status(404)
+      .json({ error: `Session by id ${sessionId} not found.` });
+  }
+
+  const addTreatmentPlan = await Object.assign({}, newTreatmentPlan, {
+    session_id: sessionId
+  });
+
+  database('treatment_plans')
+    .returning('id')
+    .insert(addTreatmentPlan)
+    .then(id => {
+      return response.status(201).json(id);
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
 //////  CREATE NEW TERM //////
 // NOTE:  Requires category id in params and then term and definition in body.
 //        Call will add the category name to the term.
@@ -746,6 +828,33 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
     .then(() => {
       return response.status(201).send({
         success: `Process ${processId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({ error });
+    });
+});
+
+//////  UPDATE TREATMENT PLAN //////
+app.put('/api/v1/treatment-plans/:treatmentPlanId', async (request, response) => {
+  const { treatmentPlanId } = request.params;
+  const updatedTreatmentPlan = request.body;
+  const treatmentPlanToUpdate = await database('treatment_plans')
+    .where('id', treatmentPlanId)
+    .select();
+
+  if (!treatmentPlanToUpdate.length) {
+    return response
+      .status(404)
+      .json({ error: `Treatment plan ${treatmentPlanId} not found.` });
+  }
+
+  await database('treatment_plans')
+    .where('id', treatmentPlanId)
+    .update(updatedTreatmentPlan)
+    .then(() => {
+      return response.status(201).send({
+        success: `Treatment plan ${treatmentPlanId} updated.`
       });
     })
     .catch(error => {

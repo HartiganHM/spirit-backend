@@ -51,6 +51,19 @@ const processes = [
   }
 ];
 
+const treatmentPlans = [
+  {
+    category: 'Sensory',
+    task: 'Puzzle Games',
+    environment: 'Solo play in quiet setting',
+    predictability:
+      'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+    self_regulation: 'Focus and attention',
+    interaction: 'Encourage problem solving with guidance',
+    JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+  }
+];
+
 const sessions = [{}];
 
 const createCategory = (knex, category) => {
@@ -170,6 +183,7 @@ const createSessions = (knex, session) => {
     .insert(session, 'id')
     .then(sessionId => {
       let processesPromises = [];
+      let treatmentPlansPromises = [];
 
       processes.forEach(processes => {
         processesPromises.push(
@@ -180,7 +194,21 @@ const createSessions = (knex, session) => {
         );
       });
 
-      return Promise.all(processesPromises);
+      treatmentPlans.forEach(treatmentPlan => {
+        treatmentPlansPromises.push(
+          createTreatmentPlans(knex, {
+            ...treatmentPlan,
+            session_id: sessionId[0]
+          })
+        );
+      });
+
+      const allSessionsPromises = [
+        processesPromises,
+        treatmentPlansPromises
+      ].map(innerPromiseArray => Promise.all(innerPromiseArray));
+
+      return Promise.all(allSessionsPromises);
     })
     .catch(error => {
       throw error;
@@ -191,10 +219,18 @@ const createProcesses = (knex, processes) => {
   return knex('processes').insert(processes);
 };
 
+const createTreatmentPlans = (knex, treatmentPlan) => {
+  return knex('treatment_plans').insert(treatmentPlan);
+};
+
 exports.seed = function(knex, Promise) {
   return knex('terms')
     .del()
     .then(() => knex('categories').del())
+    .then(() => knex('treatment_plans').del())
+    .then(function() {
+      return knex.raw('ALTER SEQUENCE treatment_plans_id_seq RESTART WITH 1');
+    })
     .then(() => knex('processes').del())
     .then(function() {
       return knex.raw('ALTER SEQUENCE processes_id_seq RESTART WITH 1');

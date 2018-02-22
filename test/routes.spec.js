@@ -401,6 +401,55 @@ describe('API Routes', () => {
     });
   });
 
+  describe('GET treatment plans by id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get a treament plan by id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/1')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if treatment plan id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/treatment-plans/0')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Treatment plan 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('GET patients by user_id', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
@@ -564,6 +613,53 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .get('/api/v1/sessions/0/processes')
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Session 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('GET treatment plans by session id', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should get treatment plans by session id', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/1/treatment-plans')
+        .then(response => {
+          response.should.have.status(200);
+          response.should.be.json;
+          response.body.should.be.a('array');
+          response.body.length.should.equal(1);
+          response.body[0].should.have.property('id');
+          response.body[0].should.have.property('category');
+          response.body[0].should.have.property('sensory');
+          response.body[0].should.have.property('task');
+          response.body[0].should.have.property('environment');
+          response.body[0].should.have.property('predictability');
+          response.body[0].should.have.property('self_regulation');
+          response.body[0].should.have.property('interaction');
+          response.body[0].should.have.property('JRC_AR_notes');
+          response.body[0].should.have.property('session_id');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should send a 404 if session id is not found', () => {
+      return chai
+        .request(server)
+        .get('/api/v1/sessions/0/treatment-plans')
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
@@ -1024,6 +1120,9 @@ describe('API Routes', () => {
           response.error.text.should.equal(
             '{"error":"Primary concern by id 0 not found."}'
           );
+        })
+        .catch(error => {
+          throw error;
         });
     });
   });
@@ -1039,15 +1138,13 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/1/processes')
-        .send(
-          {
-            sen_h_vestibular: '7F',
-            mod_2_autonomic: '3R',
-            exe_4b_self_control: '5A',
-            pos_5_alignment_COG: '10F',
-            soc_2_social_motivators: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -1061,21 +1158,104 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .post('/api/v1/sessions/0/processes')
-        .send(
-          {
-            sen_h_vestibular: '7F',
-            mod_2_autonomic: '3R',
-            exe_4b_self_control: '5A',
-            pos_5_alignment_COG: '10F',
-            soc_2_social_motivators: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '7F',
+          mod_2_autonomic: '3R',
+          exe_4b_self_control: '5A',
+          pos_5_alignment_COG: '10F',
+          soc_2_social_motivators: '3I'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal(
             '{"error":"Session by id 0 not found."}'
           );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('POST new treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should add a new treatment plan to a session', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 404 error if session id is not found', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/0/treatment-plans')
+        .send({
+          category: 'Sensory',
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Session by id 0 not found."}'
+          );
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should return a 422 error if missing a required paramter', () => {
+      return chai
+        .request(server)
+        .post('/api/v1/sessions/1/treatment-plans')
+        .send({
+          task: 'Puzzle Games',
+          environment: 'Solo play in quiet setting',
+          predictability:
+            'Should start self-sufficiently, but rely on OT as puzzles become more difficult',
+          self_regulation: 'Focus and attention',
+          interaction: 'Encourage problem solving with guidance',
+          JRC_AR_notes: 'Record results from distance, but be engaged if needed'
+        })
+        .then(response => {
+          response.should.have.status(422);
+          response.should.be.json;
+          response.error.text.should.equal(
+            '{"error":"Missing required parameter - category."}'
+          );
+        })
+        .catch(error => {
+          throw error;
         });
     });
   });
@@ -1171,11 +1351,9 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .put('/api/v1/processes/1')
-        .send(
-          {
-            sen_h_vestibular: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '3I'
+        })
         .then(response => {
           response.should.have.status(201);
           response.should.be.json;
@@ -1190,16 +1368,56 @@ describe('API Routes', () => {
       return chai
         .request(server)
         .put('/api/v1/processes/0')
-        .send(
-          {
-            sen_h_vestibular: '3I'
-          }
-        )
+        .send({
+          sen_h_vestibular: '3I'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Process 0 not found."}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
+  describe('PUT treatment plan', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('Should update a treatment plan', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/treatment-plans/1')
+        .send({
+          category: 'Executive Functioning'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.success.should.equal('Treatment plan 1 updated.');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('Should throw a 404 error if treatment plan is not found', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/treatment-plans/0')
+        .send({
+          category: 'Executive Functioning'
+        })
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
           response.error.text.should.equal(
-            '{"error":"Process 0 not found."}'
+            '{"error":"Treatment plan 0 not found."}'
           );
         })
         .catch(error => {
