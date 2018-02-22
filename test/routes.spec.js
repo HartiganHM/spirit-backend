@@ -1665,6 +1665,55 @@ describe('API Routes', () => {
     });
   });
 
+  describe('PUT user - w/ PW check', () => {
+    beforeEach(done => {
+      knex.seed.run().then(() => {
+        done();
+      });
+    });
+
+    it('should update user info with new clinic information', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/users/1/join')
+        .send({
+          passcode: '5v1sy7'
+        })
+        .then(response => {
+          response.should.have.status(201);
+          response.should.be.json;
+          response.body.should.have.property('clinic');
+          response.body.should.have.property('clinic_abbreviation');
+          response.body.should.have.property('clinic_id');
+          response.body.should.have.property('clinic_passcode');
+          response.body.clinic.should.equal('Developmental_FX');
+          response.body.clinic_abbreviation.should.equal('DFX');
+          response.body.clinic_id.should.equal(1);
+          response.body.clinic_passcode.should.equal('5v1sy7');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+
+    it('should throw a 404 error when incorrect passcode is entered', () => {
+      return chai
+        .request(server)
+        .put('/api/v1/users/1/join')
+        .send({
+          passcode: 'wrongpw'
+        })
+        .then(response => {
+          response.should.have.status(404);
+          response.should.be.json;
+          response.error.text.should.equal('{"error":"Passcode does not match any existing clinics"}');
+        })
+        .catch(error => {
+          throw error;
+        });
+    });
+  });
+
   describe('PUT primary concern', () => {
     beforeEach(done => {
       knex.seed.run().then(() => {
