@@ -6,11 +6,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const {
-  KEYUTIL,
-  KJUR,
-  b64utoutf8
-} = require('jsrsasign');
+const { KEYUTIL, KJUR, b64utoutf8 } = require('jsrsasign');
 const cors = require('express-cors');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
@@ -23,7 +19,7 @@ const corsOptions = {
   headers: ['Content-Type', 'x-token']
 };
 
-var allowCrossDomain = function (req, res, next) {
+var allowCrossDomain = function(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header(
@@ -46,9 +42,11 @@ app.set('spiritKey', process.env.SPIRIT_KEY);
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
+app.use(
+  bodyParser.urlencoded({
+    extended: true
+  })
+);
 
 if (environment !== 'development' && environment !== 'test') {
   app.use(requireHTTPS);
@@ -225,9 +223,7 @@ app.get('/api/v1/terms', async (request, response) => {
 
 //////  GET CLINIC BY CLINIC ID //////
 app.get('/api/v1/clinics/:clinic_id', async (request, response) => {
-  const {
-    clinic_id
-  } = request.params;
+  const { clinic_id } = request.params;
 
   try {
     const clinic = await database('clinics')
@@ -235,11 +231,9 @@ app.get('/api/v1/clinics/:clinic_id', async (request, response) => {
       .select();
 
     if (!clinic.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Clinic ${clinic_id} not found.`
-        });
+      return response.status(404).json({
+        error: `Clinic ${clinic_id} not found.`
+      });
     } else {
       return response.status(200).json(clinic);
     }
@@ -252,9 +246,7 @@ app.get('/api/v1/clinics/:clinic_id', async (request, response) => {
 
 //////  GET PATIENT BY PATIENT ID //////
 app.get('/api/v1/patients/:patient_id', async (request, response) => {
-  const {
-    patient_id
-  } = request.params;
+  const { patient_id } = request.params;
 
   try {
     const patient = await database('patients')
@@ -262,11 +254,9 @@ app.get('/api/v1/patients/:patient_id', async (request, response) => {
       .select();
 
     if (!patient.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Patient ${patient_id} not found.`
-        });
+      return response.status(404).json({
+        error: `Patient ${patient_id} not found.`
+      });
     } else {
       return response.status(200).json(patient);
     }
@@ -281,9 +271,7 @@ app.get('/api/v1/patients/:patient_id', async (request, response) => {
 app.get(
   '/api/v1/primary-concerns/:primaryConcernId',
   async (request, response) => {
-    const {
-      primaryConcernId
-    } = request.params;
+    const { primaryConcernId } = request.params;
 
     try {
       const primaryConcern = await database('primary_concerns')
@@ -291,11 +279,9 @@ app.get(
         .select();
 
       if (!primaryConcern.length) {
-        return response
-          .status(404)
-          .json({
-            error: `Primary concern ${primaryConcernId} not found.`
-          });
+        return response.status(404).json({
+          error: `Primary concern ${primaryConcernId} not found.`
+        });
       } else {
         return response.status(200).json(primaryConcern);
       }
@@ -309,9 +295,7 @@ app.get(
 
 ///// GET SESSION BY SESSION ID /////
 app.get('/api/v1/sessions/:sessionId', async (request, response) => {
-  const {
-    sessionId
-  } = request.params;
+  const { sessionId } = request.params;
 
   try {
     const session = await database('sessions')
@@ -319,11 +303,9 @@ app.get('/api/v1/sessions/:sessionId', async (request, response) => {
       .select();
 
     if (!session.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Session ${sessionId} not found.`
-        });
+      return response.status(404).json({
+        error: `Session ${sessionId} not found.`
+      });
     } else {
       return response.status(200).json(session);
     }
@@ -336,29 +318,28 @@ app.get('/api/v1/sessions/:sessionId', async (request, response) => {
 
 //////  GET THERAPY GOALS FOR COMPARISON  //////
 app.post('/api/v1/therapy-goals/compare', async (request, response) => {
-  const {
-    idArray
-  } = request.body;
+  const { idArray } = request.body;
 
   if (idArray.length > 1) {
-    const therapyGoals = await database('therapy_goals').whereIn('session_id', idArray).select();
+    const therapyGoals = await database('therapy_goals')
+      .whereIn('session_id', idArray)
+      .select();
     return response.status(200).json(therapyGoals);
   } else {
     return response.status(422).json({
       error: 'At least 2 ids required for comparison'
     });
   }
-
 });
 
 //////  GET PROCESSES FOR COMPARISON  //////
 app.post('/api/v1/processes/compare', async (request, response) => {
-  const {
-    idArray
-  } = request.body;
+  const { idArray } = request.body;
 
   if (idArray.length > 1) {
-    const processes = await database('processes').whereIn('session_id', idArray).select();
+    const processes = await database('processes')
+      .whereIn('session_id', idArray)
+      .select();
     return response.status(200).json(processes);
   } else {
     return response.status(422).json({
@@ -369,9 +350,7 @@ app.post('/api/v1/processes/compare', async (request, response) => {
 
 ///// GET PROCESS BY PROCESS ID /////
 app.get('/api/v1/processes/:processId', async (request, response) => {
-  const {
-    processId
-  } = request.params;
+  const { processId } = request.params;
 
   try {
     const processes = await database('processes')
@@ -379,11 +358,9 @@ app.get('/api/v1/processes/:processId', async (request, response) => {
       .select();
 
     if (!processes.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Process ${processId} not found.`
-        });
+      return response.status(404).json({
+        error: `Process ${processId} not found.`
+      });
     } else {
       return response.status(200).json(processes);
     }
@@ -398,9 +375,7 @@ app.get('/api/v1/processes/:processId', async (request, response) => {
 app.get(
   '/api/v1/treatment-plans/:treatmentPlanId',
   async (request, response) => {
-    const {
-      treatmentPlanId
-    } = request.params;
+    const { treatmentPlanId } = request.params;
 
     try {
       const treatmentPlan = await database('treatment_plans')
@@ -408,11 +383,9 @@ app.get(
         .select();
 
       if (!treatmentPlan.length) {
-        return response
-          .status(404)
-          .json({
-            error: `Treatment plan ${treatmentPlanId} not found.`
-          });
+        return response.status(404).json({
+          error: `Treatment plan ${treatmentPlanId} not found.`
+        });
       } else {
         return response.status(200).json(treatmentPlan);
       }
@@ -426,9 +399,7 @@ app.get(
 
 ///// GET THERAPY GOALS BY THERAPY GOALS ID /////
 app.get('/api/v1/therapy-goals/:therapyGoalsId', async (request, response) => {
-  const {
-    therapyGoalsId
-  } = request.params;
+  const { therapyGoalsId } = request.params;
 
   try {
     const therapyGoals = await database('therapy_goals')
@@ -436,11 +407,9 @@ app.get('/api/v1/therapy-goals/:therapyGoalsId', async (request, response) => {
       .select();
 
     if (!therapyGoals.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Therapy goal ${therapyGoalsId} not found.`
-        });
+      return response.status(404).json({
+        error: `Therapy goal ${therapyGoalsId} not found.`
+      });
     } else {
       return response.status(200).json(therapyGoals);
     }
@@ -453,9 +422,7 @@ app.get('/api/v1/therapy-goals/:therapyGoalsId', async (request, response) => {
 
 //////  GET TERMS BY TERM ID //////
 app.get('/api/v1/terms/:terms_id', async (request, response) => {
-  const {
-    terms_id
-  } = request.params;
+  const { terms_id } = request.params;
 
   try {
     const term = await database('terms')
@@ -463,11 +430,9 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
       .select();
 
     if (!term.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Term ${terms_id} not found.`
-        });
+      return response.status(404).json({
+        error: `Term ${terms_id} not found.`
+      });
     } else {
       return response.status(200).json(term);
     }
@@ -480,9 +445,7 @@ app.get('/api/v1/terms/:terms_id', async (request, response) => {
 
 //////  GET PATIENTS BY USER ID  //////
 app.get('/api/v1/users/:user_id/patients', async (request, response) => {
-  const {
-    user_id
-  } = request.params;
+  const { user_id } = request.params;
 
   try {
     const patients = await database('patients')
@@ -507,9 +470,7 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
 app.get(
   '/api/v1/patients/:patientId/primary-concerns',
   async (request, response) => {
-    const {
-      patientId
-    } = request.params;
+    const { patientId } = request.params;
 
     try {
       const primaryConcerns = await database('primary_concerns')
@@ -529,9 +490,7 @@ app.get(
 app.get(
   '/api/v1/primary-concerns/:primaryConcernId/sessions',
   async (request, response) => {
-    const {
-      primaryConcernId
-    } = request.params;
+    const { primaryConcernId } = request.params;
 
     try {
       const sessions = await database('sessions')
@@ -549,9 +508,7 @@ app.get(
 
 ///// GET PROCESS BY SESSION ID /////
 app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
-  const {
-    sessionId
-  } = request.params;
+  const { sessionId } = request.params;
 
   try {
     const processes = await database('processes')
@@ -559,11 +516,9 @@ app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
       .select();
 
     if (!processes.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Session ${sessionId} not found.`
-        });
+      return response.status(404).json({
+        error: `Session ${sessionId} not found.`
+      });
     } else {
       return response.status(200).json(processes);
     }
@@ -578,9 +533,7 @@ app.get('/api/v1/sessions/:sessionId/processes', async (request, response) => {
 app.get(
   '/api/v1/sessions/:sessionId/treatment-plans',
   async (request, response) => {
-    const {
-      sessionId
-    } = request.params;
+    const { sessionId } = request.params;
 
     try {
       const treatmentPlans = await database('treatment_plans')
@@ -588,11 +541,9 @@ app.get(
         .select();
 
       if (!treatmentPlans.length) {
-        return response
-          .status(404)
-          .json({
-            error: `Session ${sessionId} not found.`
-          });
+        return response.status(404).json({
+          error: `Session ${sessionId} not found.`
+        });
       } else {
         return response.status(200).json(treatmentPlans);
       }
@@ -608,9 +559,7 @@ app.get(
 app.get(
   '/api/v1/sessions/:sessionId/therapy-goals',
   async (request, response) => {
-    const {
-      sessionId
-    } = request.params;
+    const { sessionId } = request.params;
 
     try {
       const therapyGoals = await database('therapy_goals')
@@ -618,11 +567,9 @@ app.get(
         .select();
 
       if (!therapyGoals.length) {
-        return response
-          .status(404)
-          .json({
-            error: `Session ${sessionId} not found.`
-          });
+        return response.status(404).json({
+          error: `Session ${sessionId} not found.`
+        });
       } else {
         return response.status(200).json(therapyGoals);
       }
@@ -636,9 +583,7 @@ app.get(
 
 //////  GET TERMS BY CATEGORY ID  //////
 app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
-  const {
-    category_id
-  } = request.params;
+  const { category_id } = request.params;
 
   try {
     const terms = await database('terms')
@@ -646,11 +591,9 @@ app.get('/api/v1/categories/:category_id/terms', async (request, response) => {
       .select();
 
     if (!terms.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Category ${category_id} not found.`
-        });
+      return response.status(404).json({
+        error: `Category ${category_id} not found.`
+      });
     } else {
       return response.status(200).json(terms);
     }
@@ -667,11 +610,9 @@ app.post('/api/v1/categories', (request, response) => {
 
   for (let requiredParameter of ['name']) {
     if (!newCategory[requiredParameter]) {
-      return response
-        .status(422)
-        .json({
-          error: `Missing required parameter - ${requiredParameter}`
-        });
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}`
+      });
     }
   }
   database('categories')
@@ -694,11 +635,9 @@ app.post('/api/v1/clinics', (request, response) => {
 
   for (let requiredParameter of ['name', 'abbreviation', 'passcode']) {
     if (!newClinic[requiredParameter]) {
-      return response
-        .status(422)
-        .json({
-          error: `Missing required parameter - ${requiredParameter}`
-        });
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}`
+      });
     }
   }
 
@@ -720,17 +659,13 @@ app.post('/api/v1/clinics', (request, response) => {
 //        Call will add the clinic_name to the patient.
 app.post('/api/v1/users/:user_id/patients', async (request, response) => {
   const newPatient = request.body;
-  const {
-    user_id
-  } = request.params;
+  const { user_id } = request.params;
 
   for (let requiredParameter of ['abstracted_name']) {
     if (!newPatient[requiredParameter]) {
-      return response
-        .status(422)
-        .json({
-          error: `Missing required parameter - ${requiredParameter}`
-        });
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}`
+      });
     }
   }
 
@@ -785,9 +720,7 @@ app.post(
   '/api/v1/patients/:patientId/primary-concerns',
   async (request, response) => {
     const newPrimaryConcern = request.body;
-    const {
-      patientId
-    } = request.params;
+    const { patientId } = request.params;
 
     for (let requiredParameter of ['description']) {
       if (!newPrimaryConcern[requiredParameter]) {
@@ -802,11 +735,9 @@ app.post(
       .select();
 
     if (!patientName.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Patient by id ${patientId} not found.`
-        });
+      return response.status(404).json({
+        error: `Patient by id ${patientId} not found.`
+      });
     }
 
     const addPrimaryConcern = await Object.assign({}, newPrimaryConcern, {
@@ -833,9 +764,7 @@ app.post(
 app.post(
   '/api/v1/primary-concerns/:primaryConcernId/sessions',
   async (request, response) => {
-    const {
-      primaryConcernId
-    } = request.params;
+    const { primaryConcernId } = request.params;
 
     const primaryConcern = await database('primary_concerns')
       .where('id', primaryConcernId)
@@ -847,9 +776,12 @@ app.post(
       });
     }
 
-    const addSession = await Object.assign({}, {
-      concern_id: primaryConcernId
-    });
+    const addSession = await Object.assign(
+      {},
+      {
+        concern_id: primaryConcernId
+      }
+    );
 
     database('sessions')
       .returning('id')
@@ -870,20 +802,16 @@ app.post(
 //        Call will add the session_id to process.
 app.post('/api/v1/sessions/:sessionId/processes', async (request, response) => {
   const newProcess = request.body;
-  const {
-    sessionId
-  } = request.params;
+  const { sessionId } = request.params;
 
   const session = await database('sessions')
     .where('id', sessionId)
     .select();
 
   if (!session.length) {
-    return response
-      .status(404)
-      .json({
-        error: `Session by id ${sessionId} not found.`
-      });
+    return response.status(404).json({
+      error: `Session by id ${sessionId} not found.`
+    });
   }
 
   const addProcess = await Object.assign({}, newProcess, {
@@ -910,20 +838,16 @@ app.post(
   '/api/v1/sessions/:sessionId/treatment-plans',
   async (request, response) => {
     const newTreatmentPlan = request.body;
-    const {
-      sessionId
-    } = request.params;
+    const { sessionId } = request.params;
 
     const session = await database('sessions')
       .where('id', sessionId)
       .select();
 
     if (!session.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Session by id ${sessionId} not found.`
-        });
+      return response.status(404).json({
+        error: `Session by id ${sessionId} not found.`
+      });
     }
 
     const addTreatmentPlan = await Object.assign({}, newTreatmentPlan, {
@@ -951,20 +875,16 @@ app.post(
   '/api/v1/sessions/:sessionId/therapy-goals',
   async (request, response) => {
     const newTherapyGoal = request.body;
-    const {
-      sessionId
-    } = request.params;
+    const { sessionId } = request.params;
 
     const session = await database('sessions')
       .where('id', sessionId)
       .select();
 
     if (!session.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Session by id ${sessionId} not found.`
-        });
+      return response.status(404).json({
+        error: `Session by id ${sessionId} not found.`
+      });
     }
 
     const addTherapyGoal = await Object.assign({}, newTherapyGoal, {
@@ -990,17 +910,13 @@ app.post(
 //        Call will add the category name to the term.
 app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
   const newTerm = request.body;
-  const {
-    category_id
-  } = request.params;
+  const { category_id } = request.params;
 
   for (let requiredParameter of ['term', 'definition']) {
     if (!newTerm[requiredParameter]) {
-      return response
-        .status(422)
-        .json({
-          error: `Missing required parameter - ${requiredParameter}`
-        });
+      return response.status(422).json({
+        error: `Missing required parameter - ${requiredParameter}`
+      });
     }
   }
   const categoryName = await database('categories')
@@ -1032,20 +948,16 @@ app.post('/api/v1/categories/:category_id/terms', async (request, response) => {
 
 //////  UPDATE USER WITH CLINIC INFO //////
 app.put('/api/v1/users/:userId', async (request, response) => {
-  const {
-    userId
-  } = request.params;
+  const { userId } = request.params;
   const updatedUser = request.body;
   const userToUpdate = await database('users')
     .where('id', userId)
     .select();
 
   if (!userToUpdate.length) {
-    return response
-      .status(404)
-      .json({
-        error: `User by id ${userId} not found.`
-      });
+    return response.status(404).json({
+      error: `User by id ${userId} not found.`
+    });
   }
 
   await database('users')
@@ -1065,13 +977,13 @@ app.put('/api/v1/users/:userId', async (request, response) => {
 
 //////  CHECK PASSWORD AND UPDATE USER CLINIC INFO  //////
 app.put('/api/v1/users/:userId/join', async (request, response) => {
-  const {
-    userId
-  } = request.params;
+  const { userId } = request.params;
   const updatedUser = request.body;
   const password = updatedUser.passcode;
 
-  const clinic = await database('clinics').where('passcode', password).select();
+  const clinic = await database('clinics')
+    .where('passcode', password)
+    .select();
   if (!clinic.length) {
     return response.status(404).json({
       error: 'Passcode does not match any existing clinics'
@@ -1085,7 +997,9 @@ app.put('/api/v1/users/:userId/join', async (request, response) => {
     clinic_passcode: clinic[0].passcode
   };
 
-  await database('users').where('id', userId).update(infoToSave)
+  await database('users')
+    .where('id', userId)
+    .update(infoToSave)
     .then(() => {
       return response.status(201).json(infoToSave);
     })
@@ -1100,20 +1014,16 @@ app.put('/api/v1/users/:userId/join', async (request, response) => {
 app.put(
   '/api/v1/primary-concerns/:primaryConcernId',
   async (request, response) => {
-    const {
-      primaryConcernId
-    } = request.params;
+    const { primaryConcernId } = request.params;
     const updatedPrimaryConcern = request.body;
     const primaryConcernToUpdate = await database('primary_concerns')
       .where('id', primaryConcernId)
       .select();
 
     if (!primaryConcernToUpdate.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Primary concern ${primaryConcernId} not found.`
-        });
+      return response.status(404).json({
+        error: `Primary concern ${primaryConcernId} not found.`
+      });
     }
 
     await database('primary_concerns')
@@ -1133,57 +1043,46 @@ app.put(
 );
 
 //////  UPDATE SESSION //////
-app.put(
-  '/api/v1/sessions/:sessionId',
-  async (request, response) => {
-    const {
-      sessionId
-    } = request.params;
-    const updatedSession = request.body;
-    const sessionToUpdate = await database('sessions')
-      .where('id', sessionId)
-      .select();
+app.put('/api/v1/sessions/:sessionId', async (request, response) => {
+  const { sessionId } = request.params;
+  const updatedSession = request.body;
+  const sessionToUpdate = await database('sessions')
+    .where('id', sessionId)
+    .select();
 
-    if (!sessionToUpdate.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Session ${sessionId} not found.`
-        });
-    }
-
-    await database('sessions')
-      .where('id', sessionId)
-      .update(updatedSession)
-      .then(() => {
-        return response.status(201).send({
-          success: `Session ${sessionId} updated.`
-        });
-      })
-      .catch(error => {
-        return response.status(500).json({
-          error
-        });
-      });
+  if (!sessionToUpdate.length) {
+    return response.status(404).json({
+      error: `Session ${sessionId} not found.`
+    });
   }
-);
+
+  await database('sessions')
+    .where('id', sessionId)
+    .update(updatedSession)
+    .then(() => {
+      return response.status(201).send({
+        success: `Session ${sessionId} updated.`
+      });
+    })
+    .catch(error => {
+      return response.status(500).json({
+        error
+      });
+    });
+});
 
 //////  UPDATE PROCESS //////
 app.put('/api/v1/processes/:processId', async (request, response) => {
-  const {
-    processId
-  } = request.params;
+  const { processId } = request.params;
   const updatedProcess = request.body;
   const processToUpdate = await database('processes')
     .where('id', processId)
     .select();
 
   if (!processToUpdate.length) {
-    return response
-      .status(404)
-      .json({
-        error: `Process ${processId} not found.`
-      });
+    return response.status(404).json({
+      error: `Process ${processId} not found.`
+    });
   }
 
   await database('processes')
@@ -1205,20 +1104,16 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
 app.put(
   '/api/v1/treatment-plans/:treatmentPlanId',
   async (request, response) => {
-    const {
-      treatmentPlanId
-    } = request.params;
+    const { treatmentPlanId } = request.params;
     const updatedTreatmentPlan = request.body;
     const treatmentPlanToUpdate = await database('treatment_plans')
       .where('id', treatmentPlanId)
       .select();
 
     if (!treatmentPlanToUpdate.length) {
-      return response
-        .status(404)
-        .json({
-          error: `Treatment plan ${treatmentPlanId} not found.`
-        });
+      return response.status(404).json({
+        error: `Treatment plan ${treatmentPlanId} not found.`
+      });
     }
 
     await database('treatment_plans')
@@ -1239,20 +1134,16 @@ app.put(
 
 //////  UPDATE THERAPY GOAL //////
 app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
-  const {
-    therapyGoalId
-  } = request.params;
+  const { therapyGoalId } = request.params;
   const updatedTherapyGoal = request.body;
   const therapyGoalToUpdate = await database('therapy_goals')
     .where('id', therapyGoalId)
     .select();
 
   if (!therapyGoalToUpdate.length) {
-    return response
-      .status(404)
-      .json({
-        error: `Therapy goal ${therapyGoalId} not found.`
-      });
+    return response.status(404).json({
+      error: `Therapy goal ${therapyGoalId} not found.`
+    });
   }
 
   await database('therapy_goals')
@@ -1272,9 +1163,7 @@ app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
 
 //////  UPDATE TERM //////
 app.put('/api/v1/terms/:terms_id', async (request, response) => {
-  const {
-    terms_id
-  } = request.params;
+  const { terms_id } = request.params;
   const updatedTerm = request.body;
   const termToUpdate = await database('terms')
     .where('id', terms_id)
@@ -1303,20 +1192,16 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
 
 //////  UPDATE CATEGORY //////
 app.put('/api/v1/categories/:category_id', async (request, response) => {
-  const {
-    category_id
-  } = request.params;
+  const { category_id } = request.params;
   const updatedCategory = request.body;
 
   const categoryToUpdate = await database('categories')
     .where('id', category_id)
     .select();
   if (!categoryToUpdate.length) {
-    return response
-      .status(404)
-      .json({
-        error: `Category ${category_id} not found.`
-      });
+    return response.status(404).json({
+      error: `Category ${category_id} not found.`
+    });
   }
 
   await database('categories')
@@ -1336,9 +1221,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
 
 //////  DELETE TERM //////
 app.delete('/api/v1/terms/:terms_id', async (request, response) => {
-  const {
-    terms_id
-  } = request.params;
+  const { terms_id } = request.params;
 
   try {
     const killedTerm = await database('terms')
@@ -1363,9 +1246,7 @@ app.delete('/api/v1/terms/:terms_id', async (request, response) => {
 
 //////  DELETE CATEGORY //////
 app.delete('/api/v1/categories/:category_id', (request, response) => {
-  const {
-    category_id
-  } = request.params;
+  const { category_id } = request.params;
 
   try {
     const killedCategory = database('categories')
@@ -1373,11 +1254,9 @@ app.delete('/api/v1/categories/:category_id', (request, response) => {
       .where('id', category_id)
       .delete();
     if (!Object.keys(killedCategory).length) {
-      return response
-        .status(422)
-        .json({
-          error: `Category ${category_id} not found.`
-        });
+      return response.status(422).json({
+        error: `Category ${category_id} not found.`
+      });
     } else {
       return response.status(204).json({
         success: `Category ${category_id} deleted.`
