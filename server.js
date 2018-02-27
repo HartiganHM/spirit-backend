@@ -76,7 +76,7 @@ const validate = (request, response) => {
     }
   } catch (error) {
     response.status(401).json({
-      error: 'Invalid token.  Please login again.'
+      error: `Invalid token.  Please login again. Error: ${error} Request:${request}`
     });
   }
 };
