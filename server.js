@@ -40,6 +40,10 @@ const requireHTTPS = (request, response, next) => {
 app.set('port', process.env.PORT || 3000);
 app.set('spiritKey', process.env.SPIRIT_KEY);
 
+if (environment !== 'development' && environment !== 'test') {
+  app.use(requireHTTPS);
+}
+
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.json());
 app.use(
@@ -47,13 +51,8 @@ app.use(
     extended: true
   })
 );
-
-if (environment !== 'development' && environment !== 'test') {
-  app.use(requireHTTPS);
-} else if (environment !== 'test') {
-  app.use(allowCrossDomain);
-  app.use(cors(corsOptions));
-}
+app.use(allowCrossDomain);
+app.use(cors(corsOptions));
 
 app.listen(app.get('port'), () => {
   console.log(`Spirit is running on localhost:${app.get('port')}.`);
