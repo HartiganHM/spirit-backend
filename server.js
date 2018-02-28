@@ -14,7 +14,12 @@ const database = require('knex')(configuration);
 const key = require('./pubKey');
 
 const corsOptions = {
-  allowedOrigins: ['localhost:3001', 'localhost:3000', 'rmorgan323.github.io', 'spirit-fe.herokuapp.com'],
+  allowedOrigins: [
+    'localhost:3001',
+    'localhost:3000',
+    'rmorgan323.github.io',
+    'spirit-fe.herokuapp.com'
+  ],
   preflightContinue: true,
   headers: ['Content-Type', 'x-token']
 };
