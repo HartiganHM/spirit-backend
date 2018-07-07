@@ -968,7 +968,7 @@ app.put('/api/v1/users/:userId', async (request, response) => {
     .where('id', userId)
     .update(updatedUser)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `User ${userId} updated.`
       });
     })
@@ -1034,7 +1034,7 @@ app.put(
       .where('id', primaryConcernId)
       .update(updatedPrimaryConcern)
       .then(() => {
-        return response.status(201).send({
+        return response.status(201).sendStatus({
           success: `Primary concern ${primaryConcernId} updated.`
         });
       })
@@ -1064,7 +1064,7 @@ app.put('/api/v1/sessions/:sessionId', async (request, response) => {
     .where('id', sessionId)
     .update(updatedSession)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `Session ${sessionId} updated.`
       });
     })
@@ -1093,7 +1093,7 @@ app.put('/api/v1/processes/:processId', async (request, response) => {
     .where('id', processId)
     .update(updatedProcess)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `Process ${processId} updated.`
       });
     })
@@ -1124,7 +1124,7 @@ app.put(
       .where('id', treatmentPlanId)
       .update(updatedTreatmentPlan)
       .then(() => {
-        return response.status(201).send({
+        return response.status(201).sendStatus({
           success: `Treatment plan ${treatmentPlanId} updated.`
         });
       })
@@ -1154,7 +1154,7 @@ app.put('/api/v1/therapy-goals/:therapyGoalId', async (request, response) => {
     .where('id', therapyGoalId)
     .update(updatedTherapyGoal)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `Therapy goal ${therapyGoalId} updated.`
       });
     })
@@ -1183,7 +1183,7 @@ app.put('/api/v1/terms/:terms_id', async (request, response) => {
     .where('id', terms_id)
     .update(updatedTerm)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `Term ${terms_id} updated.`
       });
     })
@@ -1212,7 +1212,7 @@ app.put('/api/v1/categories/:category_id', async (request, response) => {
     .where('id', category_id)
     .update(updatedCategory)
     .then(() => {
-      return response.status(201).send({
+      return response.status(201).sendStatus({
         success: `Category ${category_id} updated.`
       });
     })
