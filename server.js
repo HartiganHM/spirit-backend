@@ -458,9 +458,7 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
       .select();
 
     if (!patients.length) {
-      return response.status(404).json({
-        error: `User ${user_id} not found.`
-      });
+      return response.status(404).json([]);
     } else {
       return response.status(200).json(patients);
     }
