@@ -15,6 +15,7 @@ jobs:
     steps:
       - checkout
       - run: |
+          sudo apt install postgresql-client
           sudo -u postgres psql -p 5432 -c "create database spirit_test;"
           knex migrate:latest
 
