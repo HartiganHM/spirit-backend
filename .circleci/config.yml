@@ -14,8 +14,9 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo -u postgres psql -p 5432 -c "create database spirit_test;"
-      - run: knex migrate:latest
+      - run: |
+          sudo -u postgres psql -p 5432 -c "create database spirit_test;"
+          knex migrate:latest
 
       # Download and cache dependencies
       - restore_cache:
