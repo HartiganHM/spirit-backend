@@ -5,6 +5,7 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/repo
     docker:
       - image: node:8.3.0
         environment:
@@ -13,8 +14,6 @@ jobs:
       - image: postgres:9.4.1
         environment:
           POSTGRES_USER: root
-
-    working_directory: ~/repo
 
     steps:
       - checkout
