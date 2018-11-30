@@ -10,11 +10,14 @@ jobs:
     environment:
       DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/spirit_test
 
+    - image: circleci/postgres:10-alpine-postgis
+
     working_directory: ~/repo
 
     steps:
       - checkout
       - run: sudo apt-get update
+      - run: sudo apt-get install postgres-client-10
       - run: sudo -u postgres psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
