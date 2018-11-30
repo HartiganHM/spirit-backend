@@ -11,17 +11,11 @@ jobs:
         environment:
           DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/spirit_test
 
-      - image: postgres:9.4.1
-        environment:
-          POSTGRES_USER: root
+      # - image: postgres:9.4.1
 
     steps:
       - checkout
-      - run:
-          command: echo 127.0.0.1 devhost | sudo tee -a /etc/hosts
 
-      - run: sudo apt-get update
-      - run: sudo apt-get install postgres-client-9.4
       - run: sudo -u postgres psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
