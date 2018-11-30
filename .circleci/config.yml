@@ -18,8 +18,6 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo apt-get update
-      - run: sudo apt-get install postgres-client-9.4
       - run: sudo -u postgres psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
