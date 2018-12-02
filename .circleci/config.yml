@@ -3,7 +3,7 @@ jobs:
   build:
     docker:
       - image: circleci/postgres:10-alpine-postgis
-
+      
       - image: node:8.3.0
         environment:
           DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/app_test
@@ -12,8 +12,7 @@ jobs:
 
     steps:
       - checkout
-      - run: apt-get install -y sudo
-      - run: sudo -u postgres psql -p 5432 -c "create database app_test;"
+      - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
