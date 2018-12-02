@@ -10,7 +10,7 @@ jobs:
 
     steps:
       - checkout
-      - run: sudo -u postgres psql -p 5432 -c "create database app_test;"
+      - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
