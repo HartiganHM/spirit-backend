@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - checkout
+      - run: apt-get install -y sudo
       - run: sudo -u postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
