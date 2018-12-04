@@ -12,7 +12,8 @@ jobs:
 
     steps:
       - checkout
-      - run: sh -c "command" postgres
+      - run: apt-get update
+      - run: apt-get install postgresql-client-10
       - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
