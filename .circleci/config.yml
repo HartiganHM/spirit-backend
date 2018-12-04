@@ -12,6 +12,7 @@ jobs:
 
     steps:
       - checkout
+      - run: sh -c "command" postgres
       - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
