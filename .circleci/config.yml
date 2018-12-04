@@ -6,14 +6,14 @@ jobs:
         environment:
           DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/app_test
 
-      - image: circleci/postgres:10-alpine-postgis
+      - image: circleci/postgres:9.6.5-alpine-ram
 
     working_directory: ~/repo
 
     steps:
       - checkout
       - run: apt-get update
-      - run: apt-get install postgresql-client-10
+      - run: apt-get install postgresql-client-9.6
       - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
