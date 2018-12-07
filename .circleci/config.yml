@@ -12,8 +12,6 @@ jobs:
 
     steps:
       - checkout
-      - run: apt-get update
-      - run: apt-get install postgresql-client-9.6
       - run: postgres psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
