@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: node:8.3.0
         environment:
-          DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/spirit_test
+          DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/app_test
 
       - image: circleci/postgres:9.6.5-alpine-ram
 
@@ -12,7 +12,12 @@ jobs:
 
     steps:
       - checkout
-      - run: postgres psql -p 5432 -c "create database spirit_test;"
+      - run: echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+      - run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
+      - run: apt-get update
+      - run: apt-get install postgresql-client-9.6 -y
+
+      - run: postgres psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
