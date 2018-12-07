@@ -17,7 +17,7 @@ jobs:
       - run: apt-get update
       - run: apt-get install postgresql-client-9.6 -y
 
-      - run: postgres psql -p 5432 -c "create database app_test;"
+      - run: psql -p 5432 -c "create database app_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
