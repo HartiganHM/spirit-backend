@@ -16,9 +16,8 @@ jobs:
       - run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
       - run: apt-get update
       - run: apt-get install postgresql-client-9.6 -y
-      - run: whoami
 
-      - run: psql -p 5432 -c "create database spirit_test;"
+      - run: postgres psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
