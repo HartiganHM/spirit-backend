@@ -35,7 +35,7 @@ jobs:
       - run: apt-get install postgresql-client-9.6 -y
       - run: psql -U postgres -h localhost -p 5432 -c "create database spirit_test;"
       - run: npm install -g knex
-      - run: knex migrate:latest
+      - run: knex migrate:latest --env test
 
       # run tests
       - run: npm test
