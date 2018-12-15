@@ -1,15 +1,14 @@
 version: 2
 jobs:
   build:
-    working_directory: ~/project
+    working_directory: ~/repo
     docker:
       - image: circleci/node:8.9.4
       # The below environemnt is where you set the .env variables used throughout node
         environment:
           NODE_ENV: test
           PG_USER: psql
-          PG_DATABASE: spirit
-          PG_TEST_DATABASE: spirit_test
+          PG_TEST_DATABASE: postgres://localhost/spirit_test
           PG_PORT: 5432
 
       - image: postgres:10.3
@@ -37,7 +36,7 @@ jobs:
 
       - run:
           name: Create database
-          command: psql -p 5432 -c "create database spirit_test;" && knex migrate latest
+          command: postgres psql -p 5432 -c "create database spirit_test;" && knex migrate latest
 
       - save_cache:
           paths:
