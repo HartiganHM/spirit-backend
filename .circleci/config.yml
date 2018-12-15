@@ -19,7 +19,7 @@ jobs:
 
       # - run: apt-get update
       # - run: apt-get install postgreql-client-9.6
-      - run: psql -H localhost -p 5432 -c "create database spirit_test;"
+      - run: psql -U postgres -h localhost -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
       # Download and cache dependencies
