@@ -36,6 +36,8 @@ jobs:
 
       - run:
           name: Create database
+          command: echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
+          command: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
           command: sudo apt-get update
           command: sudo apt-get install postgresql-client-9.6
           command: whoami
