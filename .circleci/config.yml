@@ -14,11 +14,11 @@ jobs:
       - checkout
       - run: echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
       - run: wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
-      # - run: apt-get update
-      # - run: apt-get install postgresql-client-9.6 -y
-
       - run: apt-get update
-      - run: apt-get install postgreql-client-9.6
+      - run: apt-get install postgresql-client-9.6 -y
+
+      # - run: apt-get update
+      # - run: apt-get install postgreql-client-9.6
       - run: psql -p 5432 -c "create database spirit_test;"
       - run: knex migrate:latest
 
