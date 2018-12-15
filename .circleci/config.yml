@@ -8,7 +8,7 @@ jobs:
         environment:
           NODE_ENV: test
           PG_USER: psql
-          PG_TEST_DATABASE: postgres://localhost/spirit_test
+          DATABASE_URL: postgresql://ubuntu:@127.0.0.1:5432/spirit_test
           PG_PORT: 5432
 
       - image: postgres:10.3
@@ -36,6 +36,9 @@ jobs:
 
       - run:
           name: Create database
+          command: sudo apt-get update
+          command: sudo apt-get install postgresql-client-9.6
+          command: whoami
           command: postgres psql -p 5432 -c "create database spirit_test;" && knex migrate latest
 
       - save_cache:
