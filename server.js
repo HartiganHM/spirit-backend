@@ -11,7 +11,8 @@ const cors = require('express-cors');
 const environment = process.env.NODE_ENV || 'development';
 const configuration = require('./knexfile')[environment];
 const database = require('knex')(configuration);
-const key = require('./pubKey');
+const key =
+  environment === 'development' ? require('./devPubKey') : require('./pubKey');
 
 const corsOptions = {
   allowedOrigins: [
@@ -457,9 +458,7 @@ app.get('/api/v1/users/:user_id/patients', async (request, response) => {
       .select();
 
     if (!patients.length) {
-      return response.status(404).json({
-        error: `User ${user_id} not found.`
-      });
+      return response.status(404).json([]);
     } else {
       return response.status(200).json(patients);
     }

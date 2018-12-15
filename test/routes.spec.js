@@ -659,14 +659,14 @@ describe('API Routes', () => {
         });
     });
 
-    it('Should return a 404 if user id is not found', () => {
+    it('Should return an empty array if user id is not found', () => {
       return chai
         .request(server)
         .get('/api/v1/users/0/patients')
         .then(response => {
           response.should.have.status(404);
           response.should.be.json;
-          response.error.text.should.equal('{"error":"User 0 not found."}');
+          response.error.text.should.equal('[]');
         })
         .catch(error => {
           throw error;
