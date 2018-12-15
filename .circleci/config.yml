@@ -20,6 +20,7 @@ jobs:
       # - run: apt-get update
       # - run: apt-get install postgreql-client-9.6
       - run: psql -U postgres -h localhost -p 5432 -c "create database spirit_test;"
+      - run: npm install
       - run: knex migrate:latest
 
       # Download and cache dependencies
@@ -29,7 +30,6 @@ jobs:
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-
 
-      - run: npm install
 
       - save_cache:
           paths:
