@@ -37,7 +37,7 @@ jobs:
 
       - run:
           name: Create database
-          command: postgres psql -p 5432 -c "create database spirit_test;" && knex migrate latest
+          command: psql -p 5432 -c "create database spirit_test;" && knex migrate latest
 
       - save_cache:
           paths:
