@@ -19,7 +19,9 @@ const corsOptions = {
     'localhost:3001',
     'localhost:3000',
     'rmorgan323.github.io',
-    'spirit-fe.herokuapp.com'
+    'spirit-fe.herokuapp.com',
+    'https://spirit-dev.e1.loginrocket.com/v1/logout',
+    'spirit-dev.e1.loginrocket.com'
   ],
   preflightContinue: true,
   headers: ['Content-Type', 'x-token']
